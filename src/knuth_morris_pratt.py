@@ -1,3 +1,7 @@
+import random
+import string
+import logging
+from timeit import default_timer as timer
 
 
 def naive(text, pattern):
@@ -14,7 +18,7 @@ def naive(text, pattern):
         if matches == patternLenght:
 
             matchList.append(i)
-            print(" " * (i+1), pattern)
+            #logging.debug(" " * (i+1), pattern)
 
     return matchList
 
@@ -41,10 +45,10 @@ def createNextTable(pattern):
 
     return prea
 
-# only finds first match
-
 
 def knuthMorrisPratt(text, pattern):
+
+    matchList = []
 
     textLen, patLen = len(text), len(pattern)
     text = " " + text
@@ -65,21 +69,47 @@ def knuthMorrisPratt(text, pattern):
         patPos = patPos+1
 
         if patPos > patLen:
-            # because of leading " " -1
-            print(textPos-patLen-1)
+            matchList.append(textPos-patLen-1)
+            patPos = prea[patPos-1]
+
+    return matchList
+
+
+def generateRandom(chars=["a", "b"], length=1000):
+
+    #string.ascii_uppercase + string.digits
+    text = "".join(random.choices(chars, k=length))
+
+    patternLenght = random.randrange(5, 10)
+    patternPos = random.randrange(length-patternLenght)
+
+    pattern = text[patternPos:patternPos+patternLenght]
+
+    return text, pattern, patternPos
 
 
 def testBoth(text, pattern):
 
-    print(f"Testing normal text:\np:{pattern}\nt:{text}")
+    print(f"p:{pattern}\nt:{text}\nNaive:")
+    start = timer()
     print(naive(text, pattern))
+    end = timer()
+    print(f"In: {end - start} s")
 
     print(f"\nWith KMP:")
-    knuthMorrisPratt(text, pattern)
+    start = timer()
+    print(knuthMorrisPratt(text, pattern))
+    end = timer()
+    print(f"In: {end - start} s")
 
 
 # simple test cases
 if __name__ == "__main__":
 
-    testBoth("This is a example text with two is.", "is")
-    testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
+    text, pattern, pos = generateRandom(length=1000)
+
+    testBoth(text, pattern)
+
+    #testBoth("This is a example text with two is.", "is")
+
+    #testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
