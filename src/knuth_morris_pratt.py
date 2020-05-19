@@ -1,6 +1,5 @@
 import random
 import string
-import logging
 from timeit import default_timer as timer
 
 
@@ -17,8 +16,14 @@ def naive(text, pattern):
 
         if matches == patternLenght:
 
-            matchList.append(i)
-            #logging.debug(" " * (i+1), pattern)
+            # problem with aaaaa and aa, it counts each a as one match, but it should only count each aa
+
+            # first entry into empty list
+            if not matchList:
+                matchList.append(i)
+            # check if the found pattern is already part of already count pattern
+            elif i - patternLenght >= matchList[-1]:
+                matchList.append(i)
 
     return matchList
 
@@ -36,12 +41,11 @@ def createNextTable(pattern):
 
         j = j+1
         t = t + 1
+
         if pattern[j] == pattern[t]:
             prea[j] = prea[t]
         else:
             prea[j] = t
-
-        #print("j: ", j, prea[j])
 
     return prea
 
@@ -50,6 +54,7 @@ def knuthMorrisPratt(text, pattern):
 
     matchList = []
 
+    # set the string to start at 1 not 0
     textLen, patLen = len(text), len(pattern)
     text = " " + text
     pattern = " " + pattern
@@ -70,27 +75,34 @@ def knuthMorrisPratt(text, pattern):
 
         if patPos > patLen:
             matchList.append(textPos-patLen-1)
-            patPos = prea[patPos-1]
+            # possible slowdown, because prea table not used
+            patPos = 1
 
     return matchList
 
+# generate valid inputs
 
-def generateRandom(chars=["a", "b"], length=1000):
 
-    #string.ascii_uppercase + string.digits
+def generateRandom(chars=["a", "b"], length=1000, patternLengthRange=(5, 10)):
+
+    # string.ascii_uppercase + string.digits
     text = "".join(random.choices(chars, k=length))
 
-    patternLenght = random.randrange(5, 10)
-    patternPos = random.randrange(length-patternLenght)
+    patternLenght = random.randrange(
+        patternLengthRange[0], patternLengthRange[1])
 
+    patternPos = random.randrange(length-patternLenght)
     pattern = text[patternPos:patternPos+patternLenght]
 
     return text, pattern, patternPos
 
 
+# run both alorithms with detailed output
 def testBoth(text, pattern):
 
-    print(f"p:{pattern}\nt:{text}\nNaive:")
+    print(f"p:{pattern}\nt:{text}")
+
+    print("\nNaive:")
     start = timer()
     print(naive(text, pattern))
     end = timer()
@@ -100,16 +112,30 @@ def testBoth(text, pattern):
     start = timer()
     print(knuthMorrisPratt(text, pattern))
     end = timer()
-    print(f"In: {end - start} s")
+    print(f"In: {end - start} s\n\n")
+
+
+# testing if diffrent algorithms lead to diffrent results
+def compareAgainst(times=100):
+
+    for i in range(times):
+        text, pattern, pos = generateRandom(length=1000)
+        if naive(text, pattern) != knuthMorrisPratt(text, pattern):
+            print(print(f"p:{pattern}\nt:{text}"))
+            n = naive(text, pattern)
+            print(len(n), n)
+            k = knuthMorrisPratt(text, pattern)
+            print(len(k), k)
 
 
 # simple test cases
 if __name__ == "__main__":
 
-    text, pattern, pos = generateRandom(length=1000)
+    # compareAgainst()
 
-    testBoth(text, pattern)
+    #text, pattern, pos = generateRandom(length=1000)
+    #testBoth(text, pattern)
 
-    #testBoth("This is a example text with two is.", "is")
-
-    #testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
+    testBoth("This is a example text with two is.", "is")
+    testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
+    # testBoth("aaaaaaaaaaaaaaaaaa", "aaa")
