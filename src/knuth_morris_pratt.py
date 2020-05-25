@@ -101,22 +101,21 @@ def generateRandom(chars=["a", "b"], length=1000, patternLengthRange=(5, 10)):
 def testBoth(text, pattern):
 
     print(f"p:{pattern}\nt:{text}")
-
     print("\nNaive:")
     start = timer()
     print(naive(text, pattern))
     end = timer()
-    print(f"In: {end - start} s")
+    print(f"In: {end - start:.5f} s")
 
     print(f"\nWith KMP:")
     start = timer()
     print(knuthMorrisPratt(text, pattern))
     end = timer()
-    print(f"In: {end - start} s\n\n")
+    print(f"In: {end - start:.5f} s\n\n")
 
 
 # testing if diffrent algorithms lead to diffrent results
-def compareAgainst(times=100):
+def compareResults(times=100):
 
     for i in range(times):
         text, pattern, pos = generateRandom(length=1000)
@@ -131,7 +130,7 @@ def compareAgainst(times=100):
 # simple test cases
 if __name__ == "__main__":
 
-    # compareAgainst()
+    # compareResults()
 
     #text, pattern, pos = generateRandom(length=1000)
     #testBoth(text, pattern)
