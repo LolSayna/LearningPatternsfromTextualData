@@ -12,4 +12,6 @@ AhoC:
 
 
 -problems: string.ascii_uppercase + string.digits as possible chars
-    how many states, for now using upper limit and some are empty
+    how many states, for now using upper limit and some are empty -> trie
+    implementation of goTo function, whole alphabet vs hashing/dict
+    checking on input-> multiple times the same word

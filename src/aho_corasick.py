@@ -1,5 +1,7 @@
-
+import logging
 import string
+
+# building the pattern matching machine for the algorithm
 
 
 def generatePatternMatchingMachine(keywords):
@@ -14,7 +16,7 @@ def generatePatternMatchingMachine(keywords):
     # failure is a simple list
     # 1   2  3  4  4
     # [0, 0, 0, 1, ...]
-    failure = []
+    failure = [0] * limitForStates
 
     # output is a list of lists
     # 1  2      3  4   5
@@ -30,7 +32,7 @@ def generatePatternMatchingMachine(keywords):
             state = goTo[state][a[j-1]]
             j += 1
 
-        for p in range(j, len(a)):
+        for p in range(j, len(a)+1):
             newstate += 1
 
             goTo[state][a[p-1]] = newstate
@@ -39,26 +41,57 @@ def generatePatternMatchingMachine(keywords):
         output[state].append(a)
 
     for c in string.ascii_letters + string.digits + " ":
-        goTo[0][c] = 0
-
-    # for i in range(limitForStates):
-    #    print(f"{i}: {goTo[i]} {output[i]}")
+        if not c in goTo[0]:
+            goTo[0][c] = 0
 
     # algorithm 2
     queue = []
     for a, s in goTo[0].items():
-        print(a, s)
+        if s != 0:
+            queue.append(s)
+
+    while queue:
+        r = queue.pop(0)
+        for a, s in goTo[r].items():
+            queue.append(s)
+            state = failure[r]
+            while not a in goTo[state]:
+                state = failure[state]
+
+            failure[s] = goTo[state][a]
+            output[s] = output[s]+output[failure[s]]
+
+    # DEBUG
+    for i in range(limitForStates):
+        logging.info(f"State: {i}: {goTo[i]} {failure[i]} {output[i]}")
 
     return goTo, failure, output
 
 
-def ahoCorastick(text, keywords):
+def ahoCorasick(text, keywords):
 
     goTo, failure, output = generatePatternMatchingMachine(keywords)
 
-    return None
+    matchList = []
+
+    state = 0
+    for i in range(1, len(text)+1):
+        while not text[i-1] in goTo[state]:
+            state = failure[state]
+        state = goTo[state][text[i-1]]
+
+        for match in output[state]:
+            matchList.append((i-len(match), match))
+            logging.info(f"Found word at {i-len(match)} {match}")
+
+    if not matchList:
+        logging.info("No match found")
+
+    return matchList
 
 
 if __name__ == "__main__":
 
-    ahoCorastick("abc", ["he", "she", "his", "hers"])
+    # logging.basicConfig(level=logging.DEBUG)
+
+    print(ahoCorasick("hehehehehehehheeheh", ["he", "hee", "his", "hers"]))

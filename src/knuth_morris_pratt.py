@@ -16,7 +16,7 @@ def naive(text, pattern):
 
         if matches == patternLenght:
 
-            # problem with aaaaa and aa, it counts each a as one match, but it should only count each aa
+            # problem with aaaaaaaaaaaaa and aaaa, it counts each a as one match, but it should only count each aa
 
             # first entry into empty list
             if not matchList:
@@ -75,8 +75,9 @@ def knuthMorrisPratt(text, pattern):
 
         if patPos > patLen:
             matchList.append(textPos-patLen-1)
-            # possible slowdown, because prea table not used
+            # possible slowdown, because prea table not used,->last entry of prea table
             patPos = 1
+            # patPos = prea[]
 
     return matchList
 
@@ -135,6 +136,6 @@ if __name__ == "__main__":
     #text, pattern, pos = generateRandom(length=1000)
     #testBoth(text, pattern)
 
-    testBoth("This is a example text with two is.", "is")
-    testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
-    # testBoth("aaaaaaaaaaaaaaaaaa", "aaa")
+    #testBoth("This is a example text with two is.", "is")
+    #testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
+    testBoth("aaaaaaaaaaaaaaaaaa", "aaa")
