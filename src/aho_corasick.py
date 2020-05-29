@@ -1,5 +1,6 @@
 import logging
 import string
+import random
 
 # building the pattern matching machine for the algorithm
 
@@ -90,8 +91,28 @@ def ahoCorasick(text, keywords):
     return matchList
 
 
+def generateRandom(chars=["a", "b", "h", "e"], length=100, keywordAmount=3, keywordLengthRange=(2, 7)):
+
+    # string.ascii_uppercase + string.digits would be all characters
+    text = "".join(random.choices(chars, k=length))
+    keywords = []
+
+    for _ in range(keywordAmount):
+        patternLenght = random.randrange(
+            keywordLengthRange[0], keywordLengthRange[1])
+
+        patternPos = random.randrange(length-patternLenght)
+        keywords.append(text[patternPos:patternPos+patternLenght])
+
+    return text, keywords
+
+
 if __name__ == "__main__":
 
     # logging.basicConfig(level=logging.DEBUG)
 
-    print(ahoCorasick("hehehehehehehheeheh", ["he", "hee", "his", "hers"]))
+    # print(ahoCorasick("aaaaaaaaaaaaaaaaaaaaaaa", ["aa", "he", "hee", "his", "hers"]))
+
+    text, keywords = generateRandom()
+    print(text, keywords)
+    print(ahoCorasick(text, keywords))
