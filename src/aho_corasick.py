@@ -7,8 +7,7 @@ import random
 
 def generatePatternMatchingMachine(keywords):
 
-    limitForStates = sum(len(i) for i in keywords)
-
+    limitForStates = sum(len(i) for i in keywords)+1
     # goTo is a list of dictonaries, each entries represents one node
     # 0             1               2
     # [{"h":1,"s":3},{"e":2,"i":6}, ....]
@@ -113,6 +112,7 @@ if __name__ == "__main__":
 
     # print(ahoCorasick("aaaaaaaaaaaaaaaaaaaaaaa", ["aa", "he", "hee", "his", "hers"]))
 
-    text, keywords = generateRandom()
-    print(text, keywords)
-    print(ahoCorasick(text, keywords))
+    for i in range(10):
+        text, keywords = generateRandom()
+        print(text, keywords)
+        print(ahoCorasick(text, keywords))

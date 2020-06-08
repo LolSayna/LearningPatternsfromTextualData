@@ -6,7 +6,6 @@ KMP:
 
 -problems: naive implementation and string "aaaa", with pattern "aa" 
     kmp matches, where the algo continues
-    kmp with leading zero
 
 AhoC:
 
@@ -15,3 +14,6 @@ AhoC:
     how many states, for now using upper limit and some are empty -> trie
     implementation of goTo function, whole alphabet vs hashing/dict
     checking on input-> multiple times the same word
+
+RabinKarp:
+    -only working on 1 and 0

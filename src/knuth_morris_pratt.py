@@ -23,22 +23,19 @@ def naive(text, pattern):
 
 def createNextTable(pattern):
 
-    prea = [0] * len(pattern)
-    j, t = 1, 0
+    j, t = 0, -1
 
-    while j < len(pattern)-1:
+    prea = [-1]
 
-        while t > 0 and pattern[j] != pattern[t]:
+    for j in range(len(pattern)):
+
+        while t >= 0 and pattern[j] != pattern[t]:
 
             t = prea[t]
 
-        j = j+1
         t = t + 1
 
-        if pattern[j] == pattern[t]:
-            prea[j] = prea[t]
-        else:
-            prea[j] = t
+        prea.append(t)
 
     return prea
 
@@ -49,26 +46,22 @@ def knuthMorrisPratt(text, pattern):
 
     # set the string to start at 1 not 0
     textLen, patLen = len(text), len(pattern)
-    text = " " + text
-    pattern = " " + pattern
 
     # next table
     prea = createNextTable(pattern)
     print(prea)
 
-    patPos = textPos = 1
-    while textPos <= textLen:
+    patPos = 0
 
-        while patPos > 0 and text[textPos] != pattern[patPos]:
-
+    for textPos in range(textLen):
+        while patPos >= 0 and pattern[patPos] is not text[textPos]:
             patPos = prea[patPos]
 
-        textPos = textPos+1
         patPos = patPos+1
 
-        if patPos > patLen:
-            matchList.append(textPos-patLen-1)
-            patPos = prea[-1]+1
+        if patPos == patLen:
+            matchList.append(textPos-patLen+1)
+            patPos = prea[-1]
 
     return matchList
 
@@ -122,11 +115,11 @@ def compareResults(times=100):
 # simple test cases
 if __name__ == "__main__":
 
-    # compareResults()
+    compareResults()
 
     #text, pattern, pos = generateRandom(length=1000)
     #testBoth(text, pattern)
 
     #testBoth("This is a example text with two is.", "is")
-    testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
+    #testBoth("babcbabcabcaabcabcabcacabc", "abcabcacab")
     #testBoth("aaaaaaaaaaaaaaaaaa", "aaa")

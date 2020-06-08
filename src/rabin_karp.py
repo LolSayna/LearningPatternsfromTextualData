@@ -2,6 +2,7 @@ import logging
 import math
 import random
 import sympy
+import knuth_morris_pratt
 
 
 def generateRandomPrime(max):
@@ -34,7 +35,7 @@ def rabinKarp(text, pattern):
         msb = 1 if text[i] == "1" else 0
         nxt = 1 if text[i+m] == "1" else 0
 
-        fx = (2*fx - msb*2 ^ m+nxt) % p
+        fx = (2*fx - msb*2 ** m+nxt) % p
 
     if fx == fy:
         matchList.append(n-m)
@@ -48,3 +49,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
     print(rabinKarp("10101001010111000101100101010", "1010"))
+    print(knuth_morris_pratt.naive(
+        "10101001010111000101100101010", "1010"))
+
+    print(knuth_morris_pratt.knuthMorrisPratt(
+        "10101001010111000101100101010", "1010"))
