@@ -1,5 +1,6 @@
 import random
 import string
+import logging
 from timeit import default_timer as timer
 
 
@@ -49,7 +50,7 @@ def knuthMorrisPratt(text, pattern):
 
     # next table
     prea = createNextTable(pattern)
-    print(prea)
+    logging.debug(f"\t\t{prea}")
 
     patPos = 0
 

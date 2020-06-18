@@ -17,3 +17,19 @@ AhoC:
 
 RabinKarp:
     -only working on 1 and 0
+
+
+
+more testing
+boyer-moore
+
+kmp standard
+rk test without many occurencsy faster
+
+alternativ: union-find implemntation refresh 
+
+
+
+
+TESTS:
+-ahoc: printable instead of uppercase+didigts

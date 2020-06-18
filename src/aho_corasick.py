@@ -26,9 +26,8 @@ def generatePatternMatchingMachine(keywords):
     # alorithm 1
     newstate = 0
     for a in (keywords):
-
         state, j = 0, 1
-        while a[j-1] in goTo[state]:
+        while j-1 < len(a) and a[j-1] in goTo[state]:
             state = goTo[state][a[j-1]]
             j += 1
 
@@ -40,7 +39,7 @@ def generatePatternMatchingMachine(keywords):
 
         output[state].append(a)
 
-    for c in string.ascii_letters + string.digits + " ":
+    for c in string.printable:
         if not c in goTo[0]:
             goTo[0][c] = 0
 
@@ -110,9 +109,11 @@ if __name__ == "__main__":
 
     # logging.basicConfig(level=logging.DEBUG)
 
-    # print(ahoCorasick("aaaaaaaaaaaaaaaaaaaaaaa", ["aa", "he", "hee", "his", "hers"]))
-
-    for i in range(10):
+    print(ahoCorasick("Had I the heavens' embroidered cloths, ", [
+          'dear', 'sweetie', 'angel', "dream", "baby"]))
+    """
+    for i in range(1000):
         text, keywords = generateRandom()
         print(text, keywords)
         print(ahoCorasick(text, keywords))
+    """
