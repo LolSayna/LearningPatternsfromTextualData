@@ -33,3 +33,15 @@ alternativ: union-find implemntation refresh
 
 TESTS:
 -ahoc: printable instead of uppercase+didigts
+
+
+BM:
+-diffrent versions: badChar as single array or 2d array
+
+
+boyer moore,turbo boyer more,apostolico.giancarlo -> diffrent variants, compare against
+https://www.amazon.de/Handbook-Exact-String-Matching-Algorithms/dp/0954300645
+https://www.amazon.de/Algorithms-Strings-Maxime-Crochemore/dp/1107670993/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=&sr=
+
+-> focus on booyer more handbook of exact STring Matching
+small presentaioon, compare the implemntation, speed on diffrent data

@@ -45,7 +45,6 @@ def knuthMorrisPratt(text, pattern):
 
     matchList = []
 
-    # set the string to start at 1 not 0
     textLen, patLen = len(text), len(pattern)
 
     # next table

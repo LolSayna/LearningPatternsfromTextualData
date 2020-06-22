@@ -4,6 +4,7 @@ from knuth_morris_pratt import naive
 from knuth_morris_pratt import knuthMorrisPratt
 from rabin_karp import rabinKarp
 from aho_corasick import ahoCorasick
+from boyer_moore import boyerMoore
 
 
 def single(algos, text, pattern):
@@ -36,7 +37,13 @@ def single(algos, text, pattern):
             print(f"Time: {end - start:.5f} s")
             print(f"Resu: {res}\n")
             results.append(res)
-
+        elif algo == "bm":
+            start = timer()
+            res = boyerMoore(text, pattern)
+            end = timer()
+            print(f"Time: {end - start:.5f} s")
+            print(f"Resu: {res}\n")
+            results.append(res)
         elif algo == "rk":
             print("skip")
             """
@@ -52,4 +59,4 @@ def single(algos, text, pattern):
 
 if __name__ == "__main__":
 
-    print(single(["nai", "kmp", "ac", "rk"], "blubbluib", "bl"))
+    print(single(["nai", "kmp", "ac", "bm", "rk"], "blubbluib", "bl"))
