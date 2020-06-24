@@ -17,7 +17,8 @@ AhoC:
 
 RabinKarp:
     -only working on 1 and 0
-
+    -> diffrent version from http://www-igm.univ-mlv.fr/~lecroq/string/node5.html#SECTION0050
+    -for speed try byteshift vs 2*
 
 
 more testing
@@ -45,3 +46,7 @@ https://www.amazon.de/Algorithms-Strings-Maxime-Crochemore/dp/1107670993/ref=tmm
 
 -> focus on booyer more handbook of exact STring Matching
 small presentaioon, compare the implemntation, speed on diffrent data
+
+Data: len(text), len(pattern), size(alphabet), preprocssing->remove by only on dataset at times
+
+runs at x-asis, time at y-axis -> diffrent lines

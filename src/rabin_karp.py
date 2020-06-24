@@ -5,65 +5,40 @@ import sympy
 import knuth_morris_pratt
 
 
-def generateRandomPrime(max):
-
-    p = random.randrange(2, max)
-    rerolls = 0
-
-    while not sympy.isprime(p):
-        p = random.randrange(2, max)
-        rerolls += 1
-
-    logging.info(f"rerolled {rerolls} times, got {p}")
-
-    return p
-
-
-def convertToBinary(text, pattern):
-    binText, binPattern = "", ""
-    for c in text:
-        binText += f"{ord(c):08b}"
-
-    for c in pattern:
-        binPattern += f"{ord(c):08b}"
-
-    return binText, binPattern
-
-
 def rabinKarp(text, pattern):
 
-    print(text, pattern)
-    #text, pattern = convertToBinary(text, pattern)
-    print(text, pattern)
-
     matchList = []
-
     n, m, = len(text), len(pattern)
 
-    p = generateRandomPrime(int(n*n * m * math.log(n*n * m)))
+    # preprocessing
+    d = 2**(m-1)
 
-    fx, fy = int(pattern, base=2) % p, int(text[:m], 2) % p
-    print("fy", fx)
+    fx, fy = 0, 0
+    for i in range(m):
+        fx = 2*fx + ord(text[i])
+        fy = 2*fy + ord(pattern[i])
+
+    logging.debug(f"Text Hash: {fx} Pattern Hash: {fy}")
+
     for i in range(n-m):
         if fx == fy:
-            matchList.append(i)
-        msb = 1 if text[i] == "1" else 0
-        nxt = 1 if text[i+m] == "1" else 0
+            # optional test for correction
+            logging.debug(
+                f"Potential match starting at {i} with the text: text[i:i+m]")
+            if pattern == text[i:i+m]:
+                matchList.append(i)
 
-        fx = (2*fx - msb*2 ** m+nxt) % p
-
-    if fx == fy:
-        matchList.append(n-m)
-        print("lastmatch")
+        fx = ((fx - ord(text[i])*d) * 2) + ord(text[i+m])
+        logging.debug(f"New Hash: {fx}")
 
     return matchList
 
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
 
-    print(rabinKarp("10101010101001111010001010111110000101010101", "1010"))
+    print(rabinKarp("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
 
     print(rabinKarp("10101010101001111010001010111110000101010101", "10100"))
-    #print(rabinKarp("standard Text bli bla ble ad fdsdsdsdsd", "bl"))
+    print(rabinKarp("standard Text bli bla ble ad fdsdsdsdsd", "bl"))

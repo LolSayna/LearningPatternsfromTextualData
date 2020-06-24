@@ -1,4 +1,4 @@
-
+import random
 from timeit import default_timer as timer
 from knuth_morris_pratt import naive
 from knuth_morris_pratt import knuthMorrisPratt
@@ -45,18 +45,32 @@ def single(algos, text, pattern):
             print(f"Resu: {res}\n")
             results.append(res)
         elif algo == "rk":
-            print("skip")
-            """
             start = timer()
             res = rabinKarp(text, pattern)
             end = timer()
             print(f"Time: {end - start:.5f} s")
             print(f"Resu: {res}\n")
             results.append(res)
-        """
+
     return results
+
+
+def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
+
+    # string.printable
+    text = "".join(random.choices(chars, k=length))
+
+    patternLenght = random.randrange(
+        patternLengthRange[0], patternLengthRange[1])
+
+    patternPos = random.randrange(length-patternLenght)
+    pattern = text[patternPos:patternPos+patternLenght]
+
+    return text, pattern, patternPos
 
 
 if __name__ == "__main__":
 
-    print(single(["nai", "kmp", "ac", "bm", "rk"], "blubbluib", "bl"))
+    #single(["nai", "kmp", "ac", "bm", "rk"], "blubbluib", "bl")
+    text, pattern, firstMatch = generateRandom()
+    single(["nai", "kmp", "ac", "bm", "rk"], text, pattern)
