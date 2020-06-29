@@ -6,6 +6,7 @@ from knuth_morris_pratt import knuthMorrisPratt
 from rabin_karp import rabinKarp
 from aho_corasick import ahoCorasick
 from boyer_moore import boyerMoore
+from boyer_moore import turboBoyerMooreLecroq
 
 
 def single(algos, text, pattern):
@@ -52,6 +53,13 @@ def single(algos, text, pattern):
             print(f"Time: {end - start:.5f} s")
             print(f"Resu: {res}\n")
             results.append(res)
+        elif algo == "tbm":
+            start = timer()
+            res = turboBoyerMooreLecroq(text, pattern)
+            end = timer()
+            print(f"Time: {end - start:.5f} s")
+            print(f"Resu: {res}\n")
+            results.append(res)
 
     return results
 
@@ -72,11 +80,12 @@ def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=
 
 def timeRun(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
 
-    times = [[] for _ in range(5)]
+    times = [[] for _ in range(6)]
 
     for _ in range(runs):
 
-        text, pattern, firstMatch = generateRandom(length=length, chars=chars)
+        text, pattern, firstMatch = generateRandom(
+            length=length, chars=chars, patternLengthRange=patternLengthRange)
 
         start = timer()
         res = naive(text, pattern)
@@ -103,18 +112,22 @@ def timeRun(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRan
         end = timer()
         times[4].append(end - start)
 
+        start = timer()
+        res = turboBoyerMooreLecroq(text, pattern)
+        end = timer()
+        times[5].append(end - start)
+
     return times
 
 
 if __name__ == "__main__":
 
-    #single(["nai", "kmp", "ac", "bm", "rk"], "blubbluib", "bl")
+    #single(["nai", "kmp", "ac", "bm", "rk", "tbm"], "blubbluib", "bl")
     #text, pattern, firstMatch = generateRandom()
-    #single(["nai", "kmp", "ac", "bm", "rk"], text, pattern)
+    #single(["nai", "kmp", "ac", "bm", "rk", "tbm"], text, pattern)
 
     fig, (ax1, ax2, ax3) = plt.subplots(3)
     fig.suptitle('Vertically stacked subplots')
-
     """
     result = timeRun(length=1000)
     ax1.plot(result[0], label="naive")
@@ -122,7 +135,8 @@ if __name__ == "__main__":
     ax1.plot(result[2], label="aho Corasick")
     ax1.plot(result[3], label="boyer Moore")
     ax1.plot(result[4], label="rabin Karp")
-    # ax1.ylabel('Time')
+    ax1.plot(result[5], label="turbo Boyer Moore")
+    ax1.set(xlabel="Long text")
     ax1.legend()
 
     result = timeRun(length=10000)
@@ -131,26 +145,28 @@ if __name__ == "__main__":
     ax2.plot(result[2], label="aho Corasick")
     ax2.plot(result[3], label="boyer Moore")
     ax2.plot(result[4], label="rabin Karp")
-    # ax2.ylabel('Time')
+    ax2.plot(result[5], label="turbo Boyer Moore")
+    ax2.set(xlabel="Medium text")
     ax2.legend()
 
-    
-    result = timeRun(length=1000000)
+    result = timeRun(length=100000)
     ax3.plot(result[0], label="naive")
     ax3.plot(result[1], label="knuth morris pratt")
     ax3.plot(result[2], label="aho Corasick")
     ax3.plot(result[3], label="boyer Moore")
     ax3.plot(result[4], label="rabin Karp")
-    # ax1.ylabel('Time')
+    ax3.plot(result[5], label="turbo Boyer Moore")
+    ax3.set(xlabel="Long text")
     ax3.legend()
     """
-
+    """
     result = timeRun(chars=["0", "1"])
     ax1.plot(result[0], label="naive")
     ax1.plot(result[1], label="knuth morris pratt")
     ax1.plot(result[2], label="aho Corasick")
     ax1.plot(result[3], label="boyer Moore")
     ax1.plot(result[4], label="rabin Karp")
+    ax1.plot(result[5], label="turbo Boyer Moore")
     ax1.set(xlabel="Binary Alphabet")
     ax1.legend()
 
@@ -160,6 +176,7 @@ if __name__ == "__main__":
     ax2.plot(result[2], label="aho Corasick")
     ax2.plot(result[3], label="boyer Moore")
     ax2.plot(result[4], label="rabin Karp")
+    ax2.plot(result[5], label="turbo Boyer Moore")
     ax2.set(xlabel="4 - Alphabet")
     ax2.legend()
 
@@ -170,7 +187,39 @@ if __name__ == "__main__":
     ax3.plot(result[2], label="aho Corasick")
     ax3.plot(result[3], label="boyer Moore")
     ax3.plot(result[4], label="rabin Karp")
+    ax3.plot(result[5], label="turbo Boyer Moore")
     ax3.set(xlabel="26 Alphabet")
+    ax3.legend()
+
+    """
+    result = timeRun(patternLengthRange=(1, 2), chars=["0", "1"])
+    ax1.plot(result[0], label="naive")
+    ax1.plot(result[1], label="knuth morris pratt")
+    ax1.plot(result[2], label="aho Corasick")
+    ax1.plot(result[3], label="boyer Moore")
+    ax1.plot(result[4], label="rabin Karp")
+    ax1.plot(result[5], label="turbo Boyer Moore")
+    ax1.set(xlabel="Short Pattern")
+    ax1.legend()
+
+    result = timeRun(patternLengthRange=(500, 750), chars=["0", "1"])
+    ax2.plot(result[0], label="naive")
+    ax2.plot(result[1], label="knuth morris pratt")
+    ax2.plot(result[2], label="aho Corasick")
+    ax2.plot(result[3], label="boyer Moore")
+    ax2.plot(result[4], label="rabin Karp")
+    ax2.plot(result[5], label="turbo Boyer Moore")
+    ax2.set(xlabel="Long Pattern")
+    ax2.legend()
+
+    result = timeRun(patternLengthRange=(0, 1000), chars=["0", "1"])
+    ax3.plot(result[0], label="naive")
+    ax3.plot(result[1], label="knuth morris pratt")
+    ax3.plot(result[2], label="aho Corasick")
+    ax3.plot(result[3], label="boyer Moore")
+    ax3.plot(result[4], label="rabin Karp")
+    ax3.plot(result[5], label="turbo Boyer Moore")
+    ax3.set(xlabel="Wide range Pattern")
     ax3.legend()
 
     plt.show()

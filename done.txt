@@ -38,7 +38,8 @@ TESTS:
 
 BM:
 -diffrent versions: badChar as single array or 2d array
-
+-https://www.inf.hs-flensburg.de/lang/algorithmen/pattern/bm.htm
+vs http://www-igm.univ-mlv.fr/~lecroq/string/node14.html#SECTION00140
 
 boyer moore,turbo boyer more,apostolico.giancarlo -> diffrent variants, compare against
 https://www.amazon.de/Handbook-Exact-String-Matching-Algorithms/dp/0954300645
