@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 from timeit import default_timer as timer
 from knuth_morris_pratt import naive
 from knuth_morris_pratt import knuthMorrisPratt
@@ -69,8 +70,107 @@ def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=
     return text, pattern, patternPos
 
 
+def timeRun(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
+
+    times = [[] for _ in range(5)]
+
+    for _ in range(runs):
+
+        text, pattern, firstMatch = generateRandom(length=length, chars=chars)
+
+        start = timer()
+        res = naive(text, pattern)
+        end = timer()
+        times[0].append(end - start)
+
+        start = timer()
+        res = knuthMorrisPratt(text, pattern)
+        end = timer()
+        times[1].append(end - start)
+
+        start = timer()
+        res = ahoCorasick(text, [pattern])
+        end = timer()
+        times[2].append(end - start)
+
+        start = timer()
+        res = boyerMoore(text, pattern)
+        end = timer()
+        times[3].append(end - start)
+
+        start = timer()
+        res = rabinKarp(text, pattern)
+        end = timer()
+        times[4].append(end - start)
+
+    return times
+
+
 if __name__ == "__main__":
 
     #single(["nai", "kmp", "ac", "bm", "rk"], "blubbluib", "bl")
-    text, pattern, firstMatch = generateRandom()
-    single(["nai", "kmp", "ac", "bm", "rk"], text, pattern)
+    #text, pattern, firstMatch = generateRandom()
+    #single(["nai", "kmp", "ac", "bm", "rk"], text, pattern)
+
+    fig, (ax1, ax2, ax3) = plt.subplots(3)
+    fig.suptitle('Vertically stacked subplots')
+
+    """
+    result = timeRun(length=1000)
+    ax1.plot(result[0], label="naive")
+    ax1.plot(result[1], label="knuth morris pratt")
+    ax1.plot(result[2], label="aho Corasick")
+    ax1.plot(result[3], label="boyer Moore")
+    ax1.plot(result[4], label="rabin Karp")
+    # ax1.ylabel('Time')
+    ax1.legend()
+
+    result = timeRun(length=10000)
+    ax2.plot(result[0], label="naive")
+    ax2.plot(result[1], label="knuth morris pratt")
+    ax2.plot(result[2], label="aho Corasick")
+    ax2.plot(result[3], label="boyer Moore")
+    ax2.plot(result[4], label="rabin Karp")
+    # ax2.ylabel('Time')
+    ax2.legend()
+
+    
+    result = timeRun(length=1000000)
+    ax3.plot(result[0], label="naive")
+    ax3.plot(result[1], label="knuth morris pratt")
+    ax3.plot(result[2], label="aho Corasick")
+    ax3.plot(result[3], label="boyer Moore")
+    ax3.plot(result[4], label="rabin Karp")
+    # ax1.ylabel('Time')
+    ax3.legend()
+    """
+
+    result = timeRun(chars=["0", "1"])
+    ax1.plot(result[0], label="naive")
+    ax1.plot(result[1], label="knuth morris pratt")
+    ax1.plot(result[2], label="aho Corasick")
+    ax1.plot(result[3], label="boyer Moore")
+    ax1.plot(result[4], label="rabin Karp")
+    ax1.set(xlabel="Binary Alphabet")
+    ax1.legend()
+
+    result = timeRun(chars=["a", "b", "c", "d"])
+    ax2.plot(result[0], label="naive")
+    ax2.plot(result[1], label="knuth morris pratt")
+    ax2.plot(result[2], label="aho Corasick")
+    ax2.plot(result[3], label="boyer Moore")
+    ax2.plot(result[4], label="rabin Karp")
+    ax2.set(xlabel="4 - Alphabet")
+    ax2.legend()
+
+    result = timeRun(chars=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+                            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"])
+    ax3.plot(result[0], label="naive")
+    ax3.plot(result[1], label="knuth morris pratt")
+    ax3.plot(result[2], label="aho Corasick")
+    ax3.plot(result[3], label="boyer Moore")
+    ax3.plot(result[4], label="rabin Karp")
+    ax3.set(xlabel="26 Alphabet")
+    ax3.legend()
+
+    plt.show()
