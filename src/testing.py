@@ -65,9 +65,22 @@ def single(algos, text, pattern):
     return results
 
 
+# testing if diffrent algorithms lead to diffrent results
+def compareResults(times=100):
+
+    for i in range(times):
+        text, pattern, pos = generateRandom(length=1000)
+        if naive(text, pattern) != knuthMorrisPratt(text, pattern):
+            print(print(f"p:{pattern}\nt:{text}"))
+            n = naive(text, pattern)
+            print(len(n), n)
+            k = knuthMorrisPratt(text, pattern)
+            print(len(k), k)
+
+
 def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
 
-    # string.printable
+    # string.printable for all standard chars
     text = "".join(random.choices(chars, k=length))
 
     patternLenght = random.randrange(
@@ -134,8 +147,8 @@ if __name__ == "__main__":
 
     fig, (ax1, ax2, ax3) = plt.subplots(3)
     fig.suptitle('Vertically stacked subplots')
-
-    result = timeRun(length=1000)
+    """
+    result = timeRun(length=100)
     ax1.plot(result[0], label="naive")
     ax1.plot(result[1], label="knuth morris pratt")
     ax1.plot(result[2], label="aho Corasick")
@@ -146,7 +159,7 @@ if __name__ == "__main__":
     ax1.set(xlabel="1000 legnth text")
     ax1.legend()
 
-    result = timeRun(length=10000)
+    result = timeRun(length=1000)
     ax2.plot(result[0], label="naive")
     ax2.plot(result[1], label="knuth morris pratt")
     ax2.plot(result[2], label="aho Corasick")
@@ -157,7 +170,7 @@ if __name__ == "__main__":
     ax2.set(xlabel="10000 legnth text")
     ax2.legend()
 
-    result = timeRun(length=100000)
+    result = timeRun(length=10000)
     ax3.plot(result[0], label="naive")
     ax3.plot(result[1], label="knuth morris pratt")
     ax3.plot(result[2], label="aho Corasick")
@@ -167,7 +180,7 @@ if __name__ == "__main__":
     ax3.plot(result[6], label="boyer Moore lecroq")
     ax3.set(xlabel="100000 legnth text")
     ax3.legend()
-
+    """
     """
     result = timeRun(chars=["0", "1"])
     ax1.plot(result[0], label="naive")
@@ -202,7 +215,7 @@ if __name__ == "__main__":
     ax3.plot(result[6], label="boyer Moore lecroq")
     ax3.set(xlabel="26 Alphabet")
     ax3.legend()
-    """
+
     """
     result = timeRun(patternLengthRange=(1, 2), chars=["0", "1"])
     ax1.plot(result[0], label="naive")
@@ -236,5 +249,5 @@ if __name__ == "__main__":
     ax3.plot(result[6], label="boyer Moore lecroq")
     ax3.set(xlabel="Wide range Pattern")
     ax3.legend()
-    """
+
     plt.show()
