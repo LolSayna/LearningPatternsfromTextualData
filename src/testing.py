@@ -1,4 +1,5 @@
 import logging
+import string
 import matplotlib.pyplot as plt
 from timeit import default_timer as timer
 
@@ -36,7 +37,7 @@ def run(currentAlgoList, text, pattern):
     return results, time
 
 
-def randomRuns(currentAlgoList=algoList, runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
+def randomRuns(currentAlgoList=algoList, runs=10, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(2, 3)):
     # customizible runs function for multiple scenarios
 
     # for plotting each algo it needs an own list of its times
@@ -60,8 +61,10 @@ def randomRuns(currentAlgoList=algoList, runs=100, chars=["a", "b", "c", "d"], l
 
     return times
 
+# TODO: different results happens
 
-def plot(runs=100, chars=["a", "b", "c", "d"], length=1000, patternLengthRange=(50, 100)):
+
+def plot(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(5, 10)):
 
     times = randomRuns(algoList, runs, chars,
                        length, patternLengthRange)
@@ -82,5 +85,4 @@ if __name__ == "__main__":
 
     # print(randomRuns(runs=20))
 
-    plot()
-    plot(length=10000)
+    plot(patternLengthRange=(10, 20))
