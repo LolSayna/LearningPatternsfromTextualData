@@ -1,253 +1,86 @@
-import random
+import logging
 import matplotlib.pyplot as plt
 from timeit import default_timer as timer
+
+import generate
+
 from knuth_morris_pratt import naive
 from knuth_morris_pratt import knuthMorrisPratt
+from aho_corasick import ahoCorasickSingle
 from rabin_karp import rabinKarp
-from aho_corasick import ahoCorasick
+from boyer_moore import boyerMooreFlens
 from boyer_moore import boyerMooreLecroq
 from boyer_moore import turboBoyerMooreLecroq
-from boyer_moore import boyerMooreFlens
+
+algoList = ["naive", "knuthMorrisPratt", "ahoCorasickSingle", "rabinKarp",
+            "boyerMooreFlens", "boyerMooreLecroq", "turboBoyerMooreLecroq"]
 
 
-def single(algos, text, pattern):
-    # syntax: test([list of algos], text, pattern)
+def run(currentAlgoList, text, pattern):
+    # syntax: run([list of algos from algoList], text, pattern)
 
-    results = []
-    print(f"Text: {text}\nPatt: {pattern}\n")
+    results, time = [], []
+    logging.info(f"Used algos: {currentAlgoList} Text: {text} Pat: {pattern}")
 
-    for algo in algos:
-        print(f"Algo: {algo}")
+    for algo in currentAlgoList:
 
-        if algo == "nai":
-            start = timer()
-            res = naive(text, pattern)
-            end = timer()
-            print(f"Time: {end - start:.5f} s")
-            print(f"Resu: {res}\n")
-            results.append(res)
-        elif algo == "kmp":
-            start = timer()
-            res = knuthMorrisPratt(text, pattern)
-            end = timer()
-            print(f"Time: {end - start:.5f} s")
-            print(f"Resu: {res}\n")
-            results.append(res)
-        elif algo == "ac":
-            start = timer()
-            res = ahoCorasick(text, [pattern])
-            end = timer()
-            print(f"Time: {end - start:.5f} s")
-            print(f"Resu: {res}\n")
-            results.append(res)
-        elif algo == "bm":
-            start = timer()
-            res = boyerMooreFlens(text, pattern)
-            end = timer()
-            print(f"Time: {end - start:.5f} s")
-            print(f"Resu: {res}\n")
-            results.append(res)
-        elif algo == "rk":
-            start = timer()
-            res = rabinKarp(text, pattern)
-            end = timer()
-            print(f"Time: {end - start:.5f} s")
-            print(f"Resu: {res}\n")
-            results.append(res)
-        elif algo == "tbm":
-            start = timer()
-            res = turboBoyerMooreLecroq(text, pattern)
-            end = timer()
-            print(f"Time: {end - start:.5f} s")
-            print(f"Resu: {res}\n")
-            results.append(res)
+        func = globals()[algo]
+        start = timer()
+        res = func(text, pattern)
+        end = timer()
 
-    return results
+        results.append(res)
+        time.append(end - start)
+        logging.info(f"{algo} found {res} in {end - start:.5f} s")
+
+    return results, time
 
 
-# testing if diffrent algorithms lead to diffrent results
-def compareResults(times=100):
+def randomRuns(currentAlgoList=algoList, runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
+    # customizible runs function for multiple scenarios
 
-    for i in range(times):
-        text, pattern, pos = generateRandom(length=1000)
-        if naive(text, pattern) != knuthMorrisPratt(text, pattern):
-            print(print(f"p:{pattern}\nt:{text}"))
-            n = naive(text, pattern)
-            print(len(n), n)
-            k = knuthMorrisPratt(text, pattern)
-            print(len(k), k)
+    # for plotting each algo it needs an own list of its times
+    times = [[] for _ in range(len(currentAlgoList))]
 
-
-def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
-
-    # string.printable for all standard chars
-    text = "".join(random.choices(chars, k=length))
-
-    patternLenght = random.randrange(
-        patternLengthRange[0], patternLengthRange[1])
-
-    patternPos = random.randrange(length-patternLenght)
-    pattern = text[patternPos:patternPos+patternLenght]
-
-    return text, pattern, patternPos
-
-
-def timeRun(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
-
-    times = [[] for _ in range(7)]
-
-    for _ in range(runs):
-
-        text, pattern, firstMatch = generateRandom(
+    for i in range(runs):
+        text, pattern, firstMatch = generate.generateRandom(
             length=length, chars=chars, patternLengthRange=patternLengthRange)
 
-        start = timer()
-        res = naive(text, pattern)
-        end = timer()
-        times[0].append(end - start)
+        results, time = run(currentAlgoList, text, pattern)
 
-        start = timer()
-        res = knuthMorrisPratt(text, pattern)
-        end = timer()
-        times[1].append(end - start)
+        # check if one of the algos outputed a diffrent result
+        if not all(element == results[0] for element in results):
+            # if len(set(results)) != 1:
+            print(
+                f"One of the algos had a different result!\nText: {text}, Pattern: {pattern}\n results:{results}")
 
-        start = timer()
-        res = ahoCorasick(text, [pattern])
-        end = timer()
-        times[2].append(end - start)
-
-        start = timer()
-        res = boyerMooreFlens(text, pattern)
-        end = timer()
-        times[3].append(end - start)
-
-        start = timer()
-        res = rabinKarp(text, pattern)
-        end = timer()
-        times[4].append(end - start)
-
-        start = timer()
-        res = turboBoyerMooreLecroq(text, pattern)
-        end = timer()
-        times[5].append(end - start)
-
-        start = timer()
-        res = boyerMooreLecroq(text, pattern)
-        end = timer()
-        times[6].append(end - start)
+        # add the time from each algo in its corresponding list
+        for j in range(len(currentAlgoList)):
+            times[j].append(time[j])
 
     return times
 
 
+def plot(runs=100, chars=["a", "b", "c", "d"], length=1000, patternLengthRange=(50, 100)):
+
+    times = randomRuns(algoList, runs, chars,
+                       length, patternLengthRange)
+
+    for i in range(len(algoList)):
+        plt.plot(times[i], label=algoList[i])
+
+    plt.xlabel("runs")
+    plt.ylabel("time")
+    plt.legend()
+    plt.show()
+
+
 if __name__ == "__main__":
 
-    #single(["nai", "kmp", "ac", "bm", "rk", "tbm"], "blubbluib", "bl")
-    #text, pattern, firstMatch = generateRandom()
-    #single(["nai", "kmp", "ac", "bm", "rk", "tbm"], text, pattern)
+    # logging.basicConfig(level=logging.INFO)
+    #print(run(algoList, "abdsdbsdbbds", "db"))
 
-    fig, (ax1, ax2, ax3) = plt.subplots(3)
-    fig.suptitle('Vertically stacked subplots')
-    """
-    result = timeRun(length=100)
-    ax1.plot(result[0], label="naive")
-    ax1.plot(result[1], label="knuth morris pratt")
-    ax1.plot(result[2], label="aho Corasick")
-    ax1.plot(result[3], label="boyer Moore flens")
-    ax1.plot(result[4], label="rabin Karp")
-    ax1.plot(result[5], label="turbo Boyer Moore")
-    ax1.plot(result[6], label="boyer Moore lecroq")
-    ax1.set(xlabel="1000 legnth text")
-    ax1.legend()
+    # print(randomRuns(runs=20))
 
-    result = timeRun(length=1000)
-    ax2.plot(result[0], label="naive")
-    ax2.plot(result[1], label="knuth morris pratt")
-    ax2.plot(result[2], label="aho Corasick")
-    ax2.plot(result[3], label="boyer Moore flens")
-    ax2.plot(result[4], label="rabin Karp")
-    ax2.plot(result[5], label="turbo Boyer Moore")
-    ax2.plot(result[6], label="boyer Moore lecroq")
-    ax2.set(xlabel="10000 legnth text")
-    ax2.legend()
-
-    result = timeRun(length=10000)
-    ax3.plot(result[0], label="naive")
-    ax3.plot(result[1], label="knuth morris pratt")
-    ax3.plot(result[2], label="aho Corasick")
-    ax3.plot(result[3], label="boyer Moore flens")
-    ax3.plot(result[4], label="rabin Karp")
-    ax3.plot(result[5], label="turbo Boyer Moore")
-    ax3.plot(result[6], label="boyer Moore lecroq")
-    ax3.set(xlabel="100000 legnth text")
-    ax3.legend()
-    """
-    """
-    result = timeRun(chars=["0", "1"])
-    ax1.plot(result[0], label="naive")
-    ax1.plot(result[1], label="knuth morris pratt")
-    ax1.plot(result[2], label="aho Corasick")
-    ax1.plot(result[3], label="boyer Moore flens")
-    ax1.plot(result[4], label="rabin Karp")
-    ax1.plot(result[5], label="turbo Boyer Moore")
-    ax1.plot(result[6], label="boyer Moore lecroq")
-    ax1.set(xlabel="Binary Alphabet")
-    ax1.legend()
-
-    result = timeRun(chars=["a", "b", "c", "d"])
-    ax2.plot(result[0], label="naive")
-    ax2.plot(result[1], label="knuth morris pratt")
-    ax2.plot(result[2], label="aho Corasick")
-    ax2.plot(result[3], label="boyer Moore flens")
-    ax2.plot(result[4], label="rabin Karp")
-    ax2.plot(result[5], label="turbo Boyer Moore")
-    ax2.plot(result[6], label="boyer Moore lecroq")
-    ax2.set(xlabel="4 - Alphabet")
-    ax2.legend()
-
-    result = timeRun(chars=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-                            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"])
-    ax3.plot(result[0], label="naive")
-    ax3.plot(result[1], label="knuth morris pratt")
-    ax3.plot(result[2], label="aho Corasick")
-    ax3.plot(result[3], label="boyer Moore flens")
-    ax3.plot(result[4], label="rabin Karp")
-    ax3.plot(result[5], label="turbo Boyer Moore")
-    ax3.plot(result[6], label="boyer Moore lecroq")
-    ax3.set(xlabel="26 Alphabet")
-    ax3.legend()
-
-    """
-    result = timeRun(patternLengthRange=(1, 2), chars=["0", "1"])
-    ax1.plot(result[0], label="naive")
-    ax1.plot(result[1], label="knuth morris pratt")
-    ax1.plot(result[2], label="aho Corasick")
-    ax1.plot(result[3], label="boyer Moore flens")
-    ax1.plot(result[4], label="rabin Karp")
-    ax1.plot(result[5], label="turbo Boyer Moore")
-    ax1.plot(result[6], label="boyer Moore lecroq")
-    ax1.set(xlabel="Short Pattern")
-    ax1.legend()
-
-    result = timeRun(patternLengthRange=(500, 750), chars=["0", "1"])
-    ax2.plot(result[0], label="naive")
-    ax2.plot(result[1], label="knuth morris pratt")
-    ax2.plot(result[2], label="aho Corasick")
-    ax2.plot(result[3], label="boyer Moore flens")
-    ax2.plot(result[4], label="rabin Karp")
-    ax2.plot(result[5], label="turbo Boyer Moore")
-    ax2.plot(result[6], label="boyer Moore lecroq")
-    ax2.set(xlabel="Long Pattern")
-    ax2.legend()
-
-    result = timeRun(patternLengthRange=(0, 1000), chars=["0", "1"])
-    ax3.plot(result[0], label="naive")
-    ax3.plot(result[1], label="knuth morris pratt")
-    ax3.plot(result[2], label="aho Corasick")
-    ax3.plot(result[3], label="boyer Moore flens")
-    ax3.plot(result[4], label="rabin Karp")
-    ax3.plot(result[5], label="turbo Boyer Moore")
-    ax3.plot(result[6], label="boyer Moore lecroq")
-    ax3.set(xlabel="Wide range Pattern")
-    ax3.legend()
-
-    plt.show()
+    plot()
+    plot(length=10000)

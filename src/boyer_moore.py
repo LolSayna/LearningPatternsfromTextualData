@@ -2,6 +2,7 @@ import logging
 import string
 
 # assume all char have an int value of less them 256
+# 3 diffrent variants, one based on https://www.inf.hs-flensburg.de/lang/algorithmen/pattern/bm.htm and 2 from http://www-igm.univ-mlv.fr/~lecroq/string/ which use the same charrules
 
 
 def generateBadCharRuleFlens(pattern):
@@ -12,10 +13,10 @@ def generateBadCharRuleFlens(pattern):
         badChar[(ord(c))] = i
 
     # debug info
-    logging.info("Flens Version: Displaying badChar Table:")
+    logging.debug("Flens: badChar Table:")
     for i, c in enumerate(badChar):
         if c != -1:
-            logging.info(f"{chr(i)} {c}")
+            logging.debug(f"  {chr(i)} {c}")
     return badChar
 
 
@@ -27,16 +28,17 @@ def generateBadCharRuleLecroq(pattern):
         badChar[ord(pattern[i])] = len(pattern) - i - 1
 
     # debug info
-    logging.info("Lecroq Version: Displaying badChar Table:")
+    logging.debug("Lecroq: badChar Table:")
     for i, c in enumerate(badChar):
         if c != len(pattern):
-            logging.info(f"{chr(i)} {c}")
+            logging.debug(f"  {chr(i)} {c}")
     return badChar
 
 
 def generateGoodCharRuleFlens(pattern):
 
     m = len(pattern)
+
     f, s = [0 for _ in range(m+1)], [0 for _ in range(m+1)]
     i, j = m, m+1
 
@@ -50,12 +52,6 @@ def generateGoodCharRuleFlens(pattern):
         j -= 1
         f[i] = j
 
-    # debug info
-    logging.info("Flens Version: Displaying goodChar Table Step 1:")
-    logging.info(pattern)
-    logging.info(f)
-    logging.info(s)
-
     j = f[0]
     for i in range(m+1):
         if s[i] == 0:
@@ -64,9 +60,8 @@ def generateGoodCharRuleFlens(pattern):
             j = f[j]
 
     # debug info
-    logging.info("Flens Version: Displaying goodChar Table Step 2:")
-    logging.info(f)
-    logging.info(s)
+    logging.debug(f"Flens: goodChar Table array f {f}")
+    logging.debug(f"Flens: goodChar Table {s}")
 
     return s
 
@@ -89,8 +84,7 @@ def generateGoodCharRuleLecroq(pattern):
                 g -= 1
             suff[i] = f - g
 
-    logging.info(
-        f"Lecroq Version: generatetd SuffixTable for goodChar Table: {suff}")
+    logging.debug(f"Lecroq: SuffixTable for goodChar Table: {suff}")
 
     goodChar = [m for _ in range(m)]
     j = 0
@@ -105,7 +99,7 @@ def generateGoodCharRuleLecroq(pattern):
     for i in range(m-1):
         goodChar[m-1-suff[i]] = m - 1 - i
 
-    logging.info(f"Lecroq Version: generatetd goodChar Table: {goodChar}")
+    logging.debug(f"Lecroq: goodChar Table: {goodChar}")
 
     return goodChar
 
@@ -199,13 +193,22 @@ def turboBoyerMooreLecroq(text, pattern):
 
 
 if __name__ == "__main__":
+    # simple test cases
 
+    # logging.basicConfig(level=logging.DEBUG)
     logging.basicConfig(level=logging.INFO)
 
-    print(boyerMooreLecroq("kekkekekbekbekbkekkebkeb", "kek"))
-    print(boyerMooreFlens("kekkekekbekbekbkekkebkeb", "kek"))
-    print(turboBoyerMooreLecroq("kekkekekbekbekbkekkebkeb", "kek"))
+    logging.info("FLENS:")
+    logging.info(boyerMooreFlens("kekkekekbekbekbkekkebkeb", "kek"))
+    logging.info("LECROQ:")
+    logging.info(boyerMooreLecroq("kekkekekbekbekbkekkebkeb", "kek"))
+    logging.info("TURBO:")
+    logging.info(turboBoyerMooreLecroq("kekkekekbekbekbkekkebkeb", "kek"))
 
-    #print(turboBoyerMooreLecroq("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
-    # generateBadCharRule("asdsakodksaodoasdksakdoasdkasodok")
-    # generateGoodCharRuleLecroq("GCAGAGAG")
+    logging.info("FLENS:")
+    logging.info(boyerMooreFlens("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
+    logging.info("LECROQ:")
+    logging.info(boyerMooreLecroq(
+        "GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
+    logging.info("TURBO:")
+    logging.info(turboBoyerMooreLecroq("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))

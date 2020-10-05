@@ -49,7 +49,6 @@ def knuthMorrisPratt(text, pattern):
     logging.debug(f"Prefix table in KMP algo: {prea}")
 
     patPos = 0
-
     for textPos in range(n):
         while patPos >= 0 and pattern[patPos] is not text[textPos]:
             patPos = prea[patPos]

@@ -1,11 +1,9 @@
 import logging
 import math
-import random
-import sympy
-import knuth_morris_pratt
 
 
 def rabinKarp(text, pattern):
+    # based not on http://www-igm.univ-mlv.fr/~lecroq/string/node5.html
 
     matchList = []
     n, m, = len(text), len(pattern)
@@ -13,6 +11,7 @@ def rabinKarp(text, pattern):
     # preprocessing
     d = 2**(m-1)
 
+    # calc hash(pattern) and hash(the first m char from the text)
     fx, fy = 0, 0
     for i in range(m):
         fx = 2*fx + ord(text[i])
@@ -22,9 +21,9 @@ def rabinKarp(text, pattern):
 
     for i in range(n-m):
         if fx == fy:
-            # optional test for correction
+            # optional test to only include real matches and not false positiv matches
             logging.debug(
-                f"Potential match starting at {i} with the text: text[i:i+m]")
+                f"Potential match starting at {i} with the text: {text[i:i+m]}")
             if pattern == text[i:i+m]:
                 matchList.append(i)
 
@@ -35,10 +34,9 @@ def rabinKarp(text, pattern):
 
 
 if __name__ == "__main__":
-
-    # logging.basicConfig(level=logging.DEBUG)
+    # simple test cases
+    logging.basicConfig(level=logging.DEBUG)
 
     print(rabinKarp("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
-
     print(rabinKarp("10101010101001111010001010111110000101010101", "10100"))
     print(rabinKarp("standard Text bli bla ble ad fdsdsdsdsd", "bl"))

@@ -1,5 +1,3 @@
-import sys
-import string
 # https://acm.timus.ru/problem.aspx?space=1&num=1269
 # problem with aho_corasick algo
 
@@ -7,11 +5,12 @@ import string
 def generatePatternMatchingMachine(keywords):
 
     limitForStates = sum(len(i) for i in keywords)+1
+
     goTo = [dict() for _ in range(limitForStates)]
     failure = [0] * limitForStates
     output = [[] for _ in range(limitForStates)]
 
-    # alorithm 1
+    # alorithm 2 (in the paper)
     newstate = 0
     for a in (keywords):
         state, j = 0, 1
@@ -27,11 +26,13 @@ def generatePatternMatchingMachine(keywords):
 
         output[state].append(a)
 
-    for c in string.printable:
+    ascii = "".join(chr(x) for x in range(128))
+
+    for c in ascii:
         if not c in goTo[0]:
             goTo[0][c] = 0
 
-    # algorithm 2
+    # algorithm 3
     queue = []
     for a, s in goTo[0].items():
         if s != 0:
@@ -51,19 +52,21 @@ def generatePatternMatchingMachine(keywords):
     return goTo, failure, output
 
 
-keywords = []
-matchList = []
-result = []
-n = input()
+n = int(input())
+keywords = [None] * n
+for i in range(n):
+    keywords[i] = input()
 
-for _ in range(int(n)):
-    keywords.append(input())
-
+# teuer
 goTo, failure, output = generatePatternMatchingMachine(keywords)
 
-m = input()
+
+m = int(input())
+found = []
+result = []
+
 line = 0
-for _ in range(int(m)):
+for _ in range(m):
     text = input()
     line += 1
 
@@ -74,8 +77,9 @@ for _ in range(int(m)):
         state = goTo[state][text[i-1]]
 
         for match in output[state]:
-            if not match in matchList:
-                matchList.append(match)
+            if not match in found:
+                output[state].remove(match)
+                found.append(match)
                 result.append(f"{line} {i-len(match)+1}")
 
 if result == []:
