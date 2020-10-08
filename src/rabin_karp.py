@@ -30,13 +30,21 @@ def rabinKarp(text, pattern):
         fx = ((fx - ord(text[i])*d) * 2) + ord(text[i+m])
         logging.debug(f"New Hash: {fx}")
 
+    # after the last rehash could be a match
+    if fx == fy:
+        logging.debug(
+            f"Potential match starting at {n-m} with the text: {text[n-m:n]}")
+        if pattern == text[n-m:n]:
+            matchList.append(n-m)
+
     return matchList
 
 
 if __name__ == "__main__":
     # simple test cases
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
 
+    print(rabinKarp("estest", "est"))
     print(rabinKarp("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
     print(rabinKarp("10101010101001111010001010111110000101010101", "10100"))
     print(rabinKarp("standard Text bli bla ble ad fdsdsdsdsd", "bl"))

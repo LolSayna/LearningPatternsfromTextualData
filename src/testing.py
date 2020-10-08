@@ -61,8 +61,6 @@ def randomRuns(currentAlgoList=algoList, runs=10, chars=["a", "b", "c", "d"], le
 
     return times
 
-# TODO: different results happens
-
 
 def plot(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(5, 10)):
 
@@ -81,8 +79,8 @@ def plot(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=
 if __name__ == "__main__":
 
     # logging.basicConfig(level=logging.INFO)
-    #print(run(algoList, "abdsdbsdbbds", "db"))
+    print(run("cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
 
-    # print(randomRuns(runs=20))
+    #randomRuns(length=1000, runs=1000, patternLengthRange=(5, 10))
 
-    plot(patternLengthRange=(10, 20))
+    #plot(patternLengthRange=(10, 20))

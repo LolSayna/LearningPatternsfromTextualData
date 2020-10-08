@@ -161,33 +161,33 @@ def turboBoyerMooreLecroq(text, pattern):
 
     matchlist = []
 
-    i = 0
+    j = 0
     suf = 0
     shift = m
-    while i <= n-m:
-        j = m-1
+    while j <= n-m:
+        i = m-1
 
-        while j >= 0 and pattern[j] == text[i+j]:
-            j -= 1
-            if suf != 0 and j == m - 1 - shift:
-                j -= u
+        while i >= 0 and pattern[i] == text[i+j]:
+            i -= 1
+            if suf != 0 and i == m - 1 - shift:
+                i -= suf
 
-        if j < 0:
-            matchlist.append(i)
+        if i < 0:
+            matchlist.append(j)
             shift = goodChar[0]
             suf = m - shift
         else:
-            v = m - 1 - j
+            v = m - 1 - i
             turboShift = suf - v
-            badCharShift = badChar[ord(text[i+j])] - m + 1 + j
-            shift = max(turboShift, badCharShift, goodChar[j])
-            if shift == goodChar[j]:
-                u = min(m - shift, v)
+            badCharShift = badChar[ord(text[i+j])] - m + 1 + i
+            shift = max(turboShift, badCharShift, goodChar[i])
+            if shift == goodChar[i]:
+                suf = min(m - shift, v)
             else:
                 if turboShift < badCharShift:
                     shift = max(shift, suf + 1)
-                u = 0
-        i += shift
+                suf = 0
+        j += shift
 
     return matchlist
 
@@ -195,9 +195,10 @@ def turboBoyerMooreLecroq(text, pattern):
 if __name__ == "__main__":
     # simple test cases
 
-    # logging.basicConfig(level=logging.DEBUG)
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.INFO)
 
+    """
     logging.info("FLENS:")
     logging.info(boyerMooreFlens("kekkekekbekbekbkekkebkeb", "kek"))
     logging.info("LECROQ:")
@@ -212,3 +213,7 @@ if __name__ == "__main__":
         "GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
     logging.info("TURBO:")
     logging.info(turboBoyerMooreLecroq("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
+    """
+
+    print(boyerMooreLecroq("cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
+    print(turboBoyerMooreLecroq("cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
