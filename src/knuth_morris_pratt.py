@@ -65,9 +65,11 @@ def knuthMorrisPratt(text, pattern):
 if __name__ == "__main__":
     # simple test cases
     logging.basicConfig(level=logging.DEBUG)
-
+    """
     text, pattern = "babcbabcabcaabcabcabcacabc", "abcabcacab"
     print("Text: ", text)
     print("Pattern: ", pattern)
     print("Naive: ", naive(text, pattern))
     print("KMP: ", knuthMorrisPratt(text, pattern))
+    """
+    print("Naive: ", naive("aaaaaaaaa", "aa"))

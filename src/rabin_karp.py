@@ -19,6 +19,10 @@ def rabinKarp(text, pattern):
 
     logging.debug(f"Text Hash: {fx} Pattern Hash: {fy}")
 
+    """
+    TODO: cleanup work, choos between longer (and repeting) code or an aditional hash operation 
+    """
+
     for i in range(n-m):
         if fx == fy:
             # optional test to only include real matches and not false positiv matches

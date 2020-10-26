@@ -51,3 +51,24 @@ small presentaioon, compare the implemntation, speed on diffrent data
 Data: len(text), len(pattern), size(alphabet), preprocssing->remove by only on dataset at times
 
 runs at x-asis, time at y-axis -> diffrent lines
+
+LONG TERM GOAL:
+pattern matching with variabls:
+regular patterns
+
+oder
+
+
+
+REPORT:
+ENGLISH
+
+describe genau welche Algorithms, einzelheiten
+challenges
+theoretical comparison/practical
+
+tests:
+-data
+-issus with data/dataset, size/randomness
+results on dataset
+in 2 weeks:
