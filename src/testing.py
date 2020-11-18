@@ -62,25 +62,29 @@ def randomRuns(currentAlgoList=algoList, runs=10, chars=["a", "b", "c", "d"], le
     return times
 
 
-def plot(runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(5, 10)):
+def plot(currentAlgoList=algoList, runs=100, chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(5, 10)):
 
-    times = randomRuns(algoList, runs, chars,
+    # logging.basicConfig(level=logging.DEBUG)
+    times = randomRuns(currentAlgoList, runs, chars,
                        length, patternLengthRange)
 
-    for i in range(len(algoList)):
+    for i in range(len(currentAlgoList)):
         plt.plot(times[i], label=algoList[i])
+        #print(algoList[i], sum(times[i]))
 
     plt.xlabel("runs")
     plt.ylabel("time")
     plt.legend()
+    plt.title("All on short pattern with length 100-200, alphabetsize = 4")
     plt.show()
 
 
 if __name__ == "__main__":
 
     # logging.basicConfig(level=logging.INFO)
-    print(run("cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
+    #print(run(algoList, "cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
 
     #randomRuns(length=1000, runs=1000, patternLengthRange=(5, 10))
 
-    #plot(patternLengthRange=(10, 20))
+    plot(currentAlgoList=algoList, chars=["a", "b", "c", "d"], runs=100, length=1000,
+         patternLengthRange=(100, 200))

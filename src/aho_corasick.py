@@ -69,6 +69,7 @@ def ahoCorasick(text, keywords):
 
     goTo, failure, output = generatePatternMatchingMachine(keywords)
 
+    print(goTo, failure, output)
     matchList = []
 
     state = 0
