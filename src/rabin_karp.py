@@ -11,7 +11,9 @@ def rabinKarp(text, pattern):
     n, m, = len(text), len(pattern)
 
     # preprocessing
-    d = 2**(m-1)
+    d = 1
+    for _ in range(m-1):
+        d = (d << 1) % q
 
     # calc hash(pattern) and hash(the first m char from the text)
     fx, fy = 0, 0
@@ -51,6 +53,6 @@ if __name__ == "__main__":
     # simple test cases
     # logging.basicConfig(level=logging.DEBUG)
     pass
-    #print(rabinKarp("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
+    print(rabinKarp("GCATCGCAGAGAGTATACAGTACG", "GCAGAGAG"))
     #print(rabinKarp("10101010101001111010001010111110000101010101", "10100"))
     #print(rabinKarp("standard Text bli bla ble ad fdsdsdsdsd", "bl"))
