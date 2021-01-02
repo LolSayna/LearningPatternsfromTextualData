@@ -19,6 +19,28 @@ def naive(text, pattern):
     return matchList
 
 
+def naiveMulti(text, keywords):
+
+    n = len(text)
+
+    for pattern in keywords:
+        m = len(pattern)
+        matchList = []
+
+        for i in range(n-m+1):
+
+            matches = 0
+            while matches < m and text[i+matches] == pattern[matches]:
+                matches += 1
+
+            if matches == m:
+                matchList.append(i)
+
+        return matchList
+
+    return almatches
+
+
 def createNextTable(pattern):
     # preprocessing function for kmp-algo in O(m), generates preafix-table
 

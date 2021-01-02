@@ -2,6 +2,7 @@ import logging
 import string
 import matplotlib.pyplot as plt
 from timeit import default_timer as timer
+import wget
 
 import generate
 
@@ -70,21 +71,82 @@ def plot(currentAlgoList=algoList, runs=100, chars=["a", "b", "c", "d"], length=
 
     for i in range(len(currentAlgoList)):
         plt.plot(times[i], label=algoList[i])
-        #print(algoList[i], sum(times[i]))
+        # print(algoList[i], sum(times[i]))
 
     plt.xlabel("runs")
     plt.ylabel("time")
     plt.legend()
-    plt.title("All on short pattern with length 100-200, alphabetsize = 4")
+    plt.title("alphabetsize = 4, patternlength = 5-10, length=10000")
     plt.show()
+
+
+def testShakespeare(pattern, currentAlgoList=algoList, filename="t8.shakespeare.txt"):
+    # test for long text files
+
+    text = ""
+    r = open(filename, "r")
+    for line in r:
+        text += line
+    r.close()
+
+    # print(len(text))
+
+    print(currentAlgoList)
+
+    print(pattern)
+    result, time = run(currentAlgoList, text, pattern)
+    print(time)
+    print(len(result[0]))
 
 
 if __name__ == "__main__":
 
-    # logging.basicConfig(level=logging.INFO)
-    #print(run(algoList, "cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
+    """
+    url = "https://ocw.mit.edu/ans7870/6/6.006/s08/lecturenotes/files/t8.shakespeare.txt"
+    file = wget.download(url, "Desktop/StringAlgorithms/")
+    """
+    testShakespeare("the")
+    testShakespeare("women")
+    testShakespeare("every thing that")
+    testShakespeare(
+        "lock hanging by it, and borrows money in God's name, the which he")
 
-    #randomRuns(length=1000, runs=1000, patternLengthRange=(5, 10))
+    # logging.basicConfig(level=logging.DEBUG)
+    # print(run(algoList, "cdbcdasdsadasdasdcdbcdasdasdasdcdbcd", "cdbcd"))
 
-    plot(currentAlgoList=algoList, chars=["a", "b", "c", "d"], runs=100, length=1000,
-         patternLengthRange=(100, 200))
+    # randomRuns(length=1000, runs=1000, patternLengthRange=(5, 10))
+
+    # ["a","b","c","d"]
+
+    # plot(currentAlgoList=algoList, chars=["a", "b"], runs=100, length=10000,
+    #     patternLengthRange=(100, 200))
+
+    """
+    Bad case senario for rabin karp
+
+
+    text = "aaaaaaaaaaaaaaaaaaaaaab"
+    pattern = "aaaab"
+
+    results, time = run(["naive", "knuthMorrisPratt", "rabinKarp"],
+                        text, pattern)
+    print("short")
+    print(results)
+    for i in time:
+        print(f'{i:.6f}')
+
+    text, pattern = "", ""
+    for i in range(10000):
+        text += "a"
+    for i in range(1000):
+        pattern += "a"
+    text += "b"
+    pattern += "b"
+
+    results, time = run(["naive", "knuthMorrisPratt", "rabinKarp"],
+                        text, pattern)
+    print("long")
+    print(results)
+    for i in time:
+        print(f'{i:.6f}')
+    """
