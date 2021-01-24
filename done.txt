@@ -72,3 +72,17 @@ tests:
 -issus with data/dataset, size/randomness
 results on dataset
 in 2 weeks:
+
+
+
+24.01.21:
+
+- canonical form rework, in first version just renamed each variable, but problem when one variable occured multiple times, so createt conversion dict to store which old names matches the new one.
+- isRegularPatternClass key idea very simple, just check for duplicates, but how to implement, collect each one and search whether its already there? for now iterate over all possible variables, since its only the uppercase letters
+- implementation of algo 1:
+    - replaceAt is used to maintain the old pattern while testing new ones
+    - look at descPat, isRegularPatternClass not needed at all
+    - problem with matchingRegular, prefix vs middle part vs suffix, what happends when pattern end on a variable and suffix is empty, also rework of findAllNonVariables to separate between suffix,prefix and the results
+    - suffix problem for empty suffix
+
+    - algo working, but is it correct?, is descriptive pattern unique or can there be multiple equaliy once
