@@ -86,3 +86,27 @@ in 2 weeks:
     - suffix problem for empty suffix
 
     - algo working, but is it correct?, is descriptive pattern unique or can there be multiple equaliy once
+    - how to rate patterns
+27.01:
+- trimming the finale pattern, for sequence of variables like GGEGJ -> G, should that be in the canonical form?
+
+
+"""
+
+bis 27.01 regular fertig - done
+dann nächste pattern types
+dann real data test
+
+BA struktur:
+literatur/erklärungen
+implementation beschreiben
+test cases
+analyse + diagramme
+
+# matching algorithm
+# shinohara erklären
+# den shinohara algorithmus erklären
+# testclassen beschreiben
+# über meine implementierung 
+
+"""

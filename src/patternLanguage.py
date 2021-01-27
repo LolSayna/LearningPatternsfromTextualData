@@ -1,11 +1,11 @@
 from knuth_morris_pratt import naive, knuthMorrisPratt
 import string
+import random
 
 # single terminal word -> string
 w1 = "abbaabaa"
 w2 = "baabbabaabba"
 w3 = "abaaaba"
-
 
 # pattern -> string, where capital letters are variables, lower case are terminal symbols
 alpha = "aAbaBa"
@@ -82,6 +82,7 @@ def findAllNonVariables(pattern):
 
 
 def replaceAt(pattern, position, element):
+    # inserts one element at a specific position
 
     return pattern[:position] + element + pattern[position + 1 :]
 
@@ -90,8 +91,6 @@ def matchingRegular(pattern, word):
     # matching problem for regular pattern
 
     w_i, prefix, suffix = findAllNonVariables(pattern)
-
-    # print("Matchint: ", findAllNonVariables(pattern))
 
     j = len(prefix)
 
@@ -116,24 +115,21 @@ def matchingRegular(pattern, word):
     return True
 
 
-def findShortestWord(sample):
-
-    return sorted(sample, key=len)[0]
-
-
 def descPat(sample):
+    # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
 
-    word = findShortestWord(sample)
+    word = sorted(sample, key=len)[0]
 
     m = len(word)
     alpha = string.ascii_uppercase[:m]
 
     for i in range(m):
+        # print("Current Alpha: ", alpha)
+
         q, j = True, 0
 
         # try replacing one variable with one terminal symbol
         newAlpha = replaceAt(alpha, i, word[i])
-        print("NEWAPLHA: ", newAlpha)
 
         # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
         if isRegularPatternClass(canonicalForm(newAlpha)):
@@ -150,7 +146,7 @@ def descPat(sample):
                 alpha = newAlpha
                 q = False
 
-        # next try to improve pattern
+        # next try to replace variables with each other
         while q and j < i:
             if alpha[j].isupper():
                 newAlpha = replaceAt(alpha, i, alpha[j])
@@ -173,50 +169,78 @@ def descPat(sample):
             if q:
                 j += 1
 
+    # filter variables in a row
+    alpha = canonicalForm(alpha)
+    i = 0
+    while i < len(alpha) - 1:
+        if alpha[i].isupper() and alpha[i + 1].isupper():
+            alpha = alpha.replace(alpha[i + 1], "")
+        else:
+            i += 1
+
     return canonicalForm(alpha)
 
 
-"""
-problem: 
-cf(αi[xi7→w[i]])∈Π bedeutet test ob pattern noch in pattern classe -> für jede pattern classe eigener test
-für regular relativ easy
-solved
+def generateWords(numberOfVariables):
 
-bis 27.01 regular fertig
-dann nächste pattern types
-dann real data test
+    parts = []
+    for _ in range(numberOfVariables):
+        s = ""
+        length = random.randint(3, 5)
+        for _ in range(length):
+            s += random.choice(string.ascii_lowercase)
+        parts.append(s)
 
-BA struktur:
-literatur/erklärungen
-implementation beschreiben
-test cases
-analyse + diagramme
+    return parts
 
-# matching algorithm
-# shinohara erklären
-# den shinohara algorithmus erklären
-# testclassen beschreiben
-# über meine implementierung 
 
-"""
+def tester(pattern, generation, testing, varCount):
+
+    sample = []
+    for _ in range(generation):
+        sample.append(fillCompletePattern(pattern, generateWords(varCount)))
+
+    descPattern = descPat(sample)
+
+    testPositiv = 0
+    for _ in range(testing):
+        if matchingRegular(
+            descPattern, fillCompletePattern(pattern, generateWords(varCount))
+        ):
+            testPositiv += 1
+
+    # print(sample)
+    print(descPattern)
+    print(float(testPositiv) / testing)
+
+
+tester("aAbcBddeeffChiD", 2, 1000, 4)
+tester("aAbcBddeeffChiD", 5, 1000, 4)
+tester("aAbcBddeeffChiD", 10, 1000, 4)
+tester("aAbcBddeeffChiD", 20, 1000, 4)
+tester("aAbcBddeeffChiD", 100, 1000, 4)
+tester("aAbcBddeeffChiD", 1000, 1000, 4)
 
 
 if __name__ == "__main__":
-
+    """
     # test membership
     beta = "aAbaBc"
     word = "abbAabaac"
-    # print(matchingRegular(beta, word))
-
+    print(matchingRegular(beta, word))
+    """
     # print(canonicalForm("AbsdfdsfsdfDefgegegC"))
 
+    """
     sample = ["abc", "abbc", "abbbc"]
     print(descPat(sample))
+    """
 
+    """
     sample = ["abbaabaa", "baabbabaabba", "abaaaba"]
-    word = "abaaaba"
-    # print(descPat(sample, word))
-
+    print(descPat(sample))
+    """
+    """
     pattern = "AjisdBijsdCasd"
     sample = [
         fillCompletePattern(pattern, ["sdf", "asfsf", "ogf"]),
@@ -232,3 +256,4 @@ if __name__ == "__main__":
     ]
     print(sample)
     print(descPat(sample))
+    """
