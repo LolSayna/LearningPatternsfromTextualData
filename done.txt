@@ -86,7 +86,8 @@ in 2 weeks:
     - suffix problem for empty suffix
 
     - algo working, but is it correct?, is descriptive pattern unique or can there be multiple equaliy once
-    - how to rate patterns
+    - how to rate patterns, distance zwischen pattern
+    
 27.01:
 - trimming the finale pattern, for sequence of variables like GGEGJ -> G, should that be in the canonical form?
 
@@ -108,5 +109,19 @@ analyse + diagramme
 # den shinohara algorithmus erklären
 # testclassen beschreiben
 # über meine implementierung 
+
+
+meeting 27.01:
+distance zwischen pattern:
+    lcs longest common substring als metric
+    split verfahren
+    andere verfahren?
+    number of letters/ number of variables
+        prefix/sufix test trivial oder?
+
+    -> statisticen zu metriken
+
+warten auf biodaten, 
+non cross pattern
 
 """

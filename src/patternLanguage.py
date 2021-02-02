@@ -214,6 +214,7 @@ def tester(pattern, generation, testing, varCount):
     print(float(testPositiv) / testing)
 
 
+tester("aAbcBddeeffChiD", 1, 1000, 4)
 tester("aAbcBddeeffChiD", 2, 1000, 4)
 tester("aAbcBddeeffChiD", 5, 1000, 4)
 tester("aAbcBddeeffChiD", 10, 1000, 4)
