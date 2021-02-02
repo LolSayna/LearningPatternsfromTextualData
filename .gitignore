@@ -1,4 +1,7 @@
 .vscode/
 venv/
 .txt
+
 t8.shakespeare.txt
+
+*.pyc
