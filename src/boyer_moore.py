@@ -73,6 +73,9 @@ def generateGoodCharRuleLecroq(pattern):
     suff = [-1 for _ in range(m)]
     suff[m-1], g = m, m - 1
 
+    # f is always changed before the value is used
+    f = 0
+
     for i in range(m-2, -1, -1):
         if i > g and suff[i+m-1-f] < i - g:
             suff[i] = suff[i+m-1-f]

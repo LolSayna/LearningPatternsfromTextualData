@@ -15,9 +15,9 @@ def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=
 
     return text, pattern, patternPos
 
-    """
+   
+"""
     english text als input data
 
     https://ocw.mit.edu/ans7870/6/6.006/s08/lecturenotes/files/t8.shakespeare.txt
-
-    """
+"""
