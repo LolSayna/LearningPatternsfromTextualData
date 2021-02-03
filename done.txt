@@ -124,4 +124,19 @@ distance zwischen pattern:
 warten auf biodaten, 
 non cross pattern
 
+
+
+done am 03.02:
+-> generateRegularPattern and generateWordsFromPattern, problem in generateRegularPattern, multiple vars in a row are possibke
+-> newTest
+-> metrics for new test, first the one by generating words from the old pattern and checking if the new one gets it -> metricByWordMatching
+    but already problem case: original: vjABjciihCayDktEynlz , algorithm build vjAnBlCz , so new new pattern accepts all generated words
+    remeber the goal was not to find orginial pattern, its to find descriptive pattern of sample
+    so finding all words doesnt mean the algoritm found the descriptive pattern
+    this example:   ABarfmrCiawpyDErxtte
+                    AeBe        -> new pattern is not descriptive, but where is the problem, sample size or mistake in algorithm
+
+                    with fixed pattern but varing sample the algo produces: AaBrfmrCiawpyDrxtte, AiaBrCxtte, AtBtCe
+
+    -> overall metric not effictive, since all words can be found, even if the new pattern is far from being descriptive, or is it descriptive
 """

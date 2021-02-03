@@ -1,6 +1,6 @@
 from knuth_morris_pratt import naive, knuthMorrisPratt
 import string
-import random
+from generate import *
 
 # single terminal word -> string
 w1 = "abbaabaa"
@@ -12,20 +12,6 @@ alpha = "aAbaBa"
 
 # set of variable assignments -> list of strings for each variabel, the first one fills the first variabel and so on
 var = ["lol", "abc", "edf"]
-
-
-def fillCompletePattern(pattern, variables):
-    # constructs a single word from a pattern with a given set of variables
-    word = ""
-
-    for c in pattern:
-        if c.isupper():
-
-            word += variables[ord(c) - ord("A")]
-        else:
-            word += c
-
-    return word
 
 
 def canonicalForm(pattern):
@@ -181,18 +167,45 @@ def descPat(sample):
     return canonicalForm(alpha)
 
 
-def generateWords(numberOfVariables):
+def metricByWordMatching(originalPattern, newPattern, testCount, replaceMin, replaceMax):
 
-    parts = []
-    for _ in range(numberOfVariables):
-        s = ""
-        length = random.randint(3, 5)
-        for _ in range(length):
-            s += random.choice(string.ascii_lowercase)
-        parts.append(s)
+    sample = generateWordsFromPattern(originalPattern, testCount, replaceMin, replaceMax)
 
-    return parts
+    found = 0
+    for word in sample:
+        #print(word)
+        if matchingRegular(newPattern, word):
+            found += 1
+    
+    return (float(found) / testCount)
 
+#print(metricByWordMatching("vjAjciihCayDktEynlz", "vjAnBlCz", 100, 1,3))
+
+def NewTest():
+
+    for _ in range(2):
+        # vars for the pattern:
+        patLength, varCount = 10, 5
+        # vars for the sample
+        wordCount, replaceMin, replaceMax = 100, 1, 3
+
+        #vars for testing
+        testCount = 1000
+
+        #pattern = generateRegularPattern(patLength, varCount)
+        pattern = "ABarfmrCiawpyDErxtte"
+        sample = generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax)
+
+        descPattern = descPat(sample)
+
+        rating = metricByWordMatching(pattern, descPattern, testCount, replaceMin, replaceMax)
+
+        print(pattern)
+        print(descPattern)
+        print(rating)
+        print(sample)
+
+NewTest()
 
 def tester(pattern, generation, testing, varCount):
 
@@ -213,7 +226,7 @@ def tester(pattern, generation, testing, varCount):
     print(descPattern)
     print(float(testPositiv) / testing)
 
-
+"""
 tester("aAbcBddeeffChiD", 1, 1000, 4)
 tester("aAbcBddeeffChiD", 2, 1000, 4)
 tester("aAbcBddeeffChiD", 5, 1000, 4)
@@ -221,7 +234,7 @@ tester("aAbcBddeeffChiD", 10, 1000, 4)
 tester("aAbcBddeeffChiD", 20, 1000, 4)
 tester("aAbcBddeeffChiD", 100, 1000, 4)
 tester("aAbcBddeeffChiD", 1000, 1000, 4)
-
+"""
 
 if __name__ == "__main__":
     """
