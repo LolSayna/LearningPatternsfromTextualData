@@ -7,10 +7,10 @@ def naive(text, pattern):
     n, m = len(text), len(pattern)
     matchList = []
 
-    for i in range(n-m+1):
+    for i in range(n - m + 1):
 
         matches = 0
-        while matches < m and text[i+matches] == pattern[matches]:
+        while matches < m and text[i + matches] == pattern[matches]:
             matches += 1
 
         if matches == m:
@@ -27,10 +27,10 @@ def naiveMulti(text, keywords):
         m = len(pattern)
         matchList = []
 
-        for i in range(n-m+1):
+        for i in range(n - m + 1):
 
             matches = 0
-            while matches < m and text[i+matches] == pattern[matches]:
+            while matches < m and text[i + matches] == pattern[matches]:
                 matches += 1
 
             if matches == m:
@@ -75,10 +75,10 @@ def knuthMorrisPratt(text, pattern):
         while patPos >= 0 and pattern[patPos] is not text[textPos]:
             patPos = prea[patPos]
 
-        patPos = patPos+1
+        patPos = patPos + 1
 
         if patPos == m:
-            matchList.append(textPos-m+1)
+            matchList.append(textPos - m + 1)
             patPos = prea[-1]
 
     return matchList
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
     text, pattern = "babcbabcabcaabcabcabcacabc", "abcabcacab"
-    #text, pattern = "acacacagtaacacagt", "adbfsbvdsfgagdfg"
+    # text, pattern = "acacacagtaacacagt", "adbfsbvdsfgagdfg"
     print("Text: ", text)
     print("Pattern: ", pattern)
     print("Naive: ", naive(text, pattern))

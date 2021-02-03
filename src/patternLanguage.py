@@ -167,45 +167,84 @@ def descPat(sample):
     return canonicalForm(alpha)
 
 
-def metricByWordMatching(originalPattern, newPattern, testCount, replaceMin, replaceMax):
+def metricLongestCommonSubstring(originalPattern, newPattern):
 
-    sample = generateWordsFromPattern(originalPattern, testCount, replaceMin, replaceMax)
+    if originalPattern == newPattern:
+        return 1.0
+
+    lcs = ""
+
+    for i in range(len(originalPattern)):
+
+        subString = ""
+        for j in range(len(newPattern)):
+            if i + j < len(originalPattern) and originalPattern[i + j] == newPattern[j]:
+                subString += newPattern[j]
+            else:
+                if len(subString) > len(lcs):
+                    lcs = subString
+                subString = ""
+
+    # print("tmp", len(lcs), len(newPattern))
+    return len(lcs) / len(newPattern)
+
+
+# print(metricLongestCommonSubstring("vjAjciihCayDktEynlz", "vjAnBlCz"))
+
+
+def metricByWordMatching(
+    originalPattern, newPattern, testCount, replaceMin, replaceMax
+):
+
+    sample = generateWordsFromPattern(
+        originalPattern, testCount, replaceMin, replaceMax
+    )
 
     found = 0
     for word in sample:
-        #print(word)
+        # print(word)
         if matchingRegular(newPattern, word):
             found += 1
-    
-    return (float(found) / testCount)
 
-#print(metricByWordMatching("vjAjciihCayDktEynlz", "vjAnBlCz", 100, 1,3))
+    return float(found) / testCount
+
+
+# print(metricByWordMatching("vjAjciihCayDktEynlz", "vjAnBlCz", 100, 1,3))
+
 
 def NewTest():
 
-    for _ in range(2):
+    for _ in range(100):
         # vars for the pattern:
         patLength, varCount = 10, 5
         # vars for the sample
-        wordCount, replaceMin, replaceMax = 100, 1, 3
+        wordCount, replaceMin, replaceMax = 2, 1, 3
 
-        #vars for testing
-        testCount = 1000
+        # vars for testing
+        testCount = 10
 
-        #pattern = generateRegularPattern(patLength, varCount)
-        pattern = "ABarfmrCiawpyDErxtte"
+        pattern = generateRegularPattern(patLength, varCount)
+        # pattern = "AarfmrBiawpyCrxtte"
         sample = generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax)
 
         descPattern = descPat(sample)
 
-        rating = metricByWordMatching(pattern, descPattern, testCount, replaceMin, replaceMax)
+        wordMatching = metricByWordMatching(
+            pattern, descPattern, testCount, replaceMin, replaceMax
+        )
+        lcs = metricLongestCommonSubstring(pattern, descPattern)
 
         print(pattern)
         print(descPattern)
-        print(rating)
-        print(sample)
+        print(wordMatching)
+        print(lcs)
+        print("\n")
+
+        # print(sample)
+
 
 NewTest()
+
 
 def tester(pattern, generation, testing, varCount):
 
@@ -225,6 +264,7 @@ def tester(pattern, generation, testing, varCount):
     # print(sample)
     print(descPattern)
     print(float(testPositiv) / testing)
+
 
 """
 tester("aAbcBddeeffChiD", 1, 1000, 4)

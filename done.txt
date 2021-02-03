@@ -139,4 +139,10 @@ done am 03.02:
                     with fixed pattern but varing sample the algo produces: AaBrfmrCiawpyDrxtte, AiaBrCxtte, AtBtCe
 
     -> overall metric not effictive, since all words can be found, even if the new pattern is far from being descriptive, or is it descriptive
+
+    -> lcs implemented
+    -> fixed problem with generateRegularPattern, since it build pattern with variables directly after each other, which are regular, so it should be possible???
+
+    TODO: clean up canonical form, where should it be
+
 """

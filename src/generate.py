@@ -2,25 +2,45 @@ import random
 import string
 
 
-def generateRandom(chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)):
+def generateRandom(
+    chars=["a", "b", "c", "d"], length=10000, patternLengthRange=(50, 100)
+):
 
     # string.printable for all standard chars
     text = "".join(random.choices(chars, k=length))
 
-    patternLenght = random.randrange(
-        patternLengthRange[0], patternLengthRange[1])
+    patternLenght = random.randrange(patternLengthRange[0], patternLengthRange[1])
 
-    patternPos = random.randrange(length-patternLenght)
-    pattern = text[patternPos:patternPos+patternLenght]
+    patternPos = random.randrange(length - patternLenght)
+    pattern = text[patternPos : patternPos + patternLenght]
 
     return text, pattern, patternPos
 
-   
+
 """
     english text als input data
 
     https://ocw.mit.edu/ans7870/6/6.006/s08/lecturenotes/files/t8.shakespeare.txt
 """
+
+
+def canonicalForm(pattern):
+    # transforms the pattern into canonical form, max number of variables is limited by alphabet
+
+    pattern = list(pattern)
+
+    conversion = {}
+    variableName = "A"
+
+    for i, c in enumerate(pattern):
+        if c.isupper():
+            try:
+                pattern[i] = conversion[c]
+            except KeyError:
+                pattern[i] = conversion[c] = variableName
+                variableName = chr(ord(variableName) + 1)
+
+    return "".join(pattern)
 
 
 def generateRegularPattern(length, varCount):
@@ -33,12 +53,20 @@ def generateRegularPattern(length, varCount):
     for i, varPos in enumerate(sorted(varPos)):
         pattern[varPos] = chr(ord("A") + i)
 
-    return "".join(pattern)
+    pattern = "".join(pattern)
 
+    i = 0
+    while i < len(pattern) - 1:
+        if pattern[i].isupper() and pattern[i + 1].isupper():
+            pattern = pattern.replace(pattern[i + 1], "")
+        else:
+            i += 1
+
+    return canonicalForm(pattern)
 
 
 def generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax):
-    # takes the pattern and generates a random string to replace each variable, the lenght of the string is in replaceRange; does that for wordCount words 
+    # takes the pattern and generates a random string to replace each variable, the lenght of the string is in replaceRange; does that for wordCount words
 
     words = []
     for _ in range(wordCount):
@@ -51,13 +79,12 @@ def generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax):
             else:
                 word += c
         words.append(word)
-    
+
     return words
 
 
-
 if __name__ == "__main__":
-    
-    print(generateRegularPattern(20,1))
-    
-    print(generateWordsFromPattern("qAbxBfCDxsmEqsefbmvy", 5, 1,3))
+
+    print(generateRegularPattern(20, 5))
+
+    print(generateWordsFromPattern("qAbxBfCDxsmEqsefbmvy", 5, 1, 3))
