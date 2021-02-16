@@ -1,76 +1,11 @@
-from knuth_morris_pratt import naive, knuthMorrisPratt
+import sys, os
+
+sys.path.append(os.getcwd())
+
+from src.knuth_morris_pratt import naive, knuthMorrisPratt
 import string
-from generate import *
-
-# single terminal word -> string
-w1 = "abbaabaa"
-w2 = "baabbabaabba"
-w3 = "abaaaba"
-
-# pattern -> string, where capital letters are variables, lower case are terminal symbols
-alpha = "aAbaBa"
-
-# set of variable assignments -> list of strings for each variabel, the first one fills the first variabel and so on
-var = ["lol", "abc", "edf"]
-
-
-def canonicalForm(pattern):
-    # transforms the pattern into canonical form, max number of variables is limited by alphabet
-
-    pattern = list(pattern)
-
-    conversion = {}
-    variableName = "A"
-
-    for i, c in enumerate(pattern):
-        if c.isupper():
-            try:
-                pattern[i] = conversion[c]
-            except KeyError:
-                pattern[i] = conversion[c] = variableName
-                variableName = chr(ord(variableName) + 1)
-
-    return "".join(pattern)
-
-
-def isRegularPatternClass(pattern):
-    # checks if the pattern belongs to the regular pattern class
-
-    for c in string.ascii_uppercase:
-        if pattern.count(c) > 1:
-            return False
-
-    return True
-
-
-def findAllNonVariables(pattern):
-    # finds all the parts of the pattern that are not variables
-
-    words = []
-    prefix = suffix = w = ""
-
-    i = 0
-    while i < len(pattern) and pattern[i].islower():
-        prefix += pattern[i]
-        i += 1
-
-    for c in pattern[len(prefix) :]:
-        if c.isupper():
-            if w != "":
-                words.append(w)
-                w = ""
-        else:
-            w += c
-
-    suffix = w
-
-    return words, prefix, suffix
-
-
-def replaceAt(pattern, position, element):
-    # inserts one element at a specific position
-
-    return pattern[:position] + element + pattern[position + 1 :]
+from patternUtil import *
+from patternGenerate import *
 
 
 def matchingRegular(pattern, word):
@@ -155,80 +90,29 @@ def descPat(sample):
             if q:
                 j += 1
 
-    # filter variables in a row
-    alpha = canonicalForm(alpha)
-    i = 0
-    while i < len(alpha) - 1:
-        if alpha[i].isupper() and alpha[i + 1].isupper():
-            alpha = alpha.replace(alpha[i + 1], "")
-        else:
-            i += 1
-
-    return canonicalForm(alpha)
-
-
-def metricLongestCommonSubstring(originalPattern, newPattern):
-
-    if originalPattern == newPattern:
-        return 1.0
-
-    lcs = ""
-
-    for i in range(len(originalPattern)):
-
-        subString = ""
-        for j in range(len(newPattern)):
-            if i + j < len(originalPattern) and originalPattern[i + j] == newPattern[j]:
-                subString += newPattern[j]
-            else:
-                if len(subString) > len(lcs):
-                    lcs = subString
-                subString = ""
-
-    # print("tmp", len(lcs), len(newPattern))
-    return len(lcs) / len(newPattern)
-
-
-# print(metricLongestCommonSubstring("vjAjciihCayDktEynlz", "vjAnBlCz"))
-
-
-def metricByWordMatching(
-    originalPattern, newPattern, testCount, replaceMin, replaceMax
-):
-
-    sample = generateWordsFromPattern(
-        originalPattern, testCount, replaceMin, replaceMax
-    )
-
-    found = 0
-    for word in sample:
-        # print(word)
-        if matchingRegular(newPattern, word):
-            found += 1
-
-    return float(found) / testCount
-
-
-# print(metricByWordMatching("vjAjciihCayDktEynlz", "vjAnBlCz", 100, 1,3))
+    return canonicalForm(removeVariablesInRow(alpha))
 
 
 def NewTest():
 
-    for _ in range(100):
+    for _ in range(10):
         # vars for the pattern:
-        patLength, varCount = 10, 5
+        patLength, varCount = 25, 3
         # vars for the sample
         wordCount, replaceMin, replaceMax = 2, 1, 3
 
         # vars for testing
-        testCount = 10
+        testCount = 1000
 
         pattern = generateRegularPattern(patLength, varCount)
         # pattern = "AarfmrBiawpyCrxtte"
         sample = generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax)
 
-        descPattern = descPat(sample)
+        print(pattern)
+        print(sample)
 
+        descPattern = descPat(sample)
+        """
         wordMatching = metricByWordMatching(
             pattern, descPattern, testCount, replaceMin, replaceMax
         )
@@ -239,10 +123,12 @@ def NewTest():
         print(wordMatching)
         print(lcs)
         print("\n")
-
+        """
         # print(sample)
 
 
+# print(metricByWordMatching("abC", "aBc"))
+# print(metricLongestCommonSubstring("abC", "aBc"))
 NewTest()
 
 

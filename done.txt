@@ -145,4 +145,18 @@ done am 03.02:
 
     TODO: clean up canonical form, where should it be
 
+
+Meeting 03.02:
+overfitting, wenn pattern zu spezifisch -> generierte samples zu ähnlich
+
+oder pattern nicht spezifisch genug
+Is a aXb b bbYca c an instance of a X b Y c -> instance check
+
+ab wie vielen anteil der menge klappt das wort
+bei welchem anteil wörter in der generation wird welcher anteil erkannt-> graph für arbeit
+
+suffix arrays -> ababa X absda Y asda sX uhasudha X Z -> k-repeated-variable
+one repeated -> 1 ne var darf sich wiederholen, die andern nicht
+
+handgeschrieben testcases
 """
