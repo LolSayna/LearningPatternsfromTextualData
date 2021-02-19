@@ -160,3 +160,44 @@ one repeated -> 1 ne var darf sich wiederholen, die andern nicht
 
 handgeschrieben testcases
 """
+
+am 19.02:
+-organisation in eigene files nach funktion, es steht:
+    util für zustandslose funktion zur umwandelung oder spezifischen abfragen
+    generate für alle func die random benutzen und daten erzeugen
+    patternLanguage für die hauptfunktionen
+    testing für ergbnisse unter benutzeung von generate
+
+
+    TODO:
+    debugging ob reg pattern fertig sind
+    nächste pattern class
+
+    beurteilen der erzeugten pattern frage-> die metriken
+
+Outputs:
+
+Generated Pattern:  AhBrxgnqCe
+Generated Sample:  ['pgdfhmvqrxgnqeeue', 'pxvhitprxgnqvgeje', 'xmhhtniherxgnqnbne', 'wsocqhogtrxgnqgqke', 'rqzkthbdhrxgnqftwfce', 'gvchhdmfxrxgnqrele', 'nlxahhvnrxgnqwnxze', 'pwvhdojckrxgnqdjdlge', 'qxycdhtxvhrxgnqtoie', 'jmrlhdyorxgnqapoee', 'umokhndorxgnqmoarde', 'pbrhxypuerxgnqlgge', 'oyopqhnierxgnqyjhse', 'vlfhwlevrxgnqlljqve', 'jtqfhjugrxgnqzrape', 'xynhnbixprxgnqjvqke', 'qzknehewxrxgnqrlpte', 'bjnihhudrxgnqryxce', 'bzvwjhaokyrxgnquosgqe', 'pseazhvffrxgnqzvne']
+Build Pattern:  AgBqCeDe
+LCS:  0.3
+WordMatching:  1.0
+
+-> algo found a different pattern, but it was able to match all words
+
+Generated Pattern:  zwAnBuwvs
+Generated Sample:  ['zwcpxkneexecuwvs', 'zwxdvnkpoluwvs', 'zwivtnitpuwvs', 'zwtvxxnaqicuwvs', 'zwwwhhnwkmfyuwvs', 'zwkbanxqguwvs', 'zwrzqncxjtuwvs', 'zwpjpynybhuluwvs', 'zwsjdnmtgkuuwvs', 'zwzkydontmqquwvs', 'zwhvknmkkuwvs', 'zwhmenfhnxpuwvs', 'zwzmkhrnfbvoouwvs', 'zwwwnnsbgzuwvs', 'zwadlhfnqlsuwvs', 'zwyvplnvghqyuwvs', 'zwwilinnsxluwvs', 'zwkvdynltpiauwvs', 'zwtoznzfwhuwvs', 'zwoabfhnyacquwvs']
+Build Pattern:  zwAvBs
+LCS:  0.3333333333333333
+WordMatching:  1.0
+-> result is less specific
+
+Generated Pattern:  uesnwAfa
+Generated Sample:  ['uesnwsiufa', 'uesnwreqfa', 'uesnwmuijfa', 'uesnwgcbsufa', 'uesnwttzfa', 'uesnwkduffa', 'uesnwaawxfa', 'uesnwkhbfa', 'uesnwlrxokfa', 'uesnwsoifa', 'uesnwiwpfa', 'uesnwoffufa', 'uesnwntlwfa', 'uesnwntrfa', 'uesnwrzaujfa', 'uesnwfymefa', 'uesnwqoepfa', 'uesnwrkllfa', 'uesnwpxxxyfa', 'uesnwrlitfa']
+Build Pattern:  uesnwAfa
+LCS:  1.0
+WordMatching:  1.0
+-> sometimes it works
+
+by increasing the sample size it should be more likely that it works
+-> build a graph with changing size of sample for algo

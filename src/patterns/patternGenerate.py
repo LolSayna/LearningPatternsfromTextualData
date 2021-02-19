@@ -4,7 +4,7 @@ from patternUtil import *
 
 
 def generateRegularPattern(length, varCount):
-    # generates a random regular pattern of length with varCount number of Variables, returns in string form
+    # generates a random regular pattern with a length smaller then the length parameter, with varCount number of Variables, returns in string form
 
     pattern = random.choices(string.ascii_lowercase, k=length)
 
@@ -37,6 +37,7 @@ def generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax):
 
 
 if __name__ == "__main__":
+    # testing some cases
 
     print(generateRegularPattern(20, 5))
 

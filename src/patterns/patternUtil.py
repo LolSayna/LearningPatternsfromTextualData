@@ -89,25 +89,3 @@ def replaceAt(pattern, position, element):
     # pattern(string) -> pattern(string)
 
     return pattern[:position] + element + pattern[position + 1 :]
-
-
-def metricLongestCommonSubstring(originalPattern, newPattern):
-
-    if originalPattern == newPattern:
-        return 1.0
-
-    lcs = ""
-
-    for i in range(len(originalPattern)):
-
-        subString = ""
-        for j in range(len(newPattern)):
-            if i + j < len(originalPattern) and originalPattern[i + j] == newPattern[j]:
-                subString += newPattern[j]
-            else:
-                if len(subString) > len(lcs):
-                    lcs = subString
-                subString = ""
-
-    # print("tmp", len(lcs), len(newPattern))
-    return len(lcs) / len(newPattern)
