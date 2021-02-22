@@ -1,6 +1,7 @@
 from patternUtil import *
 from patternGenerate import *
 from patternLanguage import *
+import matplotlib.pyplot as plt
 
 # the metrics are used to evaluate the generated pattern, is it close to the unknown orgiginal pattern or is it not precise
 
@@ -47,17 +48,17 @@ def metricByWordMatching(
     return float(found) / testCount
 
 
-def RandomTest():
+def randomTest(sameplSize=20):
 
     # vars for the pattern:
     patLength, varCount = 10, 3
     # vars for the sample
-    wordCount, replaceMin, replaceMax = 50, 3, 5
+    sameplSize, replaceMin, replaceMax = 50, 3, 5
     # vars for testing
     testCount = 1000
 
     pattern = generateRegularPattern(patLength, varCount)
-    sample = generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax)
+    sample = generateWordsFromPattern(pattern, sameplSize, replaceMin, replaceMax)
     print("Generated Pattern: ", pattern)
     print("Generated Sample: ", sample)
 
@@ -73,6 +74,39 @@ def RandomTest():
     print("WordMatching: ", wordMatching)
 
 
+def graphOne():
+    # change to sample size to test whether the descPattern "finds" the pattern the sample is based on
+    # x-axis is the sample size
+    # y-axis is the lcs percantage
+
+    data = []
+    sampleValues = range(1, 1000, 10)
+
+    for sampleSize in sampleValues:
+
+        subset = 0.0
+        for _ in range(100):
+
+            pattern = generateRegularPattern(10, 3)
+            sample = generateWordsFromPattern(pattern, sampleSize, 3, 5)
+            newPattern = descPat(sample)
+
+            subset += metricLongestCommonSubstring(pattern, newPattern)
+            # print(metricLongestCommonSubstring(pattern, newPattern))
+        print(subset / 100)
+        data.append(subset / 100)
+
+    print(data)
+
+    plt.plot(sampleValues, data)
+    plt.xlabel("total sampleSize")
+    plt.ylabel("Percentage")
+    plt.title("Influenze of sampleSize")
+    plt.show()
+
+
+graphOne()
+
 if __name__ == "__main__":
 
     # print(metricLongestCommonSubstring("aaaaaaaaaabc", "aaaaaaaaaaaabc"))
@@ -84,4 +118,4 @@ if __name__ == "__main__":
     newPattern = descPat(sample)
     print(orgPattern, newPattern)
     """
-    RandomTest()
+    # randomTest()

@@ -199,5 +199,6 @@ LCS:  1.0
 WordMatching:  1.0
 -> sometimes it works
 
+-> lcs is more suitable then wordmatching
 by increasing the sample size it should be more likely that it works
 -> build a graph with changing size of sample for algo
