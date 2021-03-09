@@ -1,10 +1,45 @@
 import sys, os
+import pprint
 
 sys.path.append(os.getcwd())
 
 from src.knuth_morris_pratt import naive, knuthMorrisPratt
 import string
 from patternUtil import *
+
+
+def preProcess(pattern, word):
+
+    n = len(word)
+
+    maxTermFactors = findMaximalTerminalFactors(pattern)
+    d = [[-1 for _ in range(n)] for _ in range(len(maxTermFactors))]
+
+    for dex, u in enumerate(maxTermFactors):
+        # print("u: ", u, "ind: ", dex)
+        pos = knuthMorrisPratt(word, u)
+        # print("pos: ", pos)
+
+        for i in range(0, n):
+
+            x = list(filter(lambda x: x >= i, pos))
+            # print("x: ", x)
+            if x:
+
+                # print(min(x))
+                d[dex][i] = min(x)
+    print(d)
+
+    for i in range(0,n):
+        # where does m and s come from
+        for j in range(0, )
+
+
+print(preProcess("aaAbbAcc", "aaabbaaccaa"))
+
+
+def matchingOneRep(pattern, word):
+    pass
 
 
 def matchingRegular(pattern, word):
@@ -95,6 +130,7 @@ def descPat(sample):
 if __name__ == "__main__":
 
     # test membership
+    """
     alpha = "aAbaBc"
     word1 = "abcbcbcbac"
     word2 = "aaa"
@@ -103,3 +139,4 @@ if __name__ == "__main__":
 
     sample = ["abc", "abbc", "abbbc"]
     print(descPat(sample))
+    """

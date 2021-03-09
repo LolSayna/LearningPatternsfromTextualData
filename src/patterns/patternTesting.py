@@ -80,17 +80,17 @@ def graphOne():
     # y-axis is the lcs percantage
 
     data = []
-    sampleValues = range(1, 1000, 10)
-
+    sampleValues = range(1, 100, 1)
     for sampleSize in sampleValues:
 
         subset = 0.0
-        for _ in range(100):
+        for _ in range(50):
 
             pattern = generateRegularPattern(10, 3)
             sample = generateWordsFromPattern(pattern, sampleSize, 3, 5)
             newPattern = descPat(sample)
-
+            print(sampleSize, sample)
+            print(pattern, newPattern)
             subset += metricLongestCommonSubstring(pattern, newPattern)
             # print(metricLongestCommonSubstring(pattern, newPattern))
         print(subset / 100)

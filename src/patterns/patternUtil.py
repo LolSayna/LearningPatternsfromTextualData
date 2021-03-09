@@ -60,6 +60,7 @@ def isRegularPatternClass(pattern):
 
 
 def findAllNonVariables(pattern):
+    # aka the maximal terminal factors
     # finds all the parts of the pattern that are not variables, including the suffix and prefix seperated
     # pattern(string) -> list of words(string)
 
@@ -82,6 +83,23 @@ def findAllNonVariables(pattern):
     suffix = w
 
     return words, prefix, suffix
+
+
+def findMaximalTerminalFactors(pattern):
+
+    words, prefix, suffix = findAllNonVariables(pattern)
+
+    factors = []
+    if prefix:
+        factors.append(prefix)
+
+    for fact in words:
+        factors.append(fact)
+
+    if suffix:
+        factors.append(suffix)
+
+    return factors
 
 
 def replaceAt(pattern, position, element):

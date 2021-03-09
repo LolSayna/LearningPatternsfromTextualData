@@ -187,7 +187,8 @@ WordMatching:  1.0
 
 Generated Pattern:  zwAnBuwvs
 Generated Sample:  ['zwcpxkneexecuwvs', 'zwxdvnkpoluwvs', 'zwivtnitpuwvs', 'zwtvxxnaqicuwvs', 'zwwwhhnwkmfyuwvs', 'zwkbanxqguwvs', 'zwrzqncxjtuwvs', 'zwpjpynybhuluwvs', 'zwsjdnmtgkuuwvs', 'zwzkydontmqquwvs', 'zwhvknmkkuwvs', 'zwhmenfhnxpuwvs', 'zwzmkhrnfbvoouwvs', 'zwwwnnsbgzuwvs', 'zwadlhfnqlsuwvs', 'zwyvplnvghqyuwvs', 'zwwilinnsxluwvs', 'zwkvdynltpiauwvs', 'zwtoznzfwhuwvs', 'zwoabfhnyacquwvs']
-Build Pattern:  zwAvBs
+Build Pattern:  zwAvBs 
+
 LCS:  0.3333333333333333
 WordMatching:  1.0
 -> result is less specific
@@ -202,3 +203,18 @@ WordMatching:  1.0
 -> lcs is more suitable then wordmatching
 by increasing the sample size it should be more likely that it works
 -> build a graph with changing size of sample for algo
+
+
+
+03.03:
+- findMaximalTerminalFactors done
+
+Meeting:
+- one repeated, biodaten woher -> https://pad.gwdg.de/-c7GRdLgTtG4-3CAps-Ocw?both
+
+suchen in großem datensatz, suchen nach start und endsequenz die in allen gleich ist
+
+finden von motifs
+
+
+start und stop sequenzen https://www.news-medical.net/life-sciences/START-and-STOP-Codons.aspx
