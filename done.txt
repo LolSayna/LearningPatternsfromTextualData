@@ -218,3 +218,8 @@ finden von motifs
 
 
 start und stop sequenzen https://www.news-medical.net/life-sciences/START-and-STOP-Codons.aspx
+
+
+
+24.03:
+problem with descPat when all input words are the same

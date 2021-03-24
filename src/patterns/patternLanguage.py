@@ -30,12 +30,13 @@ def preProcess(pattern, word):
                 d[dex][i] = min(x)
     print(d)
 
-    for i in range(0,n):
+    for i in range(0, n):
         # where does m and s come from
-        for j in range(0, )
+        # for j in range(0, )
+        pass
 
 
-print(preProcess("aaAbbAcc", "aaabbaaccaa"))
+# print(preProcess("aaAbbAcc", "aaabbaaccaa"))
 
 
 def matchingOneRep(pattern, word):
@@ -103,6 +104,7 @@ def descPat(sample):
 
         # next try to replace variables with each other
         while q and j < i:
+            print(alpha[j])
             if alpha[j].isupper():
                 newAlpha = replaceAt(alpha, i, alpha[j])
 
