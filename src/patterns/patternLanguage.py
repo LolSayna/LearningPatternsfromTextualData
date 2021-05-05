@@ -80,7 +80,7 @@ def descPat(sample):
     alpha = string.ascii_uppercase[:m]
 
     for i in range(m):
-        # print("Current Alpha: ", alpha)
+        #print("Current Alpha: ", alpha)
 
         q, j = True, 0
 
@@ -104,7 +104,6 @@ def descPat(sample):
 
         # next try to replace variables with each other
         while q and j < i:
-            print(alpha[j])
             if alpha[j].isupper():
                 newAlpha = replaceAt(alpha, i, alpha[j])
 
@@ -142,3 +141,9 @@ if __name__ == "__main__":
     sample = ["abc", "abbc", "abbbc"]
     print(descPat(sample))
     """
+    bioSample = [
+        "GTGAACAACCTCAACCTTGATTGGT",
+        "GTGAACAACCTCAACCTTGATTGGT",
+        "GTGAACAACCTCAACCTTGATTGGT",
+    ]
+    print(descPat(bioSample))

@@ -223,3 +223,9 @@ start und stop sequenzen https://www.news-medical.net/life-sciences/START-and-ST
 
 24.03:
 problem with descPat when all input words are the same
+
+05.05:
+debugging with bio data:
+- first data must be lowercase to work -> easy fix
+- second problem is number of variables needs to be smaller then 26 to work with the letters of the alphabet -> try splitting in 25er blocks
+    -> next how to split and how to store the blocks
