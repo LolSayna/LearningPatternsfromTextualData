@@ -229,3 +229,18 @@ debugging with bio data:
 - first data must be lowercase to work -> easy fix
 - second problem is number of variables needs to be smaller then 26 to work with the letters of the alphabet -> try splitting in 25er blocks
     -> next how to split and how to store the blocks
+
+28.05:
+integar arrays
+
+anzahl variablen nach organismen
+statistken auf den pattern
+
+häflte der organismen zum erzeugen von pattern
+dann testen ob die anderen dazu passen
+je nach verhältnis lernen 
+
+
+oder andere pattern art
+
+FREITAG der 4.06 12 uhr
