@@ -13,9 +13,43 @@ alpha = "aAbaBa"
 var = ["lol", "abc", "edf"]
 
 
+# change to int aray, even numbers are Variables, 0->A, 1->a, 2->B, 3->b,...
+w1 = [0,1,2,3,4,5,6,8,0,50,51,52,53,1,1001]
+
+def even(i):
+    return i % 2 == 0
+
+def convertString(pattern):
+    pat = ""
+    for i in pattern:
+        if type(i) = int:
+            return False
+        
+    pass
+
+def convertInt(pattern):
+    # converts a pattern of variables and terminals from the alphabet form into an int array
+    pat = ""
+    for i in pattern:
+        if i < 52:
+            if even(i):
+                pat += string.ascii_uppercase[int(i/2)]
+            else:
+                pat += string.ascii_lowercase[int(i/2)]
+        else:
+            if even(i):
+                pat += " X" + str(int(i/2)) +" "
+            else:
+                pat += " x" + str(int(i/2)) + " "
+
+    return pat
+
+
+
+print("test")
+print(convertInt(w1))
+
 # Operations on one single pattern
-
-
 def removeVariablesInRow(pattern):
     # trims the pattern when variables are directly after each other, aka aABCb -> aAb
     # pattern(string) -> pattern(string)
