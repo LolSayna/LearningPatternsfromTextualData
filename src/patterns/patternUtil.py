@@ -1,53 +1,103 @@
 import string
 
+"""
+The basic definitions, and simple operations on single patterns
+
+"""
+
 # Definitons
 # single terminal word -> string
 w1 = "abbaabaa"
 w2 = "baabbabaabba"
 w3 = "abaaaba"
+w4 = "abcdefghijklmnopqrstuvwxyz"
 
 # pattern -> string, where capital letters are variables, lower case are terminal symbols
 alpha = "aAbaBa"
+gamma = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 # set of variable assignments -> list of strings for each variabel, the first one fills the first variabel and so on
 var = ["lol", "abc", "edf"]
 
 
-# change to int aray, even numbers are Variables, 0->A, 1->a, 2->B, 3->b,...
-w1 = [0,1,2,3,4,5,6,8,0,50,51,52,53,1,1001]
+# Integer Array system
+# to have more then 26 different variables or terminal symbols, integers are used instead of characters
+# all even numbers are variables, starting with 0
+# all uneven nubmers are terminals, starting with 1
 
-def even(i):
+# all characters can be translated into numbers, except Z and z: A->0, a->1, B->2, b->3,..., Y->48, y->49
+# the numbers continue afterwards, and could be translated back into a Z and its int number behind it: 50-> Z50, 51->z51
+delta = [0,1,2,3,4,5,6]
+epsi = [46,47,48,49,50,51,52,53,1000,99999]
+
+
+def isVariable(i):
+    # as defined in the Int Array, an even number is a variable
     return i % 2 == 0
 
-def convertString(pattern):
+def convertToAlphabet(pattern):
+    # converts a pattern from the int array form, into the alphabet form
     pat = ""
-    for i in pattern:
-        if type(i) = int:
-            return False
-        
-    pass
-
-def convertInt(pattern):
-    # converts a pattern of variables and terminals from the alphabet form into an int array
-    pat = ""
-    for i in pattern:
-        if i < 52:
-            if even(i):
-                pat += string.ascii_uppercase[int(i/2)]
+    for c in pattern:
+        # since Z is excluded, there are 25 lowercase and 25 uppercase characters
+        if c < 50:
+            if isVariable(c):
+                pat += string.ascii_uppercase[int(c/2)]
             else:
-                pat += string.ascii_lowercase[int(i/2)]
+                pat += string.ascii_lowercase[int(c/2)]
         else:
-            if even(i):
-                pat += " X" + str(int(i/2)) +" "
+            if isVariable(c):
+                pat += "Z" + str(c)
             else:
-                pat += " x" + str(int(i/2)) + " "
+                pat += "z" + str(c)
 
     return pat
+#print(convertToAlphabet(delta))
+#print(convertToAlphabet(epsi))
 
+def convertToIntarray(pattern):
+    # converts a pattern form the alphabet form, into the int array system
+    pat = []
+    for i, c in enumerate(pattern):
 
+        # an uppercase character means a variable
+        if ord("A") <= ord(c) <= ord("Y"):
+            # since all variables are even, the integer gets multiplied by 2
+            pat.append((ord(c) - ord("A")) * 2)
 
-print("test")
-print(convertInt(w1))
+        # a lowercase character means a terminal
+        elif ord("a") <= ord(c) <= ord("y"):
+            pat.append((ord(c) - ord("a")) * 2 + 1)
+        
+        # a Z/z is usually followed by its number behind it, so it can easily added into the array
+        # if theres no number behind it converts Z-> Z50, z->z51
+        elif c == "Z" or c == "z":
+
+            #find how long the number is
+            j = 1
+            while(i+j < len(pattern) and pattern[i+j].isdigit()):
+                j += 1
+                
+            # check if a number was behind the z
+            if j > 1:
+                pat.append(int(pattern[i+1:i+j]))
+            else:
+                if c == "Z":
+                    pat.append((ord(c) - ord("A")) * 2)
+                else:
+                    pat.append((ord(c) - ord("a")) * 2 + 1)
+
+    return pat
+"""
+#print(convertToIntarray(gamma))
+print(delta)
+print(convertToAlphabet(delta))
+print(convertToIntarray(convertToAlphabet(delta)))
+print(epsi)
+print(convertToAlphabet(epsi))
+print(convertToIntarray(convertToAlphabet(epsi)))
+"""
+
 
 # Operations on one single pattern
 def removeVariablesInRow(pattern):

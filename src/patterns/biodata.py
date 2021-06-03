@@ -2,11 +2,12 @@ from patternLanguage import descPat
 
 # needed since there can only be 25 variables at the same time
 maxLength = 25
-
+import sys
+print(sys.path)
 
 def transformInput():
 
-    path = "/home/daubuntu/Desktop/StringAlgorithms/src/patterns/data/Holtermaniella/lpFGRo1oWR.fasta"
+    path = "lpFGRo1oWR.fasta"
 
     with open(path) as f:
         s = f.read()
@@ -33,5 +34,5 @@ def transformInput():
 
 transformInput()
 
-# sample = ["GTGAACAACCTCAACCTTGA", "GTGAACAACCTCAACCTTGA"]
-# print(descPat(sample))
+sample = ["GTGAACAACCTCAACCTTGA", "GTGAACAACCTCAACCTTGA"]
+print(descPat(sample))
