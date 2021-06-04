@@ -258,3 +258,15 @@ what should the generation do now, for now only change is to output in intArray 
 bit happy smily for descPat working so easy :D :D
 
 another rework for path
+
+biodata files working :D
+-> vergleich von anzahl variablen, anzahl terminale, andere metriken überlegen
+eigentlich das gleiche wie bei den zufallspattern, sehr viele möglichkeiten
+
+
+
+PLAN FOR MEETING 04.06:
+- explain intArray
+- show bioData working
+- maybe talk about metriken
+- one repeated patterns ?
