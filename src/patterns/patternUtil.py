@@ -30,7 +30,6 @@ var = ["lol", "abc", "edf"]
 delta = [0,1,2,3,4,5,6]
 epsi = [46,47,48,49,50,51,52,53,1000,99999]
 
-
 def isVariable(i):
     # as defined in the Int Array, an even number is a variable
     return i % 2 == 0
@@ -88,89 +87,101 @@ def convertToIntarray(pattern):
                     pat.append((ord(c) - ord("a")) * 2 + 1)
 
     return pat
-"""
 #print(convertToIntarray(gamma))
-print(delta)
-print(convertToAlphabet(delta))
-print(convertToIntarray(convertToAlphabet(delta)))
-print(epsi)
-print(convertToAlphabet(epsi))
-print(convertToIntarray(convertToAlphabet(epsi)))
-"""
+#print(delta)
+#print(convertToAlphabet(delta))
+#print(convertToIntarray(convertToAlphabet(delta)))
+#print(epsi)
+#print(convertToAlphabet(epsi))
+#print(convertToIntarray(convertToAlphabet(epsi)))
+
 
 
 # Operations on one single pattern
 def removeVariablesInRow(pattern):
     # trims the pattern when variables are directly after each other, aka aABCb -> aAb
-    # pattern(string) -> pattern(string)
     i = 0
     while i < len(pattern) - 1:
-        if pattern[i].isupper() and pattern[i + 1].isupper():
-            pattern = pattern.replace(pattern[i + 1], "")
+        if isVariable(pattern[i]) and isVariable(pattern[i + 1]):
+            pattern.remove(pattern[i + 1])
         else:
             i += 1
     return pattern
-
+#print(removeVariablesInRow([0,2,3,4,6,7,9]))
 
 def canonicalForm(pattern):
-    # transforms a pattern into its canonical form, max number of variables is limited by alphabet size
-    # pattern(string) -> pattern(string)
-
-    pattern = list(pattern)
+    # transforms a pattern into its canonical form
+    # this is done by renaming each variable, depending on their occurence
 
     conversion = {}
-    variableName = "A"
+    varCounter = 0
 
+    # a dictionary is created, so each time a variable occures it can be checked if it occured before
     for i, c in enumerate(pattern):
-        if c.isupper():
+        if isVariable(c):
+
+            # if its in the dict a new variable name is already assigned
             try:
                 pattern[i] = conversion[c]
+            
+            # otherwise create one and raise the counter by 2, so the next even number can be used as variable
             except KeyError:
-                pattern[i] = conversion[c] = variableName
-                variableName = chr(ord(variableName) + 1)
+                pattern[i] = conversion[c] = varCounter
+                varCounter += 2
 
-    return "".join(pattern)
-
+    return pattern
+#print(canonicalForm([2,2,2,2,2,22,44,44,22,2,2,1,0,0,2,2,22]))
 
 def isRegularPatternClass(pattern):
     # checks if a pattern belongs to the regular pattern class
-    # pattern(string) -> bool
+    # aka no variable occures more then once
 
-    for c in string.ascii_uppercase:
-        if pattern.count(c) > 1:
-            return False
+    marked = []
+    for c in pattern:
+        if isVariable(c):
+            if c in marked:
+                return False
+            else:
+                marked.append(c)
 
     return True
-
+#print(isRegularPatternClass([0,2222,2,6,7,7,9,444]))
+#print(isRegularPatternClass([0,2222,2,444,6,7,9,444]))
 
 def findAllNonVariables(pattern):
     # aka the maximal terminal factors
     # finds all the parts of the pattern that are not variables, including the suffix and prefix seperated
-    # pattern(string) -> list of words(string)
+    # pattern -> list of words(string)
 
     words = []
-    prefix = suffix = w = ""
+    prefix = []
+    suffix = []
+    w = []
 
     i = 0
-    while i < len(pattern) and pattern[i].islower():
-        prefix += pattern[i]
+    while i < len(pattern) and not isVariable(pattern[i]):
+        prefix.append(pattern[i])
         i += 1
 
     for c in pattern[len(prefix) :]:
-        if c.isupper():
-            if w != "":
+        if isVariable(c):
+            if w:
                 words.append(w)
-                w = ""
+                w = []
         else:
-            w += c
+            w.append(c)
 
     suffix = w
 
     return words, prefix, suffix
+#print(findAllNonVariables([0]))
+#print(findAllNonVariables([0,7,7,2,3,3,2]))
+#print(findAllNonVariables([1,1,0,7,7,2,3,3,2]))
+#print(findAllNonVariables([0,7,7,2,3,3,2,5,5]))
+#print(findAllNonVariables([1,1,0,7,7,2,3,3,2,5,5]))
 
-
+# something with oneRep patterns, not IntArray compartible
 def findMaximalTerminalFactors(pattern):
-
     words, prefix, suffix = findAllNonVariables(pattern)
 
     factors = []
@@ -185,9 +196,12 @@ def findMaximalTerminalFactors(pattern):
 
     return factors
 
+"""
+not needed in intArray
 
 def replaceAt(pattern, position, element):
     # inserts one element at a specific position, since strings cant be easily changed
     # pattern(string) -> pattern(string)
 
     return pattern[:position] + element + pattern[position + 1 :]
+"""

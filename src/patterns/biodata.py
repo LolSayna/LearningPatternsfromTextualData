@@ -1,38 +1,79 @@
+import os
 from patternLanguage import descPat
+from patternUtil import *
 
-# needed since there can only be 25 variables at the same time
-maxLength = 25
-import sys
-print(sys.path)
 
-def transformInput():
+"""
+used to interact with real world data
 
-    path = "lpFGRo1oWR.fasta"
+"""
 
-    with open(path) as f:
+def getBioData(name):
+    # returns a list of int arrays
+
+    # old path way
+    #path = os.getcwd()+"\src\patterns\data\Allocreadiata\IcavJvXFav.fasta"
+    #path = os.getcwd()+"\src\patterns\data\Filobasidium\yyhZkgalXA.fasta"
+    #path = os.getcwd()+"\src\patterns\data\Holtermaniella\lpFGRo1oWR.fasta"
+    #path = os.getcwd()+"\src\patterns\data\Tremella\1nFa7vRp7o.fasta"
+
+    # works on my windows pc
+    path = os.getcwd() + "\src\patterns\data\\" + name
+    for e in os.walk(path):
+        filename = e[2][0]
+    fullPath = path + "\\" + filename
+    #print(fullPath)
+
+
+    with open(fullPath) as f:
         s = f.read()
 
-    # workarround for now
-    sample = [[] for i in range(100)]
-
+    sample = []
     for line in s.splitlines():
 
         if line[0] == ">":
             pass
         else:
+            sample.append(line.lower())
 
-            # care with block size
-            for i in range((len(line) // maxLength) + 1):
-                sample[i].append((line[i * maxLength : (i + 1) * maxLength]).lower())
+    # here we have an array of strings now, with lower case a,c,g,t
+    #print(sample)
 
-    # print(sample)
-    for subsample in sample:
-        if subsample:
-            print(subsample)
-            print(descPat(subsample))
+    # next convert into usable intArrays
+    intSample = []
+    for line in sample:
+        intLine = []
+        for c in line:
+            
+            """
+            # to use a,b,c,d
+            if c == "a":
+                intLine.append(1)
+            elif c == "c":
+                intLine.append(3)
+            elif c == "g":
+                intLine.append(5)
+            elif c == "t":
+                intLine.append(7)
+            else:
+                print("unsupported input")
+            """
 
+            # get the number of the char in alphabet and make it uneven, so it fits in the structure
+            intLine.append((ord(c) - ord("a")) * 2 + 1)
 
-transformInput()
+        intSample.append(intLine)
 
-sample = ["GTGAACAACCTCAACCTTGA", "GTGAACAACCTCAACCTTGA"]
-print(descPat(sample))
+    return intSample
+
+#name [Allocreadiata, Filobasidium, Holtermaniella, Tremella]
+name = "Allocreadiata"
+
+sample = getBioData(name)
+pat = descPat(sample)
+
+with open(name+".txt", "w") as results:
+    results.write(convertToAlphabet(pat) + "\n\n\n")
+
+    for subSample in sample:
+        results.write(convertToAlphabet(subSample) + "\n")

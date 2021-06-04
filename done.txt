@@ -244,3 +244,17 @@ je nach verhältnis lernen
 oder andere pattern art
 
 FREITAG der 4.06 12 uhr
+
+
+Work am 03.06
+-int array working check, but implement everywhere
+now back to bio, how to import datasets-> importing works into an intArray
+now fixing all old functions, already problem with canonical form -> done was easy
+in patternLanguage, switching from string based to list based-> problem with copying of list and changes in the copy and references
+looks good for now, but testing not confirmed
+
+what should the generation do now, for now only change is to output in intArray form, without changing the underlying generation
+
+bit happy smily for descPat working so easy :D :D
+
+another rework for path

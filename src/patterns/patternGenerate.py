@@ -15,11 +15,14 @@ def generateRegularPattern(length, varCount):
 
     pattern = "".join(pattern)
 
+    pattern = convertToIntarray(pattern)
+
     return canonicalForm(removeVariablesInRow(pattern))
 
 
 def generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax):
     # takes the pattern and generates a word for it, each variable gets replace by a word which length is between replaceMin and replaceMax; generates wordCount words
+    # not compatible with new intArray
 
     words = []
     for _ in range(wordCount):
@@ -39,6 +42,11 @@ def generateWordsFromPattern(pattern, wordCount, replaceMin, replaceMax):
 if __name__ == "__main__":
     # testing some cases
 
-    print(generateRegularPattern(20, 5))
+    #print(generateRegularPattern(20, 5))
+    #print(convertToAlphabet(generateRegularPattern(20, 5)))
 
-    print(generateWordsFromPattern("qAbxBfCDxsmEqsefbmvy", 5, 1, 3))
+    """
+    # care with intArray not working
+    #print(generateWordsFromPattern("qAbxBfCDxsmEqsefbmvy", 5, 1, 3))
+
+    """

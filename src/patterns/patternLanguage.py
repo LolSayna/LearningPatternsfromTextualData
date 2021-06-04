@@ -1,6 +1,4 @@
 import sys, os
-import pprint
-
 sys.path.append(os.getcwd())
 
 from src.knuth_morris_pratt import naive, knuthMorrisPratt
@@ -9,6 +7,7 @@ from patternUtil import *
 
 
 def preProcess(pattern, word):
+    # used in one rep pattern
 
     n = len(word)
 
@@ -34,10 +33,7 @@ def preProcess(pattern, word):
         # where does m and s come from
         # for j in range(0, )
         pass
-
-
 # print(preProcess("aaAbbAcc", "aaabbaaccaa"))
-
 
 def matchingOneRep(pattern, word):
     pass
@@ -48,9 +44,8 @@ def matchingRegular(pattern, word):
 
     w_i, prefix, suffix = findAllNonVariables(pattern)
 
-    j = len(prefix)
-
     # check prefix
+    j = len(prefix)
     if prefix != word[:j]:
         return False
 
@@ -77,7 +72,10 @@ def descPat(sample):
     word = sorted(sample, key=len)[0]
 
     m = len(word)
-    alpha = string.ascii_uppercase[:m]
+    alpha = []
+    for i in range(m):
+        alpha.append(i*2)
+    #print(alpha)
 
     for i in range(m):
         #print("Current Alpha: ", alpha)
@@ -85,7 +83,8 @@ def descPat(sample):
         q, j = True, 0
 
         # try replacing one variable with one terminal symbol
-        newAlpha = replaceAt(alpha, i, word[i])
+        newAlpha = alpha.copy()
+        newAlpha[i] = word[i]
 
         # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
         if isRegularPatternClass(canonicalForm(newAlpha)):
@@ -104,8 +103,10 @@ def descPat(sample):
 
         # next try to replace variables with each other
         while q and j < i:
-            if alpha[j].isupper():
-                newAlpha = replaceAt(alpha, i, alpha[j])
+            if isVariable(alpha[j]):
+
+                newAlpha = alpha.copy()
+                newAlpha[i] = alpha[j]
 
                 if isRegularPatternClass(canonicalForm(newAlpha)):
 
@@ -130,20 +131,16 @@ def descPat(sample):
 
 if __name__ == "__main__":
 
-    # test membership
     """
-    alpha = "aAbaBc"
-    word1 = "abcbcbcbac"
-    word2 = "aaa"
+    # test membership
+    alpha = convertToIntarray("aAbaBc")
+    word1 = convertToIntarray("abcbcbcbac")
+    word2 = convertToIntarray("aaa")
+    print(alpha,word1,word2)
     print(matchingRegular(alpha, word1))
     print(matchingRegular(alpha, word2))
-
-    sample = ["abc", "abbc", "abbbc"]
-    print(descPat(sample))
     """
-    bioSample = [
-        "GTGAACAACCTCAACCTTGATTGGT",
-        "GTGAACAACCTCAACCTTGATTGGT",
-        "GTGAACAACCTCAACCTTGATTGGT",
-    ]
-    print(descPat(bioSample))
+    
+    #sample = [[1,3,5], [1,3,3,5],[1,3,3,3,5]]
+    #print(descPat(sample))
+    
