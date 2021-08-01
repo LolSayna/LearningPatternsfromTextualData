@@ -66,14 +66,20 @@ def getBioData(name):
 
     return intSample
 
-#name [Allocreadiata, Filobasidium, Holtermaniella, Tremella]
-name = "Allocreadiata"
+nameList = ["Allocreadiata", "Filobasidium", "Holtermaniella", "Tremella"]
 
-sample = getBioData(name)
-pat = descPat(sample)
+for name in nameList:
+    #name = "Allocreadiata"
 
-with open(name+".txt", "w") as results:
-    results.write(convertToAlphabet(pat) + "\n\n\n")
+    sample = getBioData(name)
+    pat = descPat(sample)
 
-    for subSample in sample:
-        results.write(convertToAlphabet(subSample) + "\n")
+    print(name)
+    print(convertToAlphabet(pat))
+    """
+    with open(name+".txt", "w") as results:
+        results.write(convertToAlphabet(pat) + "\n\n\n")
+
+        for subSample in sample:
+            results.write(convertToAlphabet(subSample) + "\n")
+    """

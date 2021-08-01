@@ -13,27 +13,34 @@ def preProcess(pattern, word):
 
     maxTermFactors = findMaximalTerminalFactors(pattern)
     d = [[-1 for _ in range(n)] for _ in range(len(maxTermFactors))]
+    
+    print("maxTermfactors", maxTermFactors)
 
-    for dex, u in enumerate(maxTermFactors):
-        # print("u: ", u, "ind: ", dex)
+    for counter, u in enumerate(maxTermFactors):
+        #print("u: ", u, "ind: ", dex)
         pos = knuthMorrisPratt(word, u)
-        # print("pos: ", pos)
+        #print("pos: ", pos)
 
         for i in range(0, n):
 
             x = list(filter(lambda x: x >= i, pos))
-            # print("x: ", x)
+            #print("x: ", x)
             if x:
 
-                # print(min(x))
-                d[dex][i] = min(x)
+
+                d[counter][i] = min(x)
     print(d)
 
+    #factorise alpha:
+
+
     for i in range(0, n):
+        j = 0
+        while j <= 
         # where does m and s come from
         # for j in range(0, )
         pass
-# print(preProcess("aaAbbAcc", "aaabbaaccaa"))
+print(preProcess(convertToIntarray("XbbXc"), convertToIntarray("aabbaac")))
 
 def matchingOneRep(pattern, word):
     pass

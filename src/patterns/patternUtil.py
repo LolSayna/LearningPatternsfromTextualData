@@ -180,10 +180,9 @@ def findAllNonVariables(pattern):
 #print(findAllNonVariables([0,7,7,2,3,3,2,5,5]))
 #print(findAllNonVariables([1,1,0,7,7,2,3,3,2,5,5]))
 
-# something with oneRep patterns, not IntArray compartible
+# something with oneRep patterns
 def findMaximalTerminalFactors(pattern):
     words, prefix, suffix = findAllNonVariables(pattern)
-
     factors = []
     if prefix:
         factors.append(prefix)
@@ -195,6 +194,31 @@ def findMaximalTerminalFactors(pattern):
         factors.append(suffix)
 
     return factors
+
+# only for one repeting patterns with a repeating var
+# always does a w with only terminals, beta with vars and terminals, 
+# gamma with rep var and terminals, another beta with vars and terminals
+# and another w with only terminals
+def factorisePattern(pattern, repeatingVar):
+
+    factorForm = []
+    pos = 0
+    
+    w = []
+    while pos < len(pattern) and not isVariable(pattern[pos]):
+        pos += 1
+        w.append(pattern[pos])
+    factorForm.append(w)
+
+    beta = []
+    while pos < len(pattern) and 
+
+
+    return 
+
+# 46 is the number for X
+factorisePattern(convertToIntarray("aAaXaBaa"), 46)
+
 
 """
 not needed in intArray

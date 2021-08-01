@@ -270,3 +270,17 @@ PLAN FOR MEETING 04.06:
 - show bioData working
 - maybe talk about metriken
 - one repeated patterns ?
+
+
+
+ABOUTH THE DATA:
+
+afproject.org/app/download/
+both not usefull:
+reference dataset and result dataset
+
+use:
+http://its2.bioapps.biozentrum.uni-wuerzburg.de/
+
+under create datset go through multiple folders, for example
+ cellular organisms Eukaryota Opisthokonta Metazoa Eumetazoa Bilateria Platyhelminthes Trematoda Digenea Plagiorchiida Allocreadiata
