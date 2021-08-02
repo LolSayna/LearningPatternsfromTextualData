@@ -226,14 +226,14 @@ def factorisePattern(pattern, repeatingVar):
         # iterate until the repeating variable is found, so beta and wi are built
         while pos < len(pattern) and pattern[pos] != repeatingVar:
             if isVariable(pattern[pos]):
-                lastVar = pos
+                lastVar = pos+1
             pos += 1
 
         #print("startingPos: ", startingPos, "lastVar: ", lastVar, "pos: ", pos)
         #print("beta: ", pattern[startingPos:lastVar+1])
-        betaList.append(pattern[startingPos:lastVar+1])
+        betaList.append(pattern[startingPos:lastVar])
         #print("wi: ", pattern[lastVar+1:pos])
-        wiList.append(pattern[lastVar+1:pos])
+        wiList.append(pattern[lastVar:pos])
 
         
         startingPos = pos
@@ -254,12 +254,13 @@ def factorisePattern(pattern, repeatingVar):
         
     return w0, betaList, wiList, gammaList, wiDashList
 
-"""
+
 # 46 is the number for X
-pattern = "aaaaAbbbbBaaabbaXaaaXbbbXaaaaaCaaaaaCaaaCaaa"
-print("Pattern is: ", convertToIntarray(pattern))
-print(factorisePattern(convertToIntarray(pattern), 46))
-"""
+#pattern = "XbbXc"
+#pattern = "aaAbbbbBaabbaXaaXbbbXaaaaCaaaaCaa"
+#print("Pattern is: ", convertToIntarray(pattern))
+#print(factorisePattern(convertToIntarray(pattern), 46))
+
 
 """
 not needed in intArray

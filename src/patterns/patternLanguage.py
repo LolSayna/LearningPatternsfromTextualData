@@ -6,17 +6,21 @@ import string
 from patternUtil import *
 
 
-def preProcess(pattern, word):
-    # used in one rep pattern
+def preProcess(pattern, word, repeatingVar):
+    # algo 2 in one rep pattern
 
     n = len(word)
 
     maxTermFactors = findMaximalTerminalFactors(pattern)
-    d = [[-1 for _ in range(n)] for _ in range(len(maxTermFactors))]
-    
     print("maxTermfactors", maxTermFactors)
 
-    for counter, u in enumerate(maxTermFactors):
+    # each terminal factor is only needed once
+    # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
+    uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
+    print("uniqueMaxTermFactors", uniqueMaxTermFactors)
+
+    d = [[-1 for _ in range(n)] for _ in range(len(uniqueMaxTermFactors))]
+    for counter, u in enumerate(uniqueMaxTermFactors):
         #print("u: ", u, "ind: ", dex)
         pos = knuthMorrisPratt(word, u)
         #print("pos: ", pos)
@@ -29,18 +33,50 @@ def preProcess(pattern, word):
 
 
                 d[counter][i] = min(x)
-    print(d)
+    #print("d: ", d)
 
-    #factorise alpha:
+    #factorise alpha: m is defined by the len number of betas
+    w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, repeatingVar)
+    m = len(betaList)
+
+    print("\n\n m:", m)
+    print("betaList: ", betaList)
+
+    for i in range(0,n):
+        for j in range(0,m):
+            maxTermFactorsBeta = findMaximalTerminalFactors(betaList[j])
+            s = len(maxTermFactorsBeta)
+            print(maxTermFactorsBeta, s)
+
+            # find the maxTermFactor in the d-List to know which index is needed
+            #g = d[]
 
 
+            """
+            to calculate g a maximal terminal factor is inputed and an i, then it outputs the 
+            position for that case
+            """
+
+    exit()
+
+
+    """
     for i in range(0, n):
         j = 0
         while j <= 
         # where does m and s come from
         # for j in range(0, )
         pass
-print(preProcess(convertToIntarray("XbbXc"), convertToIntarray("aabbaac")))
+    """
+
+pattern = "aaAbbbbBaabbaXaaXbbbXaaaaCaaaaCaa"
+#pattern = "XbbXc"
+#word = "aabbaac"
+word = "aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa"
+print("Pattern is: ", convertToIntarray(pattern))
+print("word is: ", convertToIntarray(word))
+# 46 is the number for X, the repeating var
+print(preProcess(convertToIntarray(pattern), convertToIntarray(word), 46))
 
 def matchingOneRep(pattern, word):
     pass
