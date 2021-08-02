@@ -13,31 +13,36 @@ def preProcess(pattern, word, repeatingVar):
 
     maxTermFactors = findMaximalTerminalFactors(pattern)
     print("maxTermfactors", maxTermFactors)
-
-    # each terminal factor is only needed once
+    # each maxmial terminal factor is only needed once
     # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
     uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
     print("uniqueMaxTermFactors", uniqueMaxTermFactors)
 
-    d = [[-1 for _ in range(n)] for _ in range(len(uniqueMaxTermFactors))]
-    for counter, u in enumerate(uniqueMaxTermFactors):
-        #print("u: ", u, "ind: ", dex)
-        pos = knuthMorrisPratt(word, u)
-        #print("pos: ", pos)
+    d = {}
+    for u in uniqueMaxTermFactors:
 
+        posiblePositons = knuthMorrisPratt(word, u)
+
+        di = []
         for i in range(0, n):
 
-            x = list(filter(lambda x: x >= i, pos))
-            #print("x: ", x)
+            x = list(filter(lambda x: x >= i, posiblePositons))
+            
             if x:
+                di.append(min(x))
+            else:
+                di.append(-1)
+
+        d[tuple(u)] = di
+
+    print("d: ", d)
 
 
-                d[counter][i] = min(x)
-    #print("d: ", d)
-
-    #factorise alpha: m is defined by the len number of betas
+    #factorise alpha: m is defined by the  number of betas
     w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, repeatingVar)
     m = len(betaList)
+    M = [[-1 for _ in range(m)] for _ in range(n)]
+
 
     print("\n\n m:", m)
     print("betaList: ", betaList)
@@ -46,30 +51,22 @@ def preProcess(pattern, word, repeatingVar):
         for j in range(0,m):
             maxTermFactorsBeta = findMaximalTerminalFactors(betaList[j])
             s = len(maxTermFactorsBeta)
-            print(maxTermFactorsBeta, s)
-
-            # find the maxTermFactor in the d-List to know which index is needed
-            #g = d[]
+            g = d[tuple(maxTermFactorsBeta[0])][i]
 
 
-            """
-            to calculate g a maximal terminal factor is inputed and an i, then it outputs the 
-            position for that case
-            """
+            print(f"s: {s} g: {g} factors: {maxTermFactorsBeta}")
+            for h in range(1,s):
+                print(h)
+                g = d[tuple(maxTermFactorsBeta[h])][g + len(maxTermFactorsBeta[h-1])+1]
+            
+            print(f"g: {g} len(maxTermFactorsBeta[s-1]: {len(maxTermFactorsBeta[s-1])}")
+            M[i][j] = g + len(maxTermFactorsBeta[s-1]) + 1
 
-    exit()
+    return M
 
-
-    """
-    for i in range(0, n):
-        j = 0
-        while j <= 
-        # where does m and s come from
-        # for j in range(0, )
-        pass
-    """
-
-pattern = "aaAbbbbBaabbaXaaXbbbXaaaaCaaaaCaa"
+"""
+# something works but all?
+pattern = "aAbbbbBaaCbbaXaaXbbbXaaaaDaaaaEaa"
 #pattern = "XbbXc"
 #word = "aabbaac"
 word = "aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa"
@@ -77,8 +74,24 @@ print("Pattern is: ", convertToIntarray(pattern))
 print("word is: ", convertToIntarray(word))
 # 46 is the number for X, the repeating var
 print(preProcess(convertToIntarray(pattern), convertToIntarray(word), 46))
+"""
 
-def matchingOneRep(pattern, word):
+# algo 3 with a fixed v
+def matchingOneRep(pattern, word, v):
+
+    position = 0
+    while not isVariable(pattern[0]):
+        if pattern[position] != word[position]:
+            return False
+        position += 1
+
+    # todo not factorize in both functions, 46 is the nubmer for X, the repeating var
+    w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, 46)
+
+
+    for i in range(0,m):
+        
+        # use kmp to find the leftmost occurence
     pass
 
 
