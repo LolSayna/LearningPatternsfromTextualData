@@ -34,6 +34,7 @@ def isVariable(i):
     # as defined in the Int Array, an even number is a variable
     return i % 2 == 0
 
+# problem when a single int is given and not an array of ints
 def convertToAlphabet(pattern):
     # converts a pattern from the int array form, into the alphabet form
     pat = ""
@@ -196,29 +197,69 @@ def findMaximalTerminalFactors(pattern):
     return factors
 
 # only for one repeting patterns with a repeating var
-# always does a w with only terminals, beta with vars and terminals, 
-# gamma with rep var and terminals, another beta with vars and terminals
-# and another w with only terminals
+# according to http://www.mlschmid.de/preprints/journals/2020_TOCT_preprint.pdf 1:9
+# the pattern alpha gets factorized into
+# w-s with only terminals, w0 at the beggining, wi, wiDash
+# beta-s that start and end with a var, but not the repeting one
+# gamma-s that start and end with the rep var, but no other vars
 def factorisePattern(pattern, repeatingVar):
-
-    factorForm = []
+    
     pos = 0
     
-    w = []
+    w0 = []
+    betaList = []
+    wiList = []
+    gammaList = []
+    wiDashList = []
+
+    # w0 is simple since its only terminals in the beginning
     while pos < len(pattern) and not isVariable(pattern[pos]):
+        w0.append(pattern[pos])
         pos += 1
-        w.append(pattern[pos])
-    factorForm.append(w)
+    #print("w0: ", w0)
 
-    beta = []
-    while pos < len(pattern) and 
+    # here the packages of beta, wi, gamme, wiDash are searched
+    while pos < len(pattern):
 
+        startingPos = pos
+        lastVar = pos
+        # iterate until the repeating variable is found, so beta and wi are built
+        while pos < len(pattern) and pattern[pos] != repeatingVar:
+            if isVariable(pattern[pos]):
+                lastVar = pos
+            pos += 1
 
-    return 
+        #print("startingPos: ", startingPos, "lastVar: ", lastVar, "pos: ", pos)
+        #print("beta: ", pattern[startingPos:lastVar+1])
+        betaList.append(pattern[startingPos:lastVar+1])
+        #print("wi: ", pattern[lastVar+1:pos])
+        wiList.append(pattern[lastVar+1:pos])
 
+        
+        startingPos = pos
+        lastRepVar = pos
+        # now pos is at an occurence of the rep variable, it get checked if another var 
+        # occures or another time the repeating one in which case the block continues
+        while pos < len(pattern) and (not isVariable(pattern[pos]) or pattern[pos] == repeatingVar):
+            if pattern[pos] == repeatingVar:
+                lastRepVar = pos
+            pos += 1
+
+        #print("startingPos: ", startingPos, "lastRepVar: ", lastRepVar, "pos: ", pos)
+        #print("gamma: ", pattern[startingPos:lastRepVar+1])
+        gammaList.append(pattern[startingPos:lastRepVar+1])
+        #print("wiDash: ", pattern[lastRepVar+1:pos])
+        wiDashList.append(pattern[lastRepVar+1:pos])
+
+        
+    return w0, betaList, wiList, gammaList, wiDashList
+
+"""
 # 46 is the number for X
-factorisePattern(convertToIntarray("aAaXaBaa"), 46)
-
+pattern = "aaaaAbbbbBaaabbaXaaaXbbbXaaaaaCaaaaaCaaaCaaa"
+print("Pattern is: ", convertToIntarray(pattern))
+print(factorisePattern(convertToIntarray(pattern), 46))
+"""
 
 """
 not needed in intArray
