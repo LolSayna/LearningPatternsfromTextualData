@@ -1,5 +1,6 @@
 import string
 
+
 """
 The basic definitions, and simple operations on single patterns
 
@@ -203,71 +204,118 @@ def findMaximalTerminalFactors(pattern):
 # beta-s that start and end with a var, but not the repeting one
 # gamma-s that start and end with the rep var, but no other vars
 def factorisePattern(pattern, repeatingVar):
-    
-    pos = 0
-    
-    w0 = []
-    betaList = []
-    wiList = []
-    gammaList = []
-    wiDashList = []
+    #  α=w0Πi =1,m (βi wiγi w ′i )βm+1wm+1 do it after this line
+    # and build a dict for all data
 
+    pos = 0
+    factorization = {}
+    
     # w0 is simple since its only terminals in the beginning
+    w0 = []
     while pos < len(pattern) and not isVariable(pattern[pos]):
         w0.append(pattern[pos])
         pos += 1
-    #print("w0: ", w0)
+    factorization["w0"] = w0
 
     # here the packages of beta, wi, gamme, wiDash are searched
-    while pos < len(pattern):
+    factorization["betaList"] = []
+    factorization["wiList"] = []
+    factorization["gammaList"] = []
+    factorization["wiDashList"] = []
 
+    # problem with the b_m+1 and w_m+1 its unkown wheather another rep var comes or not
+    # so heres the whole pattern gets search which is inefficient 
+    while repeatingVar in pattern[pos:]:
+        
+        # iterate until the repeating variable is found, so beta and wi are built
         startingPos = pos
         lastVar = pos
-        # iterate until the repeating variable is found, so beta and wi are built
         while pos < len(pattern) and pattern[pos] != repeatingVar:
             if isVariable(pattern[pos]):
                 lastVar = pos+1
             pos += 1
-
+        
+        factorization["betaList"].append(pattern[startingPos:lastVar])
+        factorization["wiList"].append(pattern[lastVar:pos])
         #print("startingPos: ", startingPos, "lastVar: ", lastVar, "pos: ", pos)
         #print("beta: ", pattern[startingPos:lastVar+1])
-        betaList.append(pattern[startingPos:lastVar])
         #print("wi: ", pattern[lastVar+1:pos])
-        wiList.append(pattern[lastVar:pos])
 
         
-        startingPos = pos
-        lastRepVar = pos
         # now pos is at an occurence of the rep variable, it get checked if another var 
         # occures or another time the repeating one in which case the block continues
+        startingPos = pos
+        lastRepVar = pos
         while pos < len(pattern) and (not isVariable(pattern[pos]) or pattern[pos] == repeatingVar):
             if pattern[pos] == repeatingVar:
                 lastRepVar = pos
             pos += 1
-
+        factorization["gammaList"].append(pattern[startingPos:lastRepVar+1])
+        factorization["wiDashList"].append(pattern[lastRepVar+1:pos])
         #print("startingPos: ", startingPos, "lastRepVar: ", lastRepVar, "pos: ", pos)
         #print("gamma: ", pattern[startingPos:lastRepVar+1])
-        gammaList.append(pattern[startingPos:lastRepVar+1])
         #print("wiDash: ", pattern[lastRepVar+1:pos])
-        wiDashList.append(pattern[lastRepVar+1:pos])
 
+    startingPos = pos
+    lastVar = pos
+    while pos < len(pattern):
+        if isVariable(pattern[pos]):
+            lastVar = pos+1
+        pos += 1
+    
+    factorization["betam+1"] = (pattern[startingPos:lastVar])
+    factorization["wim+1"] = (pattern[lastVar:pos])   
         
-    return w0, betaList, wiList, gammaList, wiDashList
+    
+    return factorization
 
 
 # 46 is the number for X
-#pattern = "XbbXc"
-#pattern = "aaAbbbbBaabbaXaaXbbbXaaaaCaaaaCaa"
+#pattern = "XbbXcAc"
+#pattern = "aaAbbbbBaabbaXaaXbbbXaaaaCaaaaCaaXXc"
+#pattern = "AgXXz51hnCq"
 #print("Pattern is: ", convertToIntarray(pattern))
 #print(factorisePattern(convertToIntarray(pattern), 46))
 
+# finds all the factors including the empty one
+def findAllFactors(word):
+     
+    factors = []
 
-"""
-not needed in intArray
+    for i in range(len(word)):
+        for j in range(len(word)):
+            factors.append(word[i:j+1])
+    
 
-def replaceAt(pattern, position, element):
-    # inserts one element at a specific position, since strings cant be easily changed
-    # pattern(string) -> pattern(string)
+    # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
+    factors = [list(x) for x in set(tuple(x) for x in factors)] 
 
-    return pattern[:position] + element + pattern[position + 1 :]
-"""
+    return factors
+
+#print(findAllFactors(convertToIntarray("aabbac")))
+
+
+# example for var is 46 which translates to X
+def fillVarWithWord(pattern, word, var):
+    # replaces all occurences of word with var
+    
+    newpattern = pattern.copy()
+
+    i = 0
+    while i < len(newpattern):
+        #print(i)
+        if newpattern[i] == var:
+            newpattern = replaceAt(newpattern, word, i)
+            i += len(word) - 1
+        i+=1
+
+    return newpattern
+
+def replaceAt(pattern, word, position):
+    # deletes the var at position and fills in the word there
+    return pattern[:position] + word + pattern[position+1:]
+
+
+#pattern = convertToIntarray("XbbXc")
+#word = [7,7,7]
+#print(fillVarWithWord(pattern, word, 46))

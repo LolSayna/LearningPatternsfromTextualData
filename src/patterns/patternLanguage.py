@@ -12,7 +12,7 @@ def preProcess(pattern, word, repeatingVar):
     n = len(word)
 
     maxTermFactors = findMaximalTerminalFactors(pattern)
-    print("maxTermfactors", maxTermFactors)
+    print("\nmaxTermfactors", maxTermFactors)
     # each maxmial terminal factor is only needed once
     # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
     uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
@@ -44,7 +44,7 @@ def preProcess(pattern, word, repeatingVar):
     M = [[-1 for _ in range(m)] for _ in range(n)]
 
 
-    print("\n\n m:", m)
+    print("\nm:", m)
     print("betaList: ", betaList)
 
     for i in range(0,n):
@@ -54,47 +54,72 @@ def preProcess(pattern, word, repeatingVar):
             g = d[tuple(maxTermFactorsBeta[0])][i]
 
 
-            print(f"s: {s} g: {g} factors: {maxTermFactorsBeta}")
+            #print(f"s: {s} g: {g} factors: {maxTermFactorsBeta}")
             for h in range(1,s):
-                print(h)
+                #print(f"h: {h}")
                 g = d[tuple(maxTermFactorsBeta[h])][g + len(maxTermFactorsBeta[h-1])+1]
             
-            print(f"g: {g} len(maxTermFactorsBeta[s-1]: {len(maxTermFactorsBeta[s-1])}")
+            #print(f"g: {g} len(maxTermFactorsBeta[s-1]: {len(maxTermFactorsBeta[s-1])}")
             M[i][j] = g + len(maxTermFactorsBeta[s-1]) + 1
 
     return M
 
-"""
-#test change with giot problem
-# something works but all?
-pattern = "aAbbbbBaaCbbaXaaXbbbXaaaaDaaaaEaa"
-#pattern = "XbbXc"
-#word = "aabbaac"
-word = "aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa"
-print("Pattern is: ", convertToIntarray(pattern))
-print("word is: ", convertToIntarray(word))
-# 46 is the number for X, the repeating var
-print(preProcess(convertToIntarray(pattern), convertToIntarray(word), 46))
-"""
 
 # algo 3 with a fixed v
-def matchingOneRep(pattern, word, v):
+def matchingOneRep(pattern, word, repeatingVar):
 
-    position = 0
-    while not isVariable(pattern[0]):
-        if pattern[position] != word[position]:
+    n = len(word)
+    position0 = 0
+    while not isVariable(pattern[position0]):
+        if pattern[position0] != word[position0]:
             return False
-        position += 1
+        position0 += 1
 
     # todo not factorize in both functions, 46 is the nubmer for X, the repeating var
-    w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, 46)
+    w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, repeatingVar)
+    m = len(betaList)
+    M = preProcess(pattern, word, repeatingVar)
+    factors = findAllFactors(word)
+
+    # remeber to use w0 
+    print("heere",m)
+    for v in factors:
+        pos = position0
+        for i in range(0, m):
+            pos += M[pos+1][i]
+            alphaj = wiList[i] + fillVarWithWord(gammaList[i], v, repeatingVar) + wiDashList[i]
+            find = knuthMorrisPratt(word[pos + 1:], alphaj )
+            if find:
+                piDash = find[0]
+            else:
+                piDash = n + 1
+            
+            if piDash <= n:
+                pos = piDash + len(alphaj) - 1
+            else:
+                return False
+        pos += M[pos + 1][m]
+    
+        # suffix check is not needed currently
+        # since its done in the loop
+    
+    # if this works for all factors v it matches 
+    return True
 
 
-    for i in range(0,m):
-        
-        # use kmp to find the leftmost occurence
-    pass
 
+#pattern = convertToIntarray("aAbbbbBaaCbbaXaaXbbbXaaaaDaaaaEaa")
+#word = convertToIntarray("aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa")
+#word = convertToIntarray("aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa")
+pattern = convertToIntarray("XbbXc")
+word = convertToIntarray("abbac")
+
+print("Pattern is: ", pattern)
+print("word is: ", word)
+
+# 46 is the number for X, the repeating var
+print(preProcess(pattern, word, 46))
+#print(matchingOneRep(pattern,word,46))
 
 def matchingRegular(pattern, word):
     # matching problem for regular pattern
