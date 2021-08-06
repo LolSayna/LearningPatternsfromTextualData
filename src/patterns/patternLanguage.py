@@ -65,6 +65,7 @@ def preProcess(pattern, word, repeatingVar):
     return M
 
 """
+#test change with giot problem
 # something works but all?
 pattern = "aAbbbbBaaCbbaXaaXbbbXaaaaDaaaaEaa"
 #pattern = "XbbXc"
