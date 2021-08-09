@@ -117,15 +117,24 @@ def matchingOneRep(pattern, word, repeatingVar):
                 break
             else:
                 pos = M[pos][i] + 1
-
+            
             alphaj = factorization["wiList"][i] + fillVarWithWord(factorization["gammaList"][i], v, repeatingVar) + factorization["wiDashList"][i]
-            find = knuthMorrisPratt(word[pos:], alphaj)
 
-            if not find:
-                matched = False
-                break
+            if factorization["betaList"][i] != []:
+                find = knuthMorrisPratt(word[pos:], alphaj)
+                if not find:
+                    matched = False
+                    break
+                else:
+                    pos = len(alphaj) + find[0]
             else:
-                pos = len(alphaj) + find[0]
+                if word[pos:len(alphaj)] != alphaj:
+                    matched = False
+                    break
+
+        
+
+            
 
         if matched:
             if factorization["betam+1"] != []:
