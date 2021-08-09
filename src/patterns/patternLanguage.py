@@ -15,8 +15,8 @@ def preProcess(pattern, word,allBetaJs):
     # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
     maxTermFactors = findMaximalTerminalFactors(pattern)
     uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
-    print("\nmaxTermfactors", maxTermFactors)
-    print("uniqueMaxTermFactors", uniqueMaxTermFactors)
+    print(f"{maxTermFactors = }")
+    print(f"{uniqueMaxTermFactors = }")
 
     d = {}
     for u in uniqueMaxTermFactors:
@@ -35,7 +35,7 @@ def preProcess(pattern, word,allBetaJs):
 
         d[tuple(u)] = di
 
-    print("d: ", d)
+    print(f"{d = }\n")
 
 
     # -1 to make it continues with the rest, where there are m+1 betaJ that exits
@@ -43,7 +43,7 @@ def preProcess(pattern, word,allBetaJs):
     M = [[-1 for _ in range(m+1)] for _ in range(n)]
 
 
-    print(f"\n{m = }")
+    print(f"{m = }")
     print(f"{allBetaJs = }")
 
     for i in range(0,n):
@@ -88,21 +88,25 @@ def matchingOneRep(pattern, word, repeatingVar):
     n = len(word)
     factorization = factorisePattern(pattern, repeatingVar)
     m = len(factorization["betaList"])
-    allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
-    M = preProcess(pattern, word,allBetaJs)
 
-    print(f"{factorization = }")
+    M = preProcess(pattern, word, factorization["betaList"] + [factorization["betam+1"]])
+    print(f"{M = }")
 
     posZero = len(factorization["w0"])
 
     if pattern[:posZero] != word[:posZero]:
+        print(f"wrong prefix")
         return False
 
-    
     factors = findAllFactors(word)
 
-    # remeber to use w0 
+
+    # check single case
+    #factors = [[1]]
+    # end check
+
     for v in factors:
+
         pos = posZero
         matched = True
 
@@ -124,10 +128,13 @@ def matchingOneRep(pattern, word, repeatingVar):
                 pos = len(alphaj) + find[0]
 
         if matched:
-            if M[pos][m] is not None:
-                pos = M[pos][m]
-                if pattern[pos:] == factorization["wim+1"]:
-                    return True
+            if factorization["betam+1"] != []:
+                if M[pos][m] is not None:
+                    pos = M[pos][m]
+
+            if pattern[pos:] == factorization["wim+1"]:
+                print(f"{v = }")
+                return True
     
     return False
 
@@ -138,14 +145,14 @@ repeatingVar = 46
 #pattern = convertToIntarray("aAbbaCbaXaXbXaaDccEb")
 #word = convertToIntarray("aabbacbaxaxbxaadcceb")
 pattern = convertToIntarray("XbbXc")
-word = convertToIntarray("abbac")
-
-print("Pattern is: ", pattern)
-print("word is:    ", word)
-
+word = convertToIntarray("aabbac")
 factorization = factorisePattern(pattern, repeatingVar)
-allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
-print(f"{factorization = }")
+
+print(f"{pattern = }")
+print(f"{word    = }")
+print(f"{factorization = }\n")
+
+#allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
 #print(preProcess(pattern, word, allBetaJs))
 print(matchingOneRep(pattern,word,repeatingVar))
 
