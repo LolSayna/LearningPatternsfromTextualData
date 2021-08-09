@@ -6,16 +6,16 @@ import string
 from patternUtil import *
 
 
-def preProcess(pattern, word, repeatingVar):
+def preProcess(pattern, word,allBetaJs):
     # algo 2 in one rep pattern
 
     n = len(word)
-
-    maxTermFactors = findMaximalTerminalFactors(pattern)
-    print("\nmaxTermfactors", maxTermFactors)
+    
     # each maxmial terminal factor is only needed once
     # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
+    maxTermFactors = findMaximalTerminalFactors(pattern)
     uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
+    print("\nmaxTermfactors", maxTermFactors)
     print("uniqueMaxTermFactors", uniqueMaxTermFactors)
 
     d = {}
@@ -38,20 +38,36 @@ def preProcess(pattern, word, repeatingVar):
     print("d: ", d)
 
 
-    #factorise alpha: m is defined by the  number of betas
-    w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, repeatingVar)
-    m = len(betaList)
-    M = [[-1 for _ in range(m)] for _ in range(n)]
+    # -1 to make it continues with the rest, where there are m+1 betaJ that exits
+    m = len(allBetaJs) - 1
+    M = [[-1 for _ in range(m+1)] for _ in range(n)]
 
 
-    print("\nm:", m)
-    print("betaList: ", betaList)
+    print(f"\n{m = }")
+    print(f"{allBetaJs = }")
 
     for i in range(0,n):
-        for j in range(0,m):
-            maxTermFactorsBeta = findMaximalTerminalFactors(betaList[j])
+        for j in range(0,m+1):
+            maxTermFactorsBeta = findMaximalTerminalFactors(allBetaJs[j])
             s = len(maxTermFactorsBeta)
+
+            if s == 0:
+                # then the bj is a single variable since there are no 2 var direclty after each other
+                M[i][j] = i - 1
+
+            elif s == 1:
+                # then there is only a single maximal terminal factor in bj
+                if d[tuple(maxTermFactorsBeta[0])][i] != - 1:
+                    M[i][j] = d[tuple(maxTermFactorsBeta[0])][i] + len(maxTermFactorsBeta[0])
+                else:
+                    M[i][j] = None
+
+            else:
+                # there are s many maximal terminal factors
+                print("does not happen")
+            """
             g = d[tuple(maxTermFactorsBeta[0])][i]
+            print(f"{s = } {maxTermFactorsBeta[0] = } {i = } {g = }")
 
 
             #print(f"s: {s} g: {g} factors: {maxTermFactorsBeta}")
@@ -60,7 +76,8 @@ def preProcess(pattern, word, repeatingVar):
                 g = d[tuple(maxTermFactorsBeta[h])][g + len(maxTermFactorsBeta[h-1])+1]
             
             #print(f"g: {g} len(maxTermFactorsBeta[s-1]: {len(maxTermFactorsBeta[s-1])}")
-            M[i][j] = g + len(maxTermFactorsBeta[s-1]) + 1
+            M[i][j] = g + len(maxTermFactorsBeta[s-1])+1
+            """
 
     return M
 
@@ -69,57 +86,68 @@ def preProcess(pattern, word, repeatingVar):
 def matchingOneRep(pattern, word, repeatingVar):
 
     n = len(word)
-    position0 = 0
-    while not isVariable(pattern[position0]):
-        if pattern[position0] != word[position0]:
-            return False
-        position0 += 1
+    factorization = factorisePattern(pattern, repeatingVar)
+    m = len(factorization["betaList"])
+    allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
+    M = preProcess(pattern, word,allBetaJs)
 
-    # todo not factorize in both functions, 46 is the nubmer for X, the repeating var
-    w0, betaList, wiList, gammaList, wiDashList = factorisePattern(pattern, repeatingVar)
-    m = len(betaList)
-    M = preProcess(pattern, word, repeatingVar)
+    print(f"{factorization = }")
+
+    posZero = len(factorization["w0"])
+
+    if pattern[:posZero] != word[:posZero]:
+        return False
+
+    
     factors = findAllFactors(word)
 
     # remeber to use w0 
-    print("heere",m)
     for v in factors:
-        pos = position0
+        pos = posZero
+        matched = True
+
         for i in range(0, m):
-            pos += M[pos+1][i]
-            alphaj = wiList[i] + fillVarWithWord(gammaList[i], v, repeatingVar) + wiDashList[i]
-            find = knuthMorrisPratt(word[pos + 1:], alphaj )
-            if find:
-                piDash = find[0]
+
+            if M[pos][i] is None:
+                matched = False
+                break
             else:
-                piDash = n + 1
-            
-            if piDash <= n:
-                pos = piDash + len(alphaj) - 1
+                pos = M[pos][i] + 1
+
+            alphaj = factorization["wiList"][i] + fillVarWithWord(factorization["gammaList"][i], v, repeatingVar) + factorization["wiDashList"][i]
+            find = knuthMorrisPratt(word[pos:], alphaj)
+
+            if not find:
+                matched = False
+                break
             else:
-                return False
-        pos += M[pos + 1][m]
+                pos = len(alphaj) + find[0]
+
+        if matched:
+            if M[pos][m] is not None:
+                pos = M[pos][m]
+                if pattern[pos:] == factorization["wim+1"]:
+                    return True
     
-        # suffix check is not needed currently
-        # since its done in the loop
-    
-    # if this works for all factors v it matches 
-    return True
+    return False
 
 
+# 46 is the number for X, the repeating var
+repeatingVar = 46
 
-#pattern = convertToIntarray("aAbbbbBaaCbbaXaaXbbbXaaaaDaaaaEaa")
-#word = convertToIntarray("aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa")
-#word = convertToIntarray("aaaabbbbccaabbabfaabfbbbbfaaaacaaaaaaaa")
+#pattern = convertToIntarray("aAbbaCbaXaXbXaaDccEb")
+#word = convertToIntarray("aabbacbaxaxbxaadcceb")
 pattern = convertToIntarray("XbbXc")
 word = convertToIntarray("abbac")
 
 print("Pattern is: ", pattern)
-print("word is: ", word)
+print("word is:    ", word)
 
-# 46 is the number for X, the repeating var
-print(preProcess(pattern, word, 46))
-#print(matchingOneRep(pattern,word,46))
+factorization = factorisePattern(pattern, repeatingVar)
+allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
+print(f"{factorization = }")
+#print(preProcess(pattern, word, allBetaJs))
+print(matchingOneRep(pattern,word,repeatingVar))
 
 def matchingRegular(pattern, word):
     # matching problem for regular pattern
