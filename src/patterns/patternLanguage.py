@@ -83,14 +83,18 @@ def preProcess(pattern, word,allBetaJs):
 
 
 # algo 3 with a fixed v
-def matchingOneRep(pattern, word, repeatingVar):
+def matchingOneRep(pattern, word):
+
+    # find the repeatingVar
+    repeatingVar = isOneRepPatternClass(pattern)[1]
+    print(f"\n\n\n{pattern = } {word = } {repeatingVar = }")
 
     n = len(word)
     factorization = factorisePattern(pattern, repeatingVar)
     m = len(factorization["betaList"])
 
     M = preProcess(pattern, word, factorization["betaList"] + [factorization["betam+1"]])
-    print(f"{M = }")
+    print(f"{factorization= } {M = }")
 
     posZero = len(factorization["w0"])
 
@@ -100,10 +104,6 @@ def matchingOneRep(pattern, word, repeatingVar):
 
     factors = findAllFactors(word)
 
-
-    # check single case
-    #factors = [[1]]
-    # end check
 
     for v in factors:
 
@@ -132,12 +132,9 @@ def matchingOneRep(pattern, word, repeatingVar):
                     matched = False
                     break
 
-        
-
-            
-
         if matched:
             if factorization["betam+1"] != []:
+                print(f"{pos = } {m = }")
                 if M[pos][m] is not None:
                     pos = M[pos][m]
 
@@ -149,21 +146,20 @@ def matchingOneRep(pattern, word, repeatingVar):
 
 
 # 46 is the number for X, the repeating var
-repeatingVar = 46
 
 #pattern = convertToIntarray("aAbbaCbaXaXbXaaDccEb")
 #word = convertToIntarray("aabbacbaxaxbxaadcceb")
-pattern = convertToIntarray("XbbXc")
-word = convertToIntarray("aabbac")
-factorization = factorisePattern(pattern, repeatingVar)
+#pattern = convertToIntarray("XbbXc")
+#word = convertToIntarray("aabbac")
+pattern = [0, 2, 0, 4, 6, 8]
+word = [1, 3, 3, 5, 3, 3]
 
 print(f"{pattern = }")
 print(f"{word    = }")
-print(f"{factorization = }\n")
 
 #allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
 #print(preProcess(pattern, word, allBetaJs))
-print(matchingOneRep(pattern,word,repeatingVar))
+print(matchingOneRep(pattern,word))
 
 def matchingRegular(pattern, word):
     # matching problem for regular pattern
@@ -254,19 +250,85 @@ def descPat(sample):
 
     return canonicalForm(removeVariablesInRow(alpha))
 
+def oneRepDescPat(sample):
+    # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
+
+    word = sorted(sample, key=len)[0]
+
+    m = len(word)
+    alpha = []
+    for i in range(m):
+        alpha.append(i*2)
+    #print(alpha)
+
+    for i in range(m):
+        #print("Current Alpha: ", alpha)
+
+        q, j = True, 0
+
+        # try replacing one variable with one terminal symbol
+        newAlpha = alpha.copy()
+        newAlpha[i] = word[i]
+
+        # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
+        if isOneRepPatternClass(canonicalForm(newAlpha)):
+
+            # next test if all words from the sample are still in the pattern language
+            inSample = True
+            for w in sample:
+                # print(w, matchingRegular(newAlpha, w))
+                if not matchingOneRep(newAlpha, w):
+                    inSample = False
+                    break
+
+            if inSample:
+                alpha = newAlpha
+                q = False
+
+        # next try to replace variables with each other
+        while q and j < i:
+            if isVariable(alpha[j]):
+
+                newAlpha = alpha.copy()
+                newAlpha[i] = alpha[j]
+
+                if isOneRepPatternClass(canonicalForm(newAlpha)):
+
+                    # next test if all words from the sample are still in the pattern language
+                    inSample = True
+                    for w in sample:
+                        # print(w, matchingRegular(newAlpha, w))
+                        if not matchingOneRep(newAlpha, w):
+                            inSample = False
+                            break
+
+                    if inSample:
+                        alpha = newAlpha
+                        q = False
+                    else:
+                        j += 1
+            if q:
+                j += 1
+
+    return canonicalForm(alpha)
+
 
 if __name__ == "__main__":
 
-    """
+    
     # test membership
     alpha = convertToIntarray("aAbaBc")
     word1 = convertToIntarray("abcbcbcbac")
     word2 = convertToIntarray("aaa")
-    print(alpha,word1,word2)
-    print(matchingRegular(alpha, word1))
-    print(matchingRegular(alpha, word2))
-    """
+    #print(alpha,word1,word2)
+    #print(matchingRegular(alpha, word1))
+    #print(matchingRegular(alpha, word2))
+
+    #print(matchingOneRep(alpha, word1, 46))
+    #print(matchingOneRep(alpha, word2, 46))
     
-    #sample = [[1,3,5], [1,3,3,5],[1,3,3,3,5]]
+    
+    sample = [[1,3,3,5,3,3], [1,7,7,5,5,7,7],[1,9,9,3,5,9,9]]
     #print(descPat(sample))
+    #print(oneRepDescPat(sample))
     

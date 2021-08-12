@@ -100,6 +100,7 @@ def convertToIntarray(pattern):
 
 
 # Operations on one single pattern
+# what happens with vars in a row and the repeating var gets deleted? 
 def removeVariablesInRow(pattern):
     # trims the pattern when variables are directly after each other, aka aABCb -> aAb
     i = 0
@@ -149,6 +150,25 @@ def isRegularPatternClass(pattern):
     return True
 #print(isRegularPatternClass([0,2222,2,6,7,7,9,444]))
 #print(isRegularPatternClass([0,2222,2,444,6,7,9,444]))
+
+def isOneRepPatternClass(pattern):
+
+    repeatedVar = None
+    marked = []
+    for c in pattern:
+        if isVariable(c):
+            if c in marked:
+                
+                if repeatedVar is None:
+                    repeatedVar = c
+                elif c != repeatedVar:
+                    return False
+            else:
+                marked.append(c)
+
+    return True, repeatedVar
+#print(isOneRepPatternClass([0,2222,2,6,7,7,9,444]))
+#print(isOneRepPatternClass([0,222,2,2,444,6,7,9,444]))
 
 def findAllNonVariables(pattern):
     # aka the maximal terminal factors
