@@ -5,3 +5,4 @@ venv/
 t8.shakespeare.txt
 
 *.pyc
+.venv

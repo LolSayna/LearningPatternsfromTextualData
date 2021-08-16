@@ -1,6 +1,5 @@
-from patternUtil import *
+
 from patternGenerate import *
-from patternLanguage import *
 import matplotlib.pyplot as plt
 
 # the metrics are used to evaluate the generated pattern, is it close to the unknown orgiginal pattern or is it not precise
@@ -105,7 +104,7 @@ def graphOne():
     plt.show()
 
 
-graphOne()
+#graphOne()
 
 if __name__ == "__main__":
 
