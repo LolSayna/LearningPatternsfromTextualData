@@ -87,7 +87,7 @@ def matchingOneRep(pattern, word):
 
     # find the repeatingVar
     repeatingVar = isOneRepPatternClass(pattern)[1]
-    print(f"\n\n\n{pattern = } {word = } {repeatingVar = }")
+    #print(f"\n\n\n{pattern = } {word = } {repeatingVar = }")
 
     n = len(word)
     factorization = factorisePattern(pattern, repeatingVar)
@@ -271,7 +271,7 @@ def oneRepDescPat(sample):
         newAlpha[i] = word[i]
 
         # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
-        if isOneRepPatternClass(canonicalForm(newAlpha)):
+        if isOneRepPatternClass(canonicalForm(newAlpha))[0]:
 
             # next test if all words from the sample are still in the pattern language
             inSample = True
@@ -292,7 +292,7 @@ def oneRepDescPat(sample):
                 newAlpha = alpha.copy()
                 newAlpha[i] = alpha[j]
 
-                if isOneRepPatternClass(canonicalForm(newAlpha)):
+                if isOneRepPatternClass(canonicalForm(newAlpha))[0]:
 
                     # next test if all words from the sample are still in the pattern language
                     inSample = True

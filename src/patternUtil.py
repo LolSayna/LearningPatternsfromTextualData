@@ -112,6 +112,16 @@ def removeVariablesInRow(pattern):
     return pattern
 #print(removeVariablesInRow([0,2,3,4,6,7,9]))
 
+# for repeating var, to keep maximum precison only 2 non repoeating vars get trimmed
+def removeNotRepeatingVariablesInRow(pattern, repeatingVar):
+    i = 0
+    while i < len(pattern) - 1:
+        if isVariable(pattern[i]) and isVariable(pattern[i + 1]) and pattern[i] != repeatingVar and pattern[i + 1] != repeatingVar:
+            pattern.remove(pattern[i + 1])
+        else:
+            i += 1
+    return pattern
+
 def canonicalForm(pattern):
     # transforms a pattern into its canonical form
     # this is done by renaming each variable, depending on their occurence
@@ -151,6 +161,7 @@ def isRegularPatternClass(pattern):
 #print(isRegularPatternClass([0,2222,2,6,7,7,9,444]))
 #print(isRegularPatternClass([0,2222,2,444,6,7,9,444]))
 
+# checks if a pattern belong to the one repeating class
 def isOneRepPatternClass(pattern):
 
     repeatedVar = None
@@ -169,6 +180,7 @@ def isOneRepPatternClass(pattern):
     return True, repeatedVar
 #print(isOneRepPatternClass([0,2222,2,6,7,7,9,444]))
 #print(isOneRepPatternClass([0,222,2,2,444,6,7,9,444]))
+
 
 def findAllNonVariables(pattern):
     # aka the maximal terminal factors
