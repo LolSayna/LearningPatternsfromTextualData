@@ -126,6 +126,7 @@ def matchingOneRep(pattern, word):
                     matched = False
                     break
                 else:
+                    print(f"{alphaj = } {pos = } {len(alphaj) = } {find[0] = } {i = }")
                     pos = len(alphaj) + find[0]
             else:
                 if word[pos:len(alphaj)] != alphaj:

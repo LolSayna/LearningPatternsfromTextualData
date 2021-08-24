@@ -112,7 +112,7 @@ def removeVariablesInRow(pattern):
     return pattern
 #print(removeVariablesInRow([0,2,3,4,6,7,9]))
 
-# for repeating var, to keep maximum precison only 2 non repoeating vars get trimmed
+# for repeating var, to keep maximum precison only 2 non repeating vars get trimmed
 def removeNotRepeatingVariablesInRow(pattern, repeatingVar):
     i = 0
     while i < len(pattern) - 1:
