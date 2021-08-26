@@ -1,7 +1,5 @@
-import sys, os
-sys.path.append(os.getcwd())
 
-from src.knuth_morris_pratt import naive, knuthMorrisPratt
+from knuth_morris_pratt import naive, knuthMorrisPratt
 import string
 from patternUtil import *
 

@@ -10,7 +10,7 @@ def generateRegularPattern(maxLength, maxVarCount, alphabet = string.ascii_lower
     # - alphabet: the list of characters for the terminals, can be a string or a list
 
     if maxVarCount > maxLength:
-        print("to many vars")
+        print("more vars then symbols")
         return None
 
     pattern = []
@@ -27,20 +27,23 @@ def generateRegularPattern(maxLength, maxVarCount, alphabet = string.ascii_lower
     for i, varPos in enumerate(sorted(varPos)):
         pattern[varPos] = i * 2
 
-    return canonicalForm(removeVariablesInRow(pattern))
+    return removeVariablesInRow(pattern)
 
 def generateRepeatingPattern(maxLength, maxVarCount, alphabet = string.ascii_lowercase, minRepetitions = 3):
     # generates a random one repeating pattern, "0"/"A" is the repeating variable, 
     # total number of repetitions can be one higher when the variable is already in the generated regular pattern
     # - repetitionRange: the amout of times the repeating variable gets inserted into the pattern
+
+    repeatingVar = 0
+
     pattern = generateRegularPattern(maxLength, maxVarCount, alphabet)
 
-    varPos = random.sample(range(maxLength), minRepetitions)
+    varPos = random.sample(range(len(pattern)), minRepetitions)
 
     for pos in varPos:
-        pattern[pos] = 0
+        pattern[pos] = repeatingVar
 
-    return pattern
+    return removeNotRepeatingVariablesInRow(pattern, repeatingVar)
 
 def generateWordFromPattern(pattern, subLength = [1,3], alphabet = string.ascii_lowercase, repeatingVar = None):
     # generates a random word for a given pattern:
@@ -51,7 +54,7 @@ def generateWordFromPattern(pattern, subLength = [1,3], alphabet = string.ascii_
     word = []
 
     # incase theres a repeating variable it gets genereated first
-    if repeatingVar:
+    if repeatingVar is not None:
         rep = []
         for _ in range(random.randint(subLength[0], subLength[1])):
             if type(alphabet) is str:
@@ -78,8 +81,91 @@ def generateWordFromPattern(pattern, subLength = [1,3], alphabet = string.ascii_
     return word
 
 
+
+def randomSampleRegular():
+    
+    patternCount = 50
+
+    pattern = []
+    for _ in range(patternCount):
+        pattern.append(generateRegularPattern(50, 10))
+
+    with open("src/data/random/sampleRegular.txt", "w") as results:
+        
+        results.write("RegularPatterns, "+ str(patternCount) + "\n")
+        for p in pattern:
+            if not isRegularPatternClass(p):
+                print(f"not regular pattern generated: {p}")
+            results.write(str(p) + "\n")
+
+def randomSampleOneRep():
+    
+    patternCount = 50
+
+    pattern = []
+    for _ in range(patternCount):
+        pattern.append(generateRepeatingPattern(50, 10))
+
+    with open("src/data/random/sampleOneRep.txt", "w") as results:
+        
+        results.write("OneRep Patterns, "+ str(patternCount) + "\n")
+        for p in pattern:
+            if not isOneRepPatternClass(p):
+                print(f"not regular pattern generated: {p}")
+            results.write(str(p) + "\n")
+
+
+def randomSample():
+
+    #randomSampleRegular()
+    #randomSampleOneRep()
+
+    with open("src/data/random/sampleRegular.txt") as data:
+        regular = data.readlines()
+    with open("src/data/random/sampleOneRep.txt") as data:
+        oneRep = data.readlines()
+
+    # the first line contains a description of the content, but no data
+    for line in regular[1:]:
+        
+
+        p = []
+        
+        # removes the brackets and the newline at the end, then splits at the ,
+        for i in line[1:-2].split(", "):
+            p.append(int(i))
+
+        sample = str(p) + "\n"
+
+        for i in range(10):
+            sample += str(generateWordFromPattern(p)) + "\n"
+        
+        with open("src/data/random/wordsRegular.txt", "a") as results:
+            results.write(sample + "\n")
+
+    for line in oneRep[1:]:
+        
+
+        p = []
+        
+        # removes the brackets and the newline at the end, then splits at the ,
+        for i in line[1:-2].split(", "):
+            p.append(int(i))
+
+        sample = str(p) + "\n"
+
+        for i in range(10):
+            sample += str(generateWordFromPattern(p, repeatingVar=0)) + "\n"
+        
+        with open("src/data/random/wordsOneRep.txt", "a") as results:
+            results.write(sample + "\n")
+
+
 if __name__ == "__main__":
     # testing some cases
+
+    
+    randomSample()
 
     #print(generateRegularPattern(20, 5))
     #print(generateRegularPattern(20, 10))
@@ -98,5 +184,7 @@ if __name__ == "__main__":
     #print(generateWordFromPattern(convertToIntarray("AzzzD"), alphabet=[5,7,91]))
     #print(generateWordFromPattern(convertToIntarray("ZqAbxBfCxsmEqsefXbmvZy"),repeatingVar=50))
     #print(generateWordFromPattern(convertToIntarray("ZqAbxBfCxsmEqsefXbmvZy"),repeatingVar=50))
+
+    
 
     pass
