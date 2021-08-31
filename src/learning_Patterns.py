@@ -84,9 +84,7 @@ def matchingOneRep(pattern, word):
 
     # find the repeatingVar
     repeatingVar = findRepeatedVar(pattern)
-
-    if repeatingVar is None:
-        return matchingRegular(pattern,word)
+    
     #print(f"\n\n\n{pattern = } {word = } {repeatingVar = }")
 
     n = len(word)
