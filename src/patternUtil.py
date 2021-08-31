@@ -311,7 +311,7 @@ def factorisePattern(pattern, repeatingVar):
 #print("Pattern is: ", convertToIntarray(pattern))
 #print(factorisePattern(convertToIntarray(pattern), 46))
 
-# finds all the factors including the empty one
+# finds all the factors, NOT including the empty one
 def findAllFactors(word):
      
     factors = []
@@ -320,13 +320,15 @@ def findAllFactors(word):
         for j in range(len(word)):
             factors.append(word[i:j+1])
     
-
+    
     # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
     factors = [list(x) for x in set(tuple(x) for x in factors)] 
-
+    
+    # remove the emtpy one
+    factors.remove([])
     return factors
 
-#print(findAllFactors(convertToIntarray("aabbac")))
+print(findAllFactors(convertToIntarray("aabbac")))
 
 
 # example for var is 46 which translates to X

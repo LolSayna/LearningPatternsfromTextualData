@@ -21,17 +21,17 @@ def preProcess(pattern, word,allBetaJs):
 
         posiblePositons = knuthMorrisPratt(word, u)
 
-        di = []
+        d_i = []
         for i in range(0, n):
 
             x = list(filter(lambda x: x >= i, posiblePositons))
             
             if x:
-                di.append(min(x))
+                d_i.append(min(x))
             else:
-                di.append(-1)
+                d_i.append(-1)
 
-        d[tuple(u)] = di
+        d[tuple(u)] = d_i
 
     print(f"{d = }\n")
 
@@ -104,34 +104,41 @@ def matchingOneRep(pattern, word):
 
 
     for v in factors:
-
+        #print(f"current {v = }")
         pos = posZero
         matched = True
 
         for i in range(0, m):
-
-            if M[pos][i] is None:
+            #print(i)
+            if pos > len(pattern) or M[pos][i] is None:
                 matched = False
                 break
             else:
                 pos = M[pos][i] + 1
             
             alphaj = factorization["wiList"][i] + fillVarWithWord(factorization["gammaList"][i], v, repeatingVar) + factorization["wiDashList"][i]
+            #print(f"{alphaj = } {pos = } {len(alphaj) = } {i = }")
 
             if factorization["betaList"][i] != []:
                 find = knuthMorrisPratt(word[pos:], alphaj)
+                #print(f"{find = }, {word = }, {alphaj = }")
                 if not find:
                     matched = False
                     break
                 else:
-                    print(f"{alphaj = } {pos = } {len(alphaj) = } {find[0] = } {i = }")
                     pos = len(alphaj) + find[0]
             else:
                 if word[pos:len(alphaj)] != alphaj:
                     matched = False
                     break
+                else:
+                    pos += len(alphaj)
 
         if matched:
+            #problem with erasing var and the factor of the full word, even if started at pos 0, len(alphaj) = len(pattern) -> therefore remove to long factors
+            # cases after all variables
+
+            #print(pattern[pos:])
             if factorization["betam+1"] != []:
                 print(f"{pos = } {m = }")
                 if M[pos][m] is not None:
@@ -151,7 +158,7 @@ def matchingOneRep(pattern, word):
 #pattern = convertToIntarray("XbbXc")
 #word = convertToIntarray("aabbac")
 pattern = [0, 2, 0, 4, 6, 8]
-word = [1, 3, 3, 5, 3, 3]
+word = [1, 3, 3, 5, 3, 3, 3]
 
 print(f"{pattern = }")
 print(f"{word    = }")
