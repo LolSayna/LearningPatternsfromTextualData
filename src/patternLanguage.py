@@ -174,7 +174,6 @@ def matchingRegular(pattern, word):
 
     j = len(split[0])
     if split[0] != word[:j]:
-        print("prefix wrong")
         return False
 
     #print(f"{split= }, {m= }, {j= }, {split[1:m-1]= }, {split[m-1]= }")
@@ -193,14 +192,14 @@ def matchingRegular(pattern, word):
             #print(f"{find= }, new j= {j}")
         else:
             j += 1
-
-    #print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
-    find = firstMatchKMP(word[j+1:],split[m-1])
-    if find is None:
+    
+    print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
+    if split[m-1] and split[m-1] != word[-len(split[m-1]) :]:
         return False
-    else:
-        return True
 
+    return True
+
+print(matchingRegular([1,2,5,4,9,9], [1,1,1,3,5,7,9]))
 
 def descPat(sample):
     # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
@@ -336,10 +335,9 @@ if __name__ == "__main__":
     word2 = convertToIntarray("aaa")
     word3 = convertToIntarray("abbasdc")
     #print(alpha,word1,word2)
-    print(matchingRegular(alpha, word1))
-    print(matchingRegular(alpha, word2))
-    print(matchingRegular(alpha, word3))
-    print(matchingRegular([1,2,5,4,9,9], [1,1,1,3,5,7,9,9]))
+    #print(matchingRegular(alpha, word1))
+    #print(matchingRegular(alpha, word2))
+    #print(matchingRegular(alpha, word3))
 
     #print(matchingOneRep(alpha, word1, 46))
     #print(matchingOneRep(alpha, word2, 46))
