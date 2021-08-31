@@ -117,7 +117,7 @@ def learnAndCheck(learnSample, testSample):
 
     return learnedPattern, count
 
-
+print("strat")
 tupels = randomSampleOneRep()
 for t in tupels:
     (pattern, words) = t

@@ -165,7 +165,6 @@ def isRegularPatternClass(pattern):
 
 # checks if a pattern belong to the one repeating class
 def isOneRepPatternClass(pattern):
-
     repeatedVar = None
     marked = []
     for c in pattern:
@@ -182,7 +181,7 @@ def isOneRepPatternClass(pattern):
     return True
 
 def findRepeatedVar(pattern):
-
+    #print(pattern)
     marked = []
     for c in pattern:
         if isVariable(c):

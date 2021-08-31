@@ -9,17 +9,13 @@ def preProcess(pattern, word, allBetaJs):
     n = len(word)
     
     # each maxmial terminal factor is only needed once
-    # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
     maxTermFactors = findMaximalTerminalFactors(pattern)
     uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
-    #print(f"{maxTermFactors = }")
-    #print(f"{uniqueMaxTermFactors = }")
 
     d = {}
     for u in uniqueMaxTermFactors:
 
         posiblePositons = knuthMorrisPratt(word, u)
-
         d_i = []
         for i in range(0, n):
 
@@ -32,50 +28,42 @@ def preProcess(pattern, word, allBetaJs):
 
         d[tuple(u)] = d_i
 
-    #print(f"{d = }\n")
-
-
+   
     # -1 to make it continues with the rest, where there are m+1 betaJ that exits
     m = len(allBetaJs) - 1
     M = [[-1 for _ in range(m+1)] for _ in range(n)]
-
-
-    #print(f"{m = }")
-    #print(f"{allBetaJs = }")
-
+    """
+    print(f"{maxTermFactors = }")
+    print(f"{uniqueMaxTermFactors = }")
+    print(f"{d = }\n")
+    print(f"{m = }")
+    print(f"{allBetaJs = }")
+    """
     for i in range(0,n):
         for j in range(0,m+1):
+
             maxTermFactorsBeta = findMaximalTerminalFactors(allBetaJs[j])
             s = len(maxTermFactorsBeta)
 
             if s == 0:
                 # then the bj is a single variable since there are no 2 var direclty after each other
-                M[i][j] = i - 1
-
-            elif s == 1:
-                # then there is only a single maximal terminal factor in bj
-                if d[tuple(maxTermFactorsBeta[0])][i] != - 1:
-                    M[i][j] = d[tuple(maxTermFactorsBeta[0])][i] + len(maxTermFactorsBeta[0])
-                else:
-                    M[i][j] = None
-
+                g = i - 1
+                if g < 0:
+                    g = None
             else:
-                # there are s many maximal terminal factors
-                print("does not happen")
-            """
-            g = d[tuple(maxTermFactorsBeta[0])][i]
-            print(f"{s = } {maxTermFactorsBeta[0] = } {i = } {g = }")
+                if d[tuple(maxTermFactorsBeta[0])][i] != - 1:
+                    g = d[tuple(maxTermFactorsBeta[0])][i] + len(maxTermFactorsBeta[0])
+                else:
+                    g = None
+                
+                for h in range(1,s):
+                    if g is not None:
+                        if d[tuple(maxTermFactorsBeta[h])][i] != - 1:
+                            g = d[tuple(maxTermFactorsBeta[h])][i] + len(maxTermFactorsBeta[h])
+                        else:
+                            g = None
 
-
-            #print(f"s: {s} g: {g} factors: {maxTermFactorsBeta}")
-            for h in range(1,s):
-                #print(f"h: {h}")
-                g = d[tuple(maxTermFactorsBeta[h])][g + len(maxTermFactorsBeta[h-1])+1]
-            
-            #print(f"g: {g} len(maxTermFactorsBeta[s-1]: {len(maxTermFactorsBeta[s-1])}")
-            M[i][j] = g + len(maxTermFactorsBeta[s-1])+1
-            """
-
+            M[i][j] = g
     return M
 
 
@@ -84,14 +72,17 @@ def matchingOneRep(pattern, word):
 
     # find the repeatingVar
     repeatingVar = findRepeatedVar(pattern)
-    
-    #print(f"\n\n\n{pattern = } {word = } {repeatingVar = }")
+    # when there is no repeating var, then the pattern is regular
+    if repeatingVar is None:
+        return matchingRegular(pattern,word)
 
-    n = len(word)
     factorization = factorisePattern(pattern, repeatingVar)
     m = len(factorization["betaList"])
 
     M = preProcess(pattern, word, factorization["betaList"] + [factorization["betam+1"]])
+    #print(factorization)
+    #print(M)
+    return
     #print(f"{factorization= } {M = }")
 
     posZero = len(factorization["w0"])
@@ -150,6 +141,11 @@ def matchingOneRep(pattern, word):
     
     return False
 
+
+pattern = [0, 3, 2, 4, 6, 5, 8, 10, 12, 3, 14, 16, 18, 12, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62] 
+word = [5, 3, 5, 5, 3, 5, 23, 21, 21, 5, 1, 5, 15, 37, 29, 5, 3, 5, 5, 3, 5, 51, 27, 5, 5, 1, 5, 5, 5, 9, 15, 39, 1, 5, 3, 1, 5, 5, 5, 1, 41, 37, 47, 7, 5, 3, 5, 5, 3, 5, 27, 5, 3, 11, 5, 5]
+
+#print(matchingOneRep(pattern,word))
 
 # 46 is the number for X, the repeating var
 
@@ -303,7 +299,7 @@ def oneRepDescPat(sample):
 
                 newAlpha = alpha.copy()
                 newAlpha[i] = alpha[j]
-
+                
                 if isOneRepPatternClass(canonicalForm(newAlpha)):
 
                     # next test if all words from the sample are still in the pattern language
