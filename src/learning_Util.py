@@ -179,7 +179,19 @@ def isOneRepPatternClass(pattern):
             else:
                 marked.append(c)
 
-    return True, repeatedVar
+    return True
+
+def findRepeatedVar(pattern):
+
+    marked = []
+    for c in pattern:
+        if isVariable(c):
+            if c in marked:
+                return c
+            else:
+                marked.append(c)
+    return None
+
 #print(isOneRepPatternClass([0,2222,2,6,7,7,9,444]))
 #print(isOneRepPatternClass([0,222,2,2,444,6,7,9,444]))
 
@@ -368,6 +380,15 @@ def fillVarWithWord(pattern, word, var):
 def replaceAt(pattern, word, position):
     # deletes the var at position and fills in the word there
     return pattern[:position] + word + pattern[position+1:]
+
+def writeToFile(filepath, title, text):
+    # used to write into files, takes one title for the first line of the file, and text
+
+    with open("src/data/" + filepath + ".txt", "w") as results:
+        
+        results.write(title + "\n")
+        for p in text:
+            results.write(str(p) + "\n")
 
 
 #pattern = convertToIntList("XbbXc")

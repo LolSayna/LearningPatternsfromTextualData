@@ -1,6 +1,6 @@
 import os
-from patternLanguage import descPat
-from patternUtil import *
+from learning_Patterns import descPat
+from learning_Util import *
 
 
 """

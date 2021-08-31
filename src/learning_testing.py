@@ -1,6 +1,6 @@
-
-from learning_generate import *
-from patternLanguage import *
+from learning_randomdata import *
+#from learning_biodata import *
+from learning_Patterns import *
 import matplotlib.pyplot as plt
 
 # the metrics are used to evaluate the generated pattern, is it close to the unknown orgiginal pattern or is it not precise
@@ -30,9 +30,7 @@ def metricLongestCommonSubstring(originalPattern, newPattern):
     return res / max(n, m)
 
 
-def metricByWordMatching(
-    originalPattern, newPattern, testCount, replaceMin, replaceMax
-):
+def metricByWordMatching(originalPattern, newPattern, testCount, replaceMin, replaceMax):
     # generates random words from the originalPattern and tests if the newPattern matches thoose
     # returns the percentage of succsesfull matches
 
@@ -106,6 +104,33 @@ def graphOne():
 
 
 #graphOne()
+
+def learnAndCheck(learnSample, testSample):
+    # lerns a descriptive pattern from the sample and returns how many of the words from the testSample were matched
+  
+    learnedPattern = oneRepDescPat(learnSample)
+
+    count = 0
+    for w in testSample:
+        if matchingOneRep(learnedPattern, w):
+            count += 1
+
+    return learnedPattern, count
+
+
+tupels = randomSampleOneRep()
+for t in tupels:
+    (pattern, words) = t
+    learnSample = words[:50]
+    testSample = words[50:]
+    learnedPattern, count = learnAndCheck(learnSample, testSample)
+
+    print(pattern)
+    print(learnedPattern)
+    print(count)
+
+
+
 
 if __name__ == "__main__":
 

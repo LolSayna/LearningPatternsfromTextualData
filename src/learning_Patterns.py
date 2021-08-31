@@ -1,10 +1,9 @@
-
-from pm_knuth_morris_pratt import naive, firstMatchKMP
 import string
 from learning_Util import *
 
+from pm_knuth_morris_pratt import firstMatchKMP, knuthMorrisPratt
 
-def preProcess(pattern, word,allBetaJs):
+def preProcess(pattern, word, allBetaJs):
     # algo 2 in one rep pattern
 
     n = len(word)
@@ -13,8 +12,8 @@ def preProcess(pattern, word,allBetaJs):
     # line from https://stackoverflow.com/questions/3724551/python-uniqueness-for-list-of-lists
     maxTermFactors = findMaximalTerminalFactors(pattern)
     uniqueMaxTermFactors = [list(x) for x in set(tuple(x) for x in maxTermFactors)] 
-    print(f"{maxTermFactors = }")
-    print(f"{uniqueMaxTermFactors = }")
+    #print(f"{maxTermFactors = }")
+    #print(f"{uniqueMaxTermFactors = }")
 
     d = {}
     for u in uniqueMaxTermFactors:
@@ -33,7 +32,7 @@ def preProcess(pattern, word,allBetaJs):
 
         d[tuple(u)] = d_i
 
-    print(f"{d = }\n")
+    #print(f"{d = }\n")
 
 
     # -1 to make it continues with the rest, where there are m+1 betaJ that exits
@@ -41,8 +40,8 @@ def preProcess(pattern, word,allBetaJs):
     M = [[-1 for _ in range(m+1)] for _ in range(n)]
 
 
-    print(f"{m = }")
-    print(f"{allBetaJs = }")
+    #print(f"{m = }")
+    #print(f"{allBetaJs = }")
 
     for i in range(0,n):
         for j in range(0,m+1):
@@ -84,7 +83,10 @@ def preProcess(pattern, word,allBetaJs):
 def matchingOneRep(pattern, word):
 
     # find the repeatingVar
-    repeatingVar = isOneRepPatternClass(pattern)[1]
+    repeatingVar = findRepeatedVar(pattern)
+
+    if repeatingVar is None:
+        return matchingRegular(pattern,word)
     #print(f"\n\n\n{pattern = } {word = } {repeatingVar = }")
 
     n = len(word)
@@ -92,12 +94,12 @@ def matchingOneRep(pattern, word):
     m = len(factorization["betaList"])
 
     M = preProcess(pattern, word, factorization["betaList"] + [factorization["betam+1"]])
-    print(f"{factorization= } {M = }")
+    #print(f"{factorization= } {M = }")
 
     posZero = len(factorization["w0"])
 
     if pattern[:posZero] != word[:posZero]:
-        print(f"wrong prefix")
+        #print(f"wrong prefix")
         return False
 
     factors = findAllFactors(word)
@@ -140,12 +142,12 @@ def matchingOneRep(pattern, word):
 
             #print(pattern[pos:])
             if factorization["betam+1"] != []:
-                print(f"{pos = } {m = }")
+                #print(f"{pos = } {m = }")
                 if M[pos][m] is not None:
                     pos = M[pos][m]
 
             if pattern[pos:] == factorization["wim+1"]:
-                print(f"{v = }")
+                #print(f"{v = }")
                 return True
     
     return False
@@ -193,7 +195,7 @@ def matchingRegular(pattern, word):
         else:
             j += 1
     
-    print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
+    #print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
     if split[m-1] and split[m-1] != word[-len(split[m-1]) :]:
         return False
 
@@ -283,7 +285,7 @@ def oneRepDescPat(sample):
         newAlpha[i] = word[i]
 
         # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
-        if isOneRepPatternClass(canonicalForm(newAlpha))[0]:
+        if isOneRepPatternClass(canonicalForm(newAlpha)):
 
             # next test if all words from the sample are still in the pattern language
             inSample = True
@@ -304,7 +306,7 @@ def oneRepDescPat(sample):
                 newAlpha = alpha.copy()
                 newAlpha[i] = alpha[j]
 
-                if isOneRepPatternClass(canonicalForm(newAlpha))[0]:
+                if isOneRepPatternClass(canonicalForm(newAlpha)):
 
                     # next test if all words from the sample are still in the pattern language
                     inSample = True
@@ -334,8 +336,8 @@ if __name__ == "__main__":
     word2 = convertToIntList("aaa")
     word3 = convertToIntList("abbasdc")
     #print(alpha,word1,word2)
-    print(matchingRegular(alpha, word1))
-    print(matchingRegular(alpha, word2))
+    #print(matchingRegular(alpha, word1))
+    #print(matchingRegular(alpha, word2))
     #print(matchingRegular(alpha, word3))
     #print(matchingRegular([1,2,5,4,9,9], [1,1,1,3,5,7,9]))
 
