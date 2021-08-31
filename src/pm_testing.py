@@ -1,18 +1,15 @@
 import logging
 import string
-import matplotlib.pyplot as plt
 from timeit import default_timer as timer
+
 import wget
+import matplotlib.pyplot as plt
 
-import generate
-
-from knuth_morris_pratt import naive
-from knuth_morris_pratt import knuthMorrisPratt
-from aho_corasick import ahoCorasickSingle
-from rabin_karp import rabinKarp
-from boyer_moore import boyerMooreFlens
-from boyer_moore import boyerMooreLecroq
-from boyer_moore import turboBoyerMooreLecroq
+import pm_generate
+from pm_knuth_morris_pratt import naive, knuthMorrisPratt
+from pm_aho_corasick import ahoCorasickSingle
+from pm_rabin_karp import rabinKarp
+from pm_boyer_moore import boyerMooreFlens, boyerMooreLecroq, turboBoyerMooreLecroq
 
 algoList = ["naive", "knuthMorrisPratt", "ahoCorasickSingle", "rabinKarp",
             "boyerMooreFlens", "boyerMooreLecroq", "turboBoyerMooreLecroq"]
@@ -45,7 +42,7 @@ def randomRuns(currentAlgoList=algoList, runs=10, chars=["a", "b", "c", "d"], le
     times = [[] for _ in range(len(currentAlgoList))]
 
     for i in range(runs):
-        text, pattern, firstMatch = generate.generateRandom(
+        text, pattern, firstMatch = pm_generate.generateRandom(
             length=length, chars=chars, patternLengthRange=patternLengthRange)
 
         results, time = run(currentAlgoList, text, pattern)

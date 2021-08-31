@@ -1,5 +1,6 @@
 
-from patternGenerate import *
+from learning_generate import *
+from patternLanguage import *
 import matplotlib.pyplot as plt
 
 # the metrics are used to evaluate the generated pattern, is it close to the unknown orgiginal pattern or is it not precise
