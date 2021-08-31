@@ -27,7 +27,7 @@ def generateRegularPattern(maxLength, maxVarCount, alphabet = string.ascii_lower
     for i, varPos in enumerate(sorted(varPos)):
         pattern[varPos] = i * 2
 
-    return removeVariablesInRow(pattern)
+    return pattern
 
 def generateRepeatingPattern(maxLength, maxVarCount, alphabet = string.ascii_lowercase, minRepetitions = 3):
     # generates a random one repeating pattern, "0"/"A" is the repeating variable, 
@@ -43,7 +43,7 @@ def generateRepeatingPattern(maxLength, maxVarCount, alphabet = string.ascii_low
     for pos in varPos:
         pattern[pos] = repeatingVar
 
-    return removeNotRepeatingVariablesInRow(pattern, repeatingVar)
+    return pattern, repeatingVar
 
 def generateWordFromPattern(pattern, subLength = [1,3], alphabet = string.ascii_lowercase, repeatingVar = None):
     # generates a random word for a given pattern:
@@ -104,7 +104,7 @@ def randomSampleOneRep():
 
     pattern = []
     for _ in range(patternCount):
-        pattern.append(generateRepeatingPattern(50, 10))
+        pattern.append(generateRepeatingPattern(50, 10)[0])
 
     with open("src/data/random/sampleOneRep.txt", "w") as results:
         
@@ -117,8 +117,8 @@ def randomSampleOneRep():
 
 def randomSample():
 
-    #randomSampleRegular()
-    #randomSampleOneRep()
+    randomSampleRegular()
+    randomSampleOneRep()
 
     with open("src/data/random/sampleRegular.txt") as data:
         regular = data.readlines()
@@ -164,7 +164,6 @@ def randomSample():
 if __name__ == "__main__":
     # testing some cases
 
-    
     randomSample()
 
     #print(generateRegularPattern(20, 5))

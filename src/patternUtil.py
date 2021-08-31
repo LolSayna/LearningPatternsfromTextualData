@@ -100,7 +100,8 @@ def convertToIntarray(pattern):
 
 
 # Operations on one single pattern
-# what happens with vars in a row and the repeating var gets deleted? 
+# variables need to stay, since replacement can not be emtpy
+"""
 def removeVariablesInRow(pattern):
     # trims the pattern when variables are directly after each other, aka aABCb -> aAb
     i = 0
@@ -121,6 +122,7 @@ def removeNotRepeatingVariablesInRow(pattern, repeatingVar):
         else:
             i += 1
     return pattern
+"""
 
 def canonicalForm(pattern):
     # transforms a pattern into its canonical form
@@ -329,7 +331,7 @@ def findAllFactors(word):
 
 # example for var is 46 which translates to X
 def fillVarWithWord(pattern, word, var):
-    # replaces all occurences of word with var
+    # replaces all occurences of var with word
     
     newpattern = pattern.copy()
 

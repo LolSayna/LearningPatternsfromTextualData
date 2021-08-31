@@ -1,5 +1,5 @@
 
-from knuth_morris_pratt import naive, knuthMorrisPratt
+from pm_knuth_morris_pratt import naive, knuthMorrisPratt
 import string
 from patternUtil import *
 
@@ -247,7 +247,7 @@ def descPat(sample):
             if q:
                 j += 1
 
-    return canonicalForm(removeVariablesInRow(alpha))
+    return canonicalForm(alpha)
 
 def oneRepDescPat(sample):
     # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
