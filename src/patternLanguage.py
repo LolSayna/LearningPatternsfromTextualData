@@ -1,5 +1,5 @@
 
-from pm_knuth_morris_pratt import naive, knuthMorrisPratt
+from pm_knuth_morris_pratt import naive, firstMatchKMP
 import string
 from patternUtil import *
 
@@ -160,38 +160,46 @@ def matchingOneRep(pattern, word):
 pattern = [0, 2, 0, 4, 6, 8]
 word = [1, 3, 3, 5, 3, 3, 3]
 
-print(f"{pattern = }")
-print(f"{word    = }")
+#print(f"{pattern = }")
+#print(f"{word    = }")
 
 #allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
 #print(preProcess(pattern, word, allBetaJs))
-print(matchingOneRep(pattern,word))
+#print(matchingOneRep(pattern,word))
 
 def matchingRegular(pattern, word):
     # matching problem for regular pattern
+    split = splitPattern(pattern)
+    m = len(split)
 
-    w_i, prefix, suffix = findAllNonVariables(pattern)
-
-    # check prefix
-    j = len(prefix)
-    if prefix != word[:j]:
+    j = len(split[0])
+    if split[0] != word[:j]:
+        print("prefix wrong")
         return False
 
-    # main check
-    for s in w_i:
+    #print(f"{split= }, {m= }, {j= }, {split[1:m-1]= }, {split[m-1]= }")
+    for w_i in split[1:m-1]:
+        if w_i:
+            #print(f"{j= }, {word[j+1:]= }, {w_i= }")
+            # firstMatchKMP returns the positions where w_i occurs first, but only in the subpattern thats given to it
+            # to find the position in the complete word j + 1 needs to be added later
+            find = firstMatchKMP(word[j+1:], w_i)
 
-        find = knuthMorrisPratt(word[j:], s)
-        if find == []:
-            return False
+            if find is None:
+                return False
+            else:
+
+                j += find + len(w_i) + 1
+            #print(f"{find= }, new j= {j}")
         else:
-            j += find[0] + len(s)
+            j += 1
 
-    # check suffix
-    # check if the suffix is not empty and only then whether it matches
-    if suffix and suffix != word[-len(suffix) :]:
+    #print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
+    find = firstMatchKMP(word[j+1:],split[m-1])
+    if find is None:
         return False
-
-    return True
+    else:
+        return True
 
 
 def descPat(sample):
@@ -326,9 +334,12 @@ if __name__ == "__main__":
     alpha = convertToIntarray("aAbaBc")
     word1 = convertToIntarray("abcbcbcbac")
     word2 = convertToIntarray("aaa")
+    word3 = convertToIntarray("abbasdc")
     #print(alpha,word1,word2)
-    #print(matchingRegular(alpha, word1))
-    #print(matchingRegular(alpha, word2))
+    print(matchingRegular(alpha, word1))
+    print(matchingRegular(alpha, word2))
+    print(matchingRegular(alpha, word3))
+    print(matchingRegular([1,2,5,4,9,9], [1,1,1,3,5,7,9,9]))
 
     #print(matchingOneRep(alpha, word1, 46))
     #print(matchingOneRep(alpha, word2, 46))

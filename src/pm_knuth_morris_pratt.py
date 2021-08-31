@@ -83,6 +83,26 @@ def knuthMorrisPratt(text, pattern):
 
     return matchList
 
+def firstMatchKMP(text,pattern):
+    # algo in O(m+n)
+
+    n, m = len(text), len(pattern)
+
+    # next table
+    prea = createNextTable(pattern)
+    #logging.debug(f"Prefix table in KMP algo: {prea}")
+
+    patPos = 0
+    for textPos in range(n):
+        while patPos >= 0 and pattern[patPos] is not text[textPos]:
+            patPos = prea[patPos]
+
+        patPos = patPos + 1
+
+        if patPos == m:
+            return textPos - m + 1
+
+    return None
 
 if __name__ == "__main__":
     # simple test cases

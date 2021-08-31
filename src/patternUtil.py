@@ -183,6 +183,24 @@ def isOneRepPatternClass(pattern):
 #print(isOneRepPatternClass([0,2222,2,6,7,7,9,444]))
 #print(isOneRepPatternClass([0,222,2,2,444,6,7,9,444]))
 
+# for regular patterns
+def splitPattern(pattern):
+
+    split = []
+    w_i = []
+
+    for c in pattern:
+        if isVariable(c):
+            split.append(w_i)
+            w_i = []
+        else:
+            w_i.append(c)
+
+    split.append(w_i)
+    return split
+
+#print(splitPattern([1,2,5,4,6,9,9]))
+
 
 def findAllNonVariables(pattern):
     # aka the maximal terminal factors
@@ -328,7 +346,7 @@ def findAllFactors(word):
     factors.remove([])
     return factors
 
-print(findAllFactors(convertToIntarray("aabbac")))
+#print(findAllFactors(convertToIntarray("aabbac")))
 
 
 # example for var is 46 which translates to X
