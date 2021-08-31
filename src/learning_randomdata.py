@@ -1,6 +1,6 @@
 import random
 import string
-from patternUtil import *
+from learning_Util import *
 
 
 def generateRegularPattern(maxLength, maxVarCount, alphabet = string.ascii_lowercase):
@@ -176,13 +176,13 @@ if __name__ == "__main__":
     #print(generateRepeatingPattern(20,5, minRepetitions=5))
     #print(generateRepeatingPattern(50,5, minRepetitions=10))
 
-    #print(generateWordFromPattern(convertToIntarray("ZqAbxBfCxsmEqsefXbmvZy")))
-    #print(generateWordFromPattern(convertToIntarray("abcD")))
-    #print(generateWordFromPattern(convertToIntarray("abcDeeeeeeeeeeeeeeeeeeeeeeeeeeeeeA"), subLength=(10,20)))
-    #print(generateWordFromPattern(convertToIntarray("AcccD"), alphabet="abbbbbb"))
-    #print(generateWordFromPattern(convertToIntarray("AzzzD"), alphabet=[5,7,91]))
-    #print(generateWordFromPattern(convertToIntarray("ZqAbxBfCxsmEqsefXbmvZy"),repeatingVar=50))
-    #print(generateWordFromPattern(convertToIntarray("ZqAbxBfCxsmEqsefXbmvZy"),repeatingVar=50))
+    #print(generateWordFromPattern(convertToIntList("ZqAbxBfCxsmEqsefXbmvZy")))
+    #print(generateWordFromPattern(convertToIntList("abcD")))
+    #print(generateWordFromPattern(convertToIntList("abcDeeeeeeeeeeeeeeeeeeeeeeeeeeeeeA"), subLength=(10,20)))
+    #print(generateWordFromPattern(convertToIntList("AcccD"), alphabet="abbbbbb"))
+    #print(generateWordFromPattern(convertToIntList("AzzzD"), alphabet=[5,7,91]))
+    #print(generateWordFromPattern(convertToIntList("ZqAbxBfCxsmEqsefXbmvZy"),repeatingVar=50))
+    #print(generateWordFromPattern(convertToIntList("ZqAbxBfCxsmEqsefXbmvZy"),repeatingVar=50))
 
     
 

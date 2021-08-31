@@ -56,7 +56,7 @@ def convertToAlphabet(pattern):
 #print(convertToAlphabet(delta))
 #print(convertToAlphabet(epsi))
 
-def convertToIntarray(pattern):
+def convertToIntList(pattern):
     # converts a pattern form the alphabet form, into the int array system
     pat = []
     for i, c in enumerate(pattern):
@@ -89,13 +89,13 @@ def convertToIntarray(pattern):
                     pat.append((ord(c) - ord("a")) * 2 + 1)
 
     return pat
-#print(convertToIntarray(gamma))
+#print(convertToIntList(gamma))
 #print(delta)
 #print(convertToAlphabet(delta))
-#print(convertToIntarray(convertToAlphabet(delta)))
+#print(convertToIntList(convertToAlphabet(delta)))
 #print(epsi)
 #print(convertToAlphabet(epsi))
-#print(convertToIntarray(convertToAlphabet(epsi)))
+#print(convertToIntList(convertToAlphabet(epsi)))
 
 
 
@@ -326,8 +326,8 @@ def factorisePattern(pattern, repeatingVar):
 #pattern = "XbbXcAc"
 #pattern = "aaAbbbbBaabbaXaaXbbbXaaaaCaaaaCaaXXc"
 #pattern = "AgXXz51hnCq"
-#print("Pattern is: ", convertToIntarray(pattern))
-#print(factorisePattern(convertToIntarray(pattern), 46))
+#print("Pattern is: ", convertToIntList(pattern))
+#print(factorisePattern(convertToIntList(pattern), 46))
 
 # finds all the factors, NOT including the empty one
 def findAllFactors(word):
@@ -346,7 +346,7 @@ def findAllFactors(word):
     factors.remove([])
     return factors
 
-#print(findAllFactors(convertToIntarray("aabbac")))
+#print(findAllFactors(convertToIntList("aabbac")))
 
 
 # example for var is 46 which translates to X
@@ -370,6 +370,6 @@ def replaceAt(pattern, word, position):
     return pattern[:position] + word + pattern[position+1:]
 
 
-#pattern = convertToIntarray("XbbXc")
+#pattern = convertToIntList("XbbXc")
 #word = [7,7,7]
 #print(fillVarWithWord(pattern, word, 46))

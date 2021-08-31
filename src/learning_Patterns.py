@@ -1,7 +1,7 @@
 
 from pm_knuth_morris_pratt import naive, firstMatchKMP
 import string
-from patternUtil import *
+from learning_Util import *
 
 
 def preProcess(pattern, word,allBetaJs):
@@ -153,10 +153,10 @@ def matchingOneRep(pattern, word):
 
 # 46 is the number for X, the repeating var
 
-#pattern = convertToIntarray("aAbbaCbaXaXbXaaDccEb")
-#word = convertToIntarray("aabbacbaxaxbxaadcceb")
-#pattern = convertToIntarray("XbbXc")
-#word = convertToIntarray("aabbac")
+#pattern = convertToIntList("aAbbaCbaXaXbXaaDccEb")
+#word = convertToIntList("aabbacbaxaxbxaadcceb")
+#pattern = convertToIntList("XbbXc")
+#word = convertToIntList("aabbac")
 pattern = [0, 2, 0, 4, 6, 8]
 word = [1, 3, 3, 5, 3, 3, 3]
 
@@ -199,7 +199,6 @@ def matchingRegular(pattern, word):
 
     return True
 
-print(matchingRegular([1,2,5,4,9,9], [1,1,1,3,5,7,9]))
 
 def descPat(sample):
     # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
@@ -330,14 +329,15 @@ if __name__ == "__main__":
 
     
     # test membership
-    alpha = convertToIntarray("aAbaBc")
-    word1 = convertToIntarray("abcbcbcbac")
-    word2 = convertToIntarray("aaa")
-    word3 = convertToIntarray("abbasdc")
+    alpha = convertToIntList("aAbaBc")
+    word1 = convertToIntList("abcbcbcbac")
+    word2 = convertToIntList("aaa")
+    word3 = convertToIntList("abbasdc")
     #print(alpha,word1,word2)
-    #print(matchingRegular(alpha, word1))
-    #print(matchingRegular(alpha, word2))
+    print(matchingRegular(alpha, word1))
+    print(matchingRegular(alpha, word2))
     #print(matchingRegular(alpha, word3))
+    #print(matchingRegular([1,2,5,4,9,9], [1,1,1,3,5,7,9]))
 
     #print(matchingOneRep(alpha, word1, 46))
     #print(matchingOneRep(alpha, word2, 46))
