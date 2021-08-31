@@ -3,6 +3,42 @@ from learning_Util import *
 
 from pm_knuth_morris_pratt import firstMatchKMP, knuthMorrisPratt
 
+def matchingRegular(pattern, word):
+    # matching problem for regular pattern
+    split = splitPattern(pattern)
+    m = len(split)
+
+    j = len(split[0])
+    if split[0] != word[:j]:
+        return False
+
+    #print(f"{split= }, {m= }, {j= }, {split[1:m-1]= }, {split[m-1]= }")
+
+    for w_i in split[1:m-1]:
+        if w_i:
+
+            #print(f"{j= }, {word[j+1:]= }, {w_i= }")
+
+            # firstMatchKMP returns the positions where w_i occurs first, but only in the subpattern thats given to it
+            # to find the position in the complete word j + 1 needs to be added later
+            find = firstMatchKMP(word[j+1:], w_i)
+
+            if find is None:
+                return False
+            else:
+
+                j += find + len(w_i) + 1
+            #print(f"{find= }, new j= {j}")
+        else:
+            j += 1
+    
+    #print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
+    if split[m-1] and split[m-1] != word[-len(split[m-1]) :]:
+        return False
+
+    return True
+
+
 def preProcess(pattern, word, allBetaJs):
     # algo 2 in one rep pattern
 
@@ -82,7 +118,6 @@ def matchingOneRep(pattern, word):
     M = preProcess(pattern, word, factorization["betaList"] + [factorization["betam+1"]])
     #print(factorization)
     #print(M)
-    return
     #print(f"{factorization= } {M = }")
 
     posZero = len(factorization["w0"])
@@ -142,58 +177,33 @@ def matchingOneRep(pattern, word):
     return False
 
 
-pattern = [0, 3, 2, 4, 6, 5, 8, 10, 12, 3, 14, 16, 18, 12, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62] 
-word = [5, 3, 5, 5, 3, 5, 23, 21, 21, 5, 1, 5, 15, 37, 29, 5, 3, 5, 5, 3, 5, 51, 27, 5, 5, 1, 5, 5, 5, 9, 15, 39, 1, 5, 3, 1, 5, 5, 5, 1, 41, 37, 47, 7, 5, 3, 5, 5, 3, 5, 27, 5, 3, 11, 5, 5]
+def matchingStupid(pattern,word):
 
-#print(matchingOneRep(pattern,word))
+    repeatingVar = findRepeatedVar(pattern)
+    factors = findAllFactors(word)
+    
+    for v in factors:
+        newPattern = []
+        [newPattern.extend(v) if c==repeatingVar else newPattern.append(c) for c in pattern]
 
-# 46 is the number for X, the repeating var
+        if matchingRegular(newPattern, word) is True:
+            return True
+    return False
 
 #pattern = convertToIntList("aAbbaCbaXaXbXaaDccEb")
 #word = convertToIntList("aabbacbaxaxbxaadcceb")
-#pattern = convertToIntList("XbbXc")
-#word = convertToIntList("aabbac")
-pattern = [0, 2, 0, 4, 6, 8]
-word = [1, 3, 3, 5, 3, 3, 3]
+pattern = convertToIntList("XbbXc")
+word = convertToIntList("abbac")
+#pattern = [0, 2, 10, 4, 6, 8]
+#word = [1, 3, 3, 5, 3, 3, 3]
 
-#print(f"{pattern = }")
-#print(f"{word    = }")
+print(f"{pattern = }")
+print(f"{word    = }")
 
 #allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
 #print(preProcess(pattern, word, allBetaJs))
-#print(matchingOneRep(pattern,word))
+print(matchingStupid(pattern,word))
 
-def matchingRegular(pattern, word):
-    # matching problem for regular pattern
-    split = splitPattern(pattern)
-    m = len(split)
-
-    j = len(split[0])
-    if split[0] != word[:j]:
-        return False
-
-    #print(f"{split= }, {m= }, {j= }, {split[1:m-1]= }, {split[m-1]= }")
-    for w_i in split[1:m-1]:
-        if w_i:
-            #print(f"{j= }, {word[j+1:]= }, {w_i= }")
-            # firstMatchKMP returns the positions where w_i occurs first, but only in the subpattern thats given to it
-            # to find the position in the complete word j + 1 needs to be added later
-            find = firstMatchKMP(word[j+1:], w_i)
-
-            if find is None:
-                return False
-            else:
-
-                j += find + len(w_i) + 1
-            #print(f"{find= }, new j= {j}")
-        else:
-            j += 1
-    
-    #print(f"{split[m-1]= }, {word[j+1:]= }, {j= }")
-    if split[m-1] and split[m-1] != word[-len(split[m-1]) :]:
-        return False
-
-    return True
 
 
 def descPat(sample):
@@ -285,7 +295,7 @@ def oneRepDescPat(sample):
             inSample = True
             for w in sample:
                 # print(w, matchingRegular(newAlpha, w))
-                if not matchingOneRep(newAlpha, w):
+                if not matchingStupid(newAlpha, w):
                     inSample = False
                     break
 
@@ -306,7 +316,7 @@ def oneRepDescPat(sample):
                     inSample = True
                     for w in sample:
                         # print(w, matchingRegular(newAlpha, w))
-                        if not matchingOneRep(newAlpha, w):
+                        if not matchingStupid(newAlpha, w):
                             inSample = False
                             break
 
