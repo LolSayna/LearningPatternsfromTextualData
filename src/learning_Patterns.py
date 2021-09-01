@@ -38,6 +38,7 @@ def matchingRegular(pattern, word):
 
     return True
 
+print(matchingRegular([1,3],[1,1,3]))
 
 def preProcess(pattern, word, allBetaJs):
     # algo 2 in one rep pattern
@@ -192,8 +193,8 @@ def matchingOneRepStupid(pattern,word):
 
 #pattern = convertToIntList("aAbbaCbaXaXbXaaDccEb")
 #word = convertToIntList("aabbacbaxaxbxaadcceb")
-pattern = convertToIntList("XbbXc")
-word = convertToIntList("abbac")
+#pattern = convertToIntList("XbbXc")
+#word = convertToIntList("abbac")
 #pattern = [0, 2, 10, 4, 6, 8]
 #word = [1, 3, 3, 5, 3, 3, 3]
 
