@@ -125,7 +125,7 @@ def randomSampleRegular():
 def randomSampleOneRep():
     
     # nr of genereted patterns
-    patternCount = 50
+    patternCount = 10
     # length of the patterns
     length = 30
     # nr of variables in pattern

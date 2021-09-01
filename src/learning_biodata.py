@@ -3,14 +3,11 @@ from learning_Patterns import descPat
 from learning_Util import *
 
 
-"""
-used to interact with real world data
-
-"""
 
 def getBioData(name):
     # returns a list of int arrays
 
+    path = "src/data/first_sample_bio"
     # old path way
     #path = os.getcwd()+"\src\patterns\data\Allocreadiata\IcavJvXFav.fasta"
     #path = os.getcwd()+"\src\patterns\data\Filobasidium\yyhZkgalXA.fasta"

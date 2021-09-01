@@ -177,7 +177,7 @@ def matchingOneRep(pattern, word):
     return False
 
 
-def matchingStupid(pattern,word):
+def matchingOneRepStupid(pattern,word):
 
     repeatingVar = findRepeatedVar(pattern)
     factors = findAllFactors(word)
@@ -197,16 +197,15 @@ word = convertToIntList("abbac")
 #pattern = [0, 2, 10, 4, 6, 8]
 #word = [1, 3, 3, 5, 3, 3, 3]
 
-print(f"{pattern = }")
-print(f"{word    = }")
+#print(f"{pattern = }")
+#print(f"{word    = }")
 
 #allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
 #print(preProcess(pattern, word, allBetaJs))
-print(matchingStupid(pattern,word))
+#print(matchingStupid(pattern,word))
 
 
-
-def descPat(sample):
+def descPat(sample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass):
     # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
 
     word = sorted(sample, key=len)[0]
@@ -227,13 +226,13 @@ def descPat(sample):
         newAlpha[i] = word[i]
 
         # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
-        if isRegularPatternClass(canonicalForm(newAlpha)):
+        if classMembershipFunction(canonicalForm(newAlpha)):
 
             # next test if all words from the sample are still in the pattern language
             inSample = True
             for w in sample:
                 # print(w, matchingRegular(newAlpha, w))
-                if not matchingRegular(newAlpha, w):
+                if not matchingFunction(newAlpha, w):
                     inSample = False
                     break
 
@@ -248,13 +247,13 @@ def descPat(sample):
                 newAlpha = alpha.copy()
                 newAlpha[i] = alpha[j]
 
-                if isRegularPatternClass(canonicalForm(newAlpha)):
+                if classMembershipFunction(canonicalForm(newAlpha)):
 
                     # next test if all words from the sample are still in the pattern language
                     inSample = True
                     for w in sample:
                         # print(w, matchingRegular(newAlpha, w))
-                        if not matchingRegular(newAlpha, w):
+                        if not matchingFunction(newAlpha, w):
                             inSample = False
                             break
 
@@ -267,69 +266,6 @@ def descPat(sample):
                 j += 1
 
     return canonicalForm(alpha)
-
-def oneRepDescPat(sample):
-    # creates a descriptive pattern from a sample of words, also automatically finds a shortest word
-
-    word = sorted(sample, key=len)[0]
-
-    m = len(word)
-    alpha = []
-    for i in range(m):
-        alpha.append(i*2)
-    #print(alpha)
-
-    for i in range(m):
-        #print("Current Alpha: ", alpha)
-
-        q, j = True, 0
-
-        # try replacing one variable with one terminal symbol
-        newAlpha = alpha.copy()
-        newAlpha[i] = word[i]
-
-        # first test is whether the new pattern is still in its pattern class, actually not needed for regualar pattern
-        if isOneRepPatternClass(canonicalForm(newAlpha)):
-
-            # next test if all words from the sample are still in the pattern language
-            inSample = True
-            for w in sample:
-                # print(w, matchingRegular(newAlpha, w))
-                if not matchingStupid(newAlpha, w):
-                    inSample = False
-                    break
-
-            if inSample:
-                alpha = newAlpha
-                q = False
-
-        # next try to replace variables with each other
-        while q and j < i:
-            if isVariable(alpha[j]):
-
-                newAlpha = alpha.copy()
-                newAlpha[i] = alpha[j]
-                
-                if isOneRepPatternClass(canonicalForm(newAlpha)):
-
-                    # next test if all words from the sample are still in the pattern language
-                    inSample = True
-                    for w in sample:
-                        # print(w, matchingRegular(newAlpha, w))
-                        if not matchingStupid(newAlpha, w):
-                            inSample = False
-                            break
-
-                    if inSample:
-                        alpha = newAlpha
-                        q = False
-                    else:
-                        j += 1
-            if q:
-                j += 1
-
-    return canonicalForm(alpha)
-
 
 if __name__ == "__main__":
 

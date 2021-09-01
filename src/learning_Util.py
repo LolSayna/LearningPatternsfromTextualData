@@ -163,8 +163,9 @@ def isRegularPatternClass(pattern):
 #print(isRegularPatternClass([0,2222,2,6,7,7,9,444]))
 #print(isRegularPatternClass([0,2222,2,444,6,7,9,444]))
 
-# checks if a pattern belong to the one repeating class
 def isOneRepPatternClass(pattern):
+    # checks if a pattern belong to the one repeating class
+    # a regular pattern is also one Repeated
     repeatedVar = None
     marked = []
     for c in pattern:
