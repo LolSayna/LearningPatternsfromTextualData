@@ -1,3 +1,4 @@
+import timeit
 from learning_randomdata import *
 #from learning_biodata import *
 from learning_Patterns import *
@@ -105,6 +106,48 @@ def graphOne():
 
 #graphOne()
 
+#---------------------------------------Tests------------------------------------------#
+
+def viabilityTest():
+    
+    length = 50
+    varCount = 10
+    lengthRange = [50,100]
+    wordcount = 100
+    repetitions = 100
+
+    randomWordTimeTotaltime, matchingWordTimeTotaltime = 0, 0
+
+    for _ in range(repetitions):
+        pattern = generateRegularPattern(length, varCount)
+        words = []
+        for _ in range(wordcount):
+            words.append(generateRandomWord(lengthRange))
+        
+        start_time = timeit.default_timer()
+        for w in words:
+            matchingRegular(pattern, w)
+
+        randomWordTime = timeit.default_timer() - start_time
+
+        words = []
+        for _ in range(wordcount):
+            words.append(generateWordFromPattern(pattern))
+        
+        start_time = timeit.default_timer()
+        for w in words:
+            matchingRegular(pattern, w)
+
+        matchingWordTime = timeit.default_timer() - start_time
+
+        randomWordTimeTotaltime += randomWordTime
+        matchingWordTimeTotaltime += matchingWordTime
+        
+    print(format(randomWordTimeTotaltime/repetitions, ".5f"), format(matchingWordTimeTotaltime/repetitions, ".5f"))
+
+viabilityTest()
+
+
 def learnAndCheck(learnSample, testSample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass):
     # lerns a descriptive pattern from the sample and returns how many of the words from the testSample were matched
   
@@ -149,7 +192,7 @@ for t in tupels:
     tripels.append((pattern, learnedPattern,count))
 writeToFile("results/oneRepStuipidLearnAnchCheck", "learnAndCheck one repeated: one pattern, a learned from it, the number ob matches words form the sample of size: "+ str(testSampleSize), tripels)
 """
-#"""
+"""
 tupels = randomSampleOneRep()
 tripels = []
 for t in tupels:
@@ -163,7 +206,7 @@ for t in tupels:
     print(count)
     tripels.append((pattern, learnedPattern,count))
 writeToFile("results/oneRepLearnAnchCheck", "learnAndCheck one repeated: one pattern, a learned from it, the number ob matches words form the sample of size: "+ str(testSampleSize), tripels)
-#"""
+"""
 
 
 if __name__ == "__main__":
