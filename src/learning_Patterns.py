@@ -38,7 +38,7 @@ def matchingRegular(pattern, word):
 
     return True
 
-print(matchingRegular([1,3],[1,1,3]))
+#print(matchingRegular([1,2,3,4],[1,1,3,5,5]))
 
 def preProcess(pattern, word, allBetaJs):
     # algo 2 in one rep pattern
@@ -174,11 +174,11 @@ def matchingOneRep(pattern, word):
             if pattern[pos:] == factorization["wim+1"]:
                 #print(f"{v = }")
                 return True
-    
     return False
 
+#print(matchingOneRep([1,2,1,2,1],[1,5,1,5,1]))
 
-def matchingOneRepStupid(pattern,word):
+def matchingOneRepNaive(pattern,word):
 
     repeatingVar = findRepeatedVar(pattern)
     factors = findAllFactors(word)
@@ -203,7 +203,7 @@ def matchingOneRepStupid(pattern,word):
 
 #allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
 #print(preProcess(pattern, word, allBetaJs))
-#print(matchingStupid(pattern,word))
+#print(matchingNaive(pattern,word))
 
 
 def descPat(sample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass):
@@ -287,6 +287,7 @@ if __name__ == "__main__":
     
     
     sample = [[1,3,3,5,3,3], [1,7,7,5,5,7,7],[1,9,9,3,5,9,9]]
-    #print(descPat(sample))
+    sample = [[1,3,5],[1,3,3,5],[1,3,3,3,5]]
+    print(descPat(sample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass))
     #print(oneRepDescPat(sample))
     

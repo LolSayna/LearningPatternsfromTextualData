@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 
 # the metrics are used to evaluate the generated pattern, is it close to the unknown orgiginal pattern or is it not precise
 
+def metricVarCount(pattern):
+    count = 0
+    for c in pattern:
+        if isVariable(c):
+            count += 1
+    
+    return count
 
 def metricLongestCommonSubstring(originalPattern, newPattern):
     # takes the longestcommonsubstring from poth patterns, ignorig variable or symbol
@@ -113,30 +120,40 @@ def viabilityTest():
     length = 50
     varCount = 10
     lengthRange = [50,100]
+    #alphabet = string.ascii_lowercase
+    alphabet = "abcd"
+
     wordcount = 100
     repetitions = 100
+
+    #only for one repeated:
+    repeatingVarTime = 5
+    repeatingVar = 0    # since random patterns always have the repeating var 0
 
     randomWordTimeTotaltime, matchingWordTimeTotaltime = 0, 0
 
     for _ in range(repetitions):
-        pattern = generateRegularPattern(length, varCount)
+        #pattern = generateRegularPattern(length, varCount,alphabet=alphabet)
+        pattern = generateRepeatingPattern(length, varCount,alphabet=alphabet, repetitions=repeatingVarTime)
         words = []
         for _ in range(wordcount):
-            words.append(generateRandomWord(lengthRange))
+            words.append(generateRandomWord(lengthRange,alphabet=alphabet))
         
         start_time = timeit.default_timer()
         for w in words:
-            matchingRegular(pattern, w)
+            #matchingRegular(pattern, w)
+            matchingOneRep(pattern,w)
 
         randomWordTime = timeit.default_timer() - start_time
 
         words = []
         for _ in range(wordcount):
-            words.append(generateWordFromPattern(pattern))
+            words.append(generateWordFromPattern(pattern,alphabet=alphabet))
         
         start_time = timeit.default_timer()
         for w in words:
-            matchingRegular(pattern, w)
+            #matchingRegular(pattern, w)
+            matchingOneRep(pattern,w)
 
         matchingWordTime = timeit.default_timer() - start_time
 
@@ -145,8 +162,27 @@ def viabilityTest():
         
     print(format(randomWordTimeTotaltime/repetitions, ".5f"), format(matchingWordTimeTotaltime/repetitions, ".5f"))
 
-viabilityTest()
+#viabilityTest()
 
+def varCountTest():
+
+    tupels = randomSampleRegular()
+    #tupels = randomSampleOneRep()
+    totalVarCount = 0
+    for t in tupels:
+        (pattern, words) = t
+        sample = words
+
+        newpat = descPat(sample)
+        #newpat = descPat(sample, matchingFunction=matchingOneRep, classMembershipFunction=isOneRepPatternClass)
+
+        totalVarCount += metricVarCount(newpat)
+        print(pattern, newpat)
+        print(metricVarCount(pattern), metricVarCount(newpat))
+    
+    print(f"{totalVarCount/ len(tupels) = }")
+
+varCountTest()
 
 def learnAndCheck(learnSample, testSample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass):
     # lerns a descriptive pattern from the sample and returns how many of the words from the testSample were matched

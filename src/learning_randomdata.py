@@ -46,6 +46,21 @@ def generateRepeatingPattern(length, varCount, alphabet = string.ascii_lowercase
 
     return pattern
 
+def generateRandomWord(lengthRange, alphabet = string.ascii_lowercase):
+    # lengthrange has to borders, minimum length of the word maxmium
+
+    word = []
+
+    length = random.randint(lengthRange[0], lengthRange[1])
+    for _ in range(length):
+        if type(alphabet) is str:
+            t = (ord(random.choice(alphabet)) - ord("a")) * 2 + 1
+        elif type(alphabet) is list:
+            t = random.choice(alphabet)
+        word.append(t)
+    return word
+#print(generateRandomWord([10,20]))
+
 def generateWordFromPattern(pattern, subLength = [1,3], alphabet = string.ascii_lowercase, repeatingVar = None):
     # generates a random word for a given pattern:
     # - subLength: the minium and the maximum length for the replacement
@@ -97,7 +112,7 @@ def randomSampleRegular():
     for _ in range(patternCount):
         patterns.append(generateRegularPattern(length, varCount, alphabet=alphabet))
 
-    #writeToFile("random/regularPatterns", "RegularPatterns, "+ str(patternCount), patterns)
+    writeToFile("random/regularPatterns", "RegularPatterns, "+ str(patternCount), patterns)
     # possible to end function here and save the patterns
 
 
@@ -117,7 +132,7 @@ def randomSampleRegular():
             words.append(generateWordFromPattern(p, subLength=subLength, alphabet=repAlphabet))
         tupels.append((p, words))
     
-    #writeToFile("random/regularWithWords", "RegularPatterns with words, "+ str(patternCount), tupels)
+    writeToFile("random/regularWithWords", "RegularPatterns with words, "+ str(patternCount), tupels)
 
     return tupels
     
@@ -139,7 +154,7 @@ def randomSampleOneRep():
     for _ in range(patternCount):
         patterns.append(generateRepeatingPattern(length, varCount, alphabet=alphabet, repetitions=repetitions))
 
-    #writeToFile("random/oneRepPatterns", "OneRep Patterns, "+ str(patternCount), patterns)
+    writeToFile("random/oneRepPatterns", "OneRep Patterns, "+ str(patternCount), patterns)
     # possible to end function here and save the patterns
 
 
@@ -159,7 +174,7 @@ def randomSampleOneRep():
             words.append(generateWordFromPattern(p, subLength=subLength, alphabet=repAlphabet, repeatingVar=0))
         tupels.append((p, words))
     
-    #writeToFile("random/oneRepWithWords", "OneRepeatedPatterns with words, "+ str(patternCount), tupels)
+    writeToFile("random/oneRepWithWords", "OneRepeatedPatterns with words, "+ str(patternCount), tupels)
 
     return tupels
 

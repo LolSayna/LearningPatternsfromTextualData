@@ -53,8 +53,8 @@ def convertToAlphabet(pattern):
                 pat += "z" + str(c)
 
     return pat
-print(convertToAlphabet(delta))
-print(convertToAlphabet(epsi))
+#print(convertToAlphabet(delta))
+#print(convertToAlphabet(epsi))
 
 def convertToIntList(pattern):
     # converts a pattern form the alphabet form, into the int array system
