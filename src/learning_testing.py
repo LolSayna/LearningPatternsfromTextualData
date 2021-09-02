@@ -220,21 +220,6 @@ for t in tupels:
     (pattern, words) = t
     learnSample = words[:testSampleSize]
     testSample = words[testSampleSize:]
-    learnedPattern, count = learnAndCheck(learnSample, testSample, matchingFunction=matchingOneRepStupid, classMembershipFunction=isOneRepPatternClass)
-
-    print(pattern)
-    print(learnedPattern)
-    print(count)
-    tripels.append((pattern, learnedPattern,count))
-writeToFile("results/oneRepStuipidLearnAnchCheck", "learnAndCheck one repeated: one pattern, a learned from it, the number ob matches words form the sample of size: "+ str(testSampleSize), tripels)
-"""
-"""
-tupels = randomSampleOneRep()
-tripels = []
-for t in tupels:
-    (pattern, words) = t
-    learnSample = words[:testSampleSize]
-    testSample = words[testSampleSize:]
     learnedPattern, count = learnAndCheck(learnSample, testSample, matchingFunction=matchingOneRep, classMembershipFunction=isOneRepPatternClass)
 
     print(pattern)

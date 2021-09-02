@@ -191,19 +191,6 @@ def matchingOneRepNaive(pattern,word):
             return True
     return False
 
-#pattern = convertToIntList("aAbbaCbaXaXbXaaDccEb")
-#word = convertToIntList("aabbacbaxaxbxaadcceb")
-#pattern = convertToIntList("XbbXc")
-#word = convertToIntList("abbac")
-#pattern = [0, 2, 10, 4, 6, 8]
-#word = [1, 3, 3, 5, 3, 3, 3]
-
-#print(f"{pattern = }")
-#print(f"{word    = }")
-
-#allBetaJs = factorization["betaList"] + [factorization["betam+1"]]
-#print(preProcess(pattern, word, allBetaJs))
-#print(matchingNaive(pattern,word))
 
 
 def descPat(sample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass):
@@ -288,6 +275,6 @@ if __name__ == "__main__":
     
     sample = [[1,3,3,5,3,3], [1,7,7,5,5,7,7],[1,9,9,3,5,9,9]]
     sample = [[1,3,5],[1,3,3,5],[1,3,3,3,5]]
-    print(descPat(sample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass))
+    #print(descPat(sample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass))
     #print(oneRepDescPat(sample))
     
