@@ -79,7 +79,7 @@ def randomTest(sameplSize=20):
     print("LCS: ", lcs)
     print("WordMatching: ", wordMatching)
 
-
+# outdated version, look at learn and check test
 def graphOne():
     # change to sample size to test whether the descPattern "finds" the pattern the sample is based on
     # x-axis is the sample size
@@ -182,7 +182,7 @@ def varCountTest():
     
     print(f"{totalVarCount/ len(tupels) = }")
 
-varCountTest()
+#varCountTest()
 
 def learnAndCheck(learnSample, testSample, matchingFunction=matchingRegular, classMembershipFunction=isRegularPatternClass):
     # lerns a descriptive pattern from the sample and returns how many of the words from the testSample were matched
@@ -197,38 +197,47 @@ def learnAndCheck(learnSample, testSample, matchingFunction=matchingRegular, cla
 
     return learnedPattern, count
 
-testSampleSize = 50
-"""
-tupels = randomSampleRegular()
-tripels = []
-for t in tupels:
-    (pattern, words) = t
-    learnSample = words[:testSampleSize]
-    testSample = words[testSampleSize:]
-    learnedPattern, count = learnAndCheck(learnSample, testSample)
+def learnAndCheckTest():
+    testSampleSize = 50
 
-    #print(pattern)
-    #print(learnedPattern)
-    print(count)
-    tripels.append((pattern, learnedPattern,count))
-writeToFile("results/regularLearnAnchCheck", "learnAndCheck: one pattern, a learned from it, the number ob matches words form the sample of size: "+ str(testSampleSize), tripels)
-"""
-"""
-tupels = randomSampleOneRep()
-tripels = []
-for t in tupels:
-    (pattern, words) = t
-    learnSample = words[:testSampleSize]
-    testSample = words[testSampleSize:]
-    learnedPattern, count = learnAndCheck(learnSample, testSample, matchingFunction=matchingOneRep, classMembershipFunction=isOneRepPatternClass)
+    testSampleSizeRange = range(2, 60)
 
-    print(pattern)
-    print(learnedPattern)
-    print(count)
-    tripels.append((pattern, learnedPattern,count))
-writeToFile("results/oneRepLearnAnchCheck", "learnAndCheck one repeated: one pattern, a learned from it, the number ob matches words form the sample of size: "+ str(testSampleSize), tripels)
-"""
+    dataPoints = []
+    for sampleSize in testSampleSizeRange:
+        
+        matches = 0
 
+        # runs are used to minimize extreme random cases
+        runs = 10
+        for _ in range(runs):
+            tupels = randomSampleRegular(sampleSize + testSampleSize)
+            #print(tupels)
+            #tripels = []
+            for t in tupels:
+                (pattern, words) = t
+                learnSample = words[:sampleSize]
+                testSample = words[sampleSize+testSampleSize:]
+                learnedPattern, count = learnAndCheck(learnSample, testSample)
+
+                #print(pattern)
+                #print(learnedPattern)
+                #print(count)
+                matches += count
+                #tripels.append((pattern, learnedPattern,count))
+        dataPoints.append((matches/runs)/testSampleSize)
+        print((matches/runs)/testSampleSize)
+        #writeToFile("results/regularLearnAnchCheck", "learnAndCheck: one pattern, a learned from it, the number ob matches words form the sample of size: "+ str(testSampleSize), tripels)
+        
+        
+    print(dataPoints)
+    plt.plot(testSampleSizeRange, dataPoints)
+    plt.xlabel("Number of words used to learn the pattern")
+    plt.ylabel("Number of words matched from 100 possible words")
+    #plt.title("Matching words from the original pattern by learned pattern")
+    plt.savefig("learnAndCheckTest.png")
+    plt.show()
+
+#learnAndCheckTest()
 
 if __name__ == "__main__":
 

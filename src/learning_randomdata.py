@@ -97,7 +97,7 @@ def generateWordFromPattern(pattern, subLength = [1,3], alphabet = string.ascii_
     return word
 
 
-def randomSampleRegular():
+def randomSampleRegular(wordCount):
     
     # nr of genereted patterns
     patternCount = 50
@@ -112,7 +112,7 @@ def randomSampleRegular():
     for _ in range(patternCount):
         patterns.append(generateRegularPattern(length, varCount, alphabet=alphabet))
 
-    writeToFile("random/regularPatterns", "RegularPatterns, "+ str(patternCount), patterns)
+    #writeToFile("random/regularPatterns", "RegularPatterns, "+ str(patternCount), patterns)
     # possible to end function here and save the patterns
 
 
@@ -132,12 +132,12 @@ def randomSampleRegular():
             words.append(generateWordFromPattern(p, subLength=subLength, alphabet=repAlphabet))
         tupels.append((p, words))
     
-    writeToFile("random/regularWithWords", "RegularPatterns with words, "+ str(patternCount), tupels)
+    #writeToFile("random/regularWithWords", "RegularPatterns with words, "+ str(patternCount), tupels)
 
     return tupels
     
 
-def randomSampleOneRep():
+def randomSampleOneRep(wordCount):
     
     # nr of genereted patterns
     patternCount = 10
